@@ -1,0 +1,60 @@
+stages:
+  - bulid
+  - package
+  - deploy
+bulid:
+  stage: bulid
+  script:
+    - git config --global user.name "tangzhang"
+    - git config --global user.email "it_tangzhang@163.com"
+    - cd /usr/local/myapp/my_admin_v2
+    - git pull origin dev
+    - cd /usr/local/myapp/my_admin_v2/api/common-service
+    - git pull origin dev
+  only:
+    - dev
+  tags:
+    - 47.93.202.202
+#(settings.xml是项目使用的的maven配置文件)
+#(此操作会创建target目录，所以Git提交需要忽略此目录，不然会造成冲突)
+package:
+  stage: package
+  script:
+    - cd /usr/local/myapp/my_admin_v2/api
+    - mvn -s "./settings.xml" clean install
+  only:
+    - dev
+  tags:
+    - 47.93.202.202
+deploy:
+  stage: deploy
+  script:
+    - cd  /usr/local/myapp/my_admin_v2/api/common-service/target/
+    - docker stop my_admin_v2-common-service-dev
+    - docker cp common-service-2.0.0-SNAPSHOT.jar my_admin_v2-common-service-dev:/app.jar
+    - docker start my_admin_v2-common-service-dev
+  only:
+    - dev
+  tags:
+    - 47.93.202.202
+#----------------------------------------------------------------
+#其他备注信息
+#----------------------------------------------------------------
+#该套部署方案需要为gitlab-runner用户创建ssh-keygen并设置
+#su gitlab-runner
+#ssh-keygen -t rsa -b 2048 -C "it_tangzhang@163.com"
+#注意修改.git目录的权限需要为su gitlab-runner开放 chmod -R 777 .git
+#（本方案使用git@方式不用https）https方式每次git操作都要输入密码
+#   git config  credential.helper store
+#构建打包的时候需要权限
+#最好chmod -R 777 /usr/local/myapp/my_admin_v2(总项目根目录)
+
+#/var/run/docker.sock: connect: permission denied
+#给该文件添加777权限或将gitlab-runner用户加入权限组（赋予root权限）
+
+#服务器docker启动容器
+#docker pull tangzhang/openjdk:11
+#docker run -d -p 10082:10082 --name=my_admin_v2-common-service-dev -v /usr/local/myapp/logs/common-services:/logs tangzhang/openjdk:11 java -jar /app.jar
+#docker login -u tangzhang -p aa.188632 
+#
+#

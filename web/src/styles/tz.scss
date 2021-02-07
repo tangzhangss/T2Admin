@@ -1,0 +1,27 @@
+.tz-flex-row{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+label {
+  font-weight: 700;
+  margin: 5px 0;
+}
+//提交按钮
+.tz-btn-submit{
+  font-size: 14px;
+  padding: 8px 12px;
+}
+//手指
+.pointer{
+  cursor: pointer;
+}
+//按钮
+.tz-btn{
+  font-size: 14px;
+  padding: 8px 12px;
+}
+//加粗
+.bold{
+  font-weight: bold;
+}

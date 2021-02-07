@@ -1,0 +1,108 @@
+<template>
+  <div>
+    <tz-table ref="tzTable"
+              :api-url="api" :action="['delete','edit']"
+              :table-column="tableColumn" showIndex :edit-column="editColumn"
+              :edit-column-rules="editColumnRules"
+              :edit-column-default-value="menu"
+              @edit-data-handle="editDataHandle"
+              :action-others='[{title:"创建子菜单",icon:"el-icon-circle-plus-outline",onClick:createDataHandle}]'
+    >
+    </tz-table>
+  </div>
+</template>
+
+<script>
+  import TZTable from "@/components/TZTable/index";
+
+  export default {
+    name: 'Menu',
+    components: {
+      "tz-table":TZTable,
+    },
+    data:function(){
+      return {
+        api:"/service_api/menu?queryAll=true&orderBy=orderNo@ASC",
+        editColumnRules:{},
+        showEditDialog:false,
+        menu:{
+          redirect:"noRedirect",
+          systemic:true,
+          usable:true,
+          parentDesc:'',
+        },
+        isRoot:false,//是否是一级菜单
+        clientList:[],//所有客户的列表（不包括超级管理员）
+      }
+    },
+    created() {
+        this.$http.get("/service_api/client?id@NEQ="+window.superAdminClientId).then(res=>{
+           this.clientList=res.data.content;
+        })
+    },
+    computed: {
+      tableColumn(){
+        return [
+          // {prop:"icon",label:"icon",iSpan:8},
+          {prop:"title",label:"菜单名",filterable:true,isShowFilter:true,iSpan:8},
+          {prop:"parent.title",label:"上级菜单",filterable:true,isShowFilter:true,iSpan:8,},
+          {prop:"path",label:"path",iSpan:6},
+          {prop:"url",label:"url",width:"120"},
+          {prop:"orderNo",label:"排序"},
+          {prop:"createTime",label:"创建时间",cType:'dateTime',filterable:true,iType:"datetimeRange",iSpan:18},
+          {prop:"updateTime",label:"更新时间",cType:'dateTime',iSpan:18},
+          {prop:"remark",label:"备注"},
+          {prop:"systemic",label:"系统创建",cType:"switch",filterable:true,iSpan:6,width:"80"},
+          {prop:"usable",label:"是否启用",cType:"switch",filterable:true,iSpan:6,width:"80"},
+        ]
+      },
+      editColumn(){
+        return [
+          {prop:"parentId",label: "上级菜单",iType:'text',readonly:true,showKey:"parentDesc",isShow:!this.isRoot,iSpan:20},
+          {prop:"title", label:"菜单名", required:true,iType:'text',  iSpan:12,style:"width:200px"},
+          {prop:"path",label:"path",iType:'text',tip:"仅且仅需要一级菜单以/开头", required:true, iSpan:12,style:"width:200px"},
+          {prop:"icon", label:"icon",tip:"支持element,svg图标",  iType:'text', iSpan:12,style:"width:200px"},
+          {prop:"name",isShow:!this.isRoot, tip:"一级菜单可不填", label:"name", iType:'text',iSpan:12,style:"width:200px"},
+          {prop:"redirect",tip:"一级菜单:当设置 noRedirect 的时候该路由在面包屑导航中不可被点击;其他:重定向",label:"redirect",iType:'text',iSpan:12,style:"width:200px"},
+          {prop:"url",isShow:!this.isRoot, tip:"一级菜单可不填,以/开头", label:"页面路径", iType:'text',iSpan:12,style:"width:200px"},
+          {prop:"orderNo", label:"排序", iType:'number', iSpan:12,style:"width:200px"},
+          {prop:"systemic", label:"系统菜单", iType:'switch', iSpan:6,},
+          {prop:"usable", label:"是否启用", iType:'switch', iSpan:6},
+          {prop:"clientIdsArray",tip:"非系统菜单有效", label:"所属客户",isVisibleFunc:(item)=> !item.systemic,iType:'select',multiple:true,iSpan:24,options:this.clientList,selectKey:"id",selectLabel:"name",selectValue:"id"},
+        ]
+      }
+    },
+    methods:{
+      //创建 回调 这里data表示父级菜单信息或则undefined
+      editDataHandle(data){
+        if(data && data.parentId){
+          this.isRoot=false;
+          data.parentDesc = this.getParentDesc(data).reverse().join('/');
+        }else{
+          //表示是一级菜单
+          this.isRoot=true;
+        }
+      },
+      //这个是创建子菜单使用-需要配合editDataHandle
+      createDataHandle(data){
+        //表示是子菜单
+        this.menu.parentId=data.id;
+        this.menu.parent=data;
+        let initData = this.menu;
+        this.$refs.tzTable.editData(initData);
+      },
+      getParentDesc(data,res=[]){
+        let parent = data.parent;
+        if(!parent){
+          return res;
+        }
+        res.push(parent.title);
+        return this.getParentDesc(parent,res);
+      }
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>
