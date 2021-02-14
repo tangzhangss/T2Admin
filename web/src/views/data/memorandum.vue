@@ -5,18 +5,17 @@
                :table-column="tableColumn" showIndex
                :edit-column="editColumn"
                :action-others='[{title:"查看",icon:"el-icon-view",onClick:openDataModal}]'
-               @after-delete-data-handle="()=>{this.updateFilterTabsStatus()}"
     >
     </tz-table>
 
     <div class="data-memorandum-el-dialog">
       <el-drawer
         :title="memorandum.title"
-        :visible.sync="isDrawerShow"
+        v-model="isDrawerShow"
         direction="rtl"
         size="50%"
         >
-        <div v-html="memorandum.content"></div>
+        <div v-html="memorandum.content"  style="white-space: pre-wrap;"></div>
       </el-drawer>
     </div>
   </div>
@@ -50,7 +49,7 @@
       editColumn(){
         return [
           {prop:"title", label:"标题", iType:"text",required:true,iSpan:24},
-          {prop:"content", label:"内容", iType:"quill-editor", iSpan:24},
+          {prop:"content", label:"内容", iType:"textarea", iSpan:24,style:"width:100%;height:300px"},
         ];
       }
     },

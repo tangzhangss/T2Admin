@@ -4,11 +4,11 @@
     <div class="tabs" v-if="filterTabs.length>0">
       <el-tabs type="border-card" @tab-click="filterTabsClick">
           <el-tab-pane v-for="item in filterTabs">
-             <div slot="label">
+             <template #label>
               <el-badge :value="item.badge" class="item" :hidden="item.badge==0||item.badge==''||item.badge==undefined||item.badge==null">
                 <span>{{item.label}}</span>
               </el-badge>
-            </div>
+            </template>
           </el-tab-pane>
       </el-tabs>
     </div>
@@ -24,16 +24,18 @@
           <el-badge value="✔" :hidden="searchApiUrl==apiUrl" class="item">
             <el-button type="primary" plain @click="filterModalVisible=true">筛选</el-button>
           </el-badge>
-          <el-dialog title="筛选" :visible.sync="filterModalVisible"  v-dialogDrag>
-            <div class="search-modal">
-              <label>选择<span style="font-weight: 200;font-size:12px;color: gray">(每次选择条件之后，输入都会被清空，请在一开始就选择好需要的条件)</span></label>
-              <el-checkbox-group v-model="tableFilterColumnCheckbox.model" class="tz-flex-row">
-                <el-checkbox v-for="(item,index) in tableFilterColumnCheckbox.group" :label="item" @change="tableFilterColumnCheckboxChange(item)" ></el-checkbox>
-              </el-checkbox-group>
-              <label v-if="tableFilterColumnCheckbox.model.length>0">输入</label>
-              <tz-search :column-list="tableFilterColumnCheckbox.selectedItem" @search-method="search" @search-clear-method="searchClear"></tz-search>
-            </div>
-          </el-dialog>
+          <div   v-dialogDrag>
+            <el-dialog title="筛选" v-model="filterModalVisible">
+              <div class="search-modal">
+                <label>选择<span style="font-weight: 200;font-size:12px;color: gray">(每次选择条件之后，输入都会被清空，请在一开始就选择好需要的条件)</span></label>
+                <el-checkbox-group v-model="tableFilterColumnCheckbox.model" class="tz-flex-row">
+                  <el-checkbox v-for="(item,index) in tableFilterColumnCheckbox.group" :label="item" @change="tableFilterColumnCheckboxChange(item)" ></el-checkbox>
+                </el-checkbox-group>
+                <label v-if="tableFilterColumnCheckbox.model.length>0">输入</label>
+                <tz-search :column-list="tableFilterColumnCheckbox.selectedItem" @search-method="search" @search-clear-method="searchClear"></tz-search>
+              </div>
+            </el-dialog>
+          </div>
         </div>
         <el-button type="primary" plain @click="editData()">新建</el-button>
       </div>
@@ -54,16 +56,19 @@
             <el-checkbox-group v-model="customShowColumnCheckbox.model" style="display: flex;flex-direction: column">
               <el-checkbox v-for="(item,index) in customShowColumnCheckbox.group" :label="item" @change="customShowColumnCheckboxChange(item)" ></el-checkbox>
             </el-checkbox-group>
-          <el-button type="info" plain slot="reference">自定义展示列</el-button>
+          <template #reference>
+            <el-button type="info" plain >自定义展示列</el-button>
+          </template>
         </el-popover>
       </div>
     </div>
     <el-table
+      ref="elTable"
       :header-cell-class-name="headerStyleClass"
       class="table-class"
       v-loading="loading"
       :data="tableData"
-      :style="cStyle" :width="width" :stripe="stripe" :border="border" :height="height"
+      :style="cStyle" :width="width"  :height="height"
       :row-class-name="tableRowClassName"
       :max-height="maxHeightValue"
       highlight-current-row
@@ -74,6 +79,7 @@
       <!--多选时显示-->
       <el-table-column v-if="selection"
                        type="selection"
+                       fixed="left"
                        width="55">
       </el-table-column>
 
@@ -84,101 +90,97 @@
       </el-table-column>
 
       <!--cType是数据类型-->
-      <template v-for="(item,index) in tableColumnData" v-if="!item.hide" >
-          <!--文本格式-->
-          <el-table-column v-if="!item.cType || item.cType.toUpperCase()=='TEXT'"
-            :key="item.id"
-            :prop="item.prop"
-            :label="item.label"
-            :width="item.width"
-            :fixed="item.fixed"
-            :data-type="item.dataType"
-            :formatter="item.formatter"
-            :render-header="renderHeader"
-          ></el-table-column>
-        <!--日期时间-->
-        <el-table-column v-else-if="item.cType.toUpperCase()=='DATE' || item.cType.toUpperCase()=='DATETIME'"
-                         :key="item.id"
-                         :prop="item.prop"
-                         :label="item.label"
-                         :width="item.width"
-                         :fixed="item.fixed"
-                         :style="item.cStyle"
-        >
-          <template slot-scope="scope">
-            <span v-if="item.dateFormat">{{TZUtils.formatDate(scope.row[item.prop],item.dateFormat)}}</span>
-            <span v-else-if="item.cType.toUpperCase()=='DATE'">{{TZUtils.formatDate(scope.row[item.prop],'yyyy-MM-dd')}}</span>
-            <span v-else-if="item.cType.toUpperCase()=='DATETIME'">{{TZUtils.formatDate(scope.row[item.prop],'yyyy-MM-dd HH:mm')}}</span>
-          </template>
-        </el-table-column>
-          <!--图片-->
-          <el-table-column v-else-if="item.cType.toUpperCase()=='IMAGE'"
-            :key="item.id"
-            :prop="item.prop"
-            :label="item.label"
-            :width="item.width"
-            :fixed="item.fixed"
-            :style="item.cStyle"
-          >
-            <template slot-scope="scope">
+      <template v-for="(item,index) in tableColumnData">
+          <template  v-if="!item.hide" >
+            <!--文本格式-->
+            <el-table-column v-if="!item.cType || item.cType.toUpperCase()=='TEXT'"
+                             :key="item.id"
+                             :prop="item.prop"
+                             :label="item.label"
+                             :width="item.width"
+                             :fixed="item.fixed"
+                             :data-type="item.dataType"
+                             :formatter="item.formatter"
+                             :render-header="renderHeader"
+            ></el-table-column>
+            <!--日期时间-->
+            <!--自定义列的width属性必须不能为undefined-->
+            <el-table-column v-else-if="item.cType.toUpperCase()=='DATE' || item.cType.toUpperCase()=='DATETIME'"
+                             :key="item.id"
+                             :prop="item.prop"
+                             :label="item.label"
+                             :width="item.width||''"
+                             :fixed="item.fixed"
+                             :style="item.cStyle"
+            >
+              <template #default="scope">
+                <span v-if="item.dateFormat">{{TZUtils.formatDate(scope.row[item.prop],item.dateFormat)}}</span>
+                <span v-else-if="item.cType.toUpperCase()=='DATE'">{{TZUtils.formatDate(scope.row[item.prop],'yyyy-MM-dd')}}</span>
+                <span v-else-if="item.cType.toUpperCase()=='DATETIME'">{{TZUtils.formatDate(scope.row[item.prop],'yyyy-MM-dd HH:mm')}}</span>
+              </template>
+            </el-table-column>
+            <!--图片-->
+            <el-table-column v-else-if="item.cType.toUpperCase()=='IMAGE'"
+                             :key="item.id"
+                             :prop="item.prop"
+                             :label="item.label"
+                             :width="item.width"
+                             :fixed="item.fixed"
+                             :style="item.cStyle"
+            >
+              <template #default="scope">
 
                 <el-image  :preview-src-list="new Array(scope.row[item.prop])" :style="'cursor:pointer;'+item.cStyle" :src="scope.row[item.prop]" :fit="scope.row[item.fit] || 'contain'+
-'cover' " >
+  'cover' " >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
                 </el-image>
-            </template>
-          </el-table-column>
-        <!--开关-->
-        <el-table-column v-else-if="item.cType.toUpperCase()=='SWITCH'"
-                         :key="item.id"
-                         :prop="item.prop"
-                         :label="item.label"
-                         :width="item.width"
-                         :fixed="item.fixed"
-                         :style="item.cStyle"
-        >
-          <template slot-scope="scope">
-
-            <el-switch
-              v-model="scope.row[item.prop]"
-              disabled>
-            </el-switch>
-          </template>
-        </el-table-column>
-
+              </template>
+            </el-table-column>
+            <!--开关-->
+            <el-table-column v-else-if="item.cType.toUpperCase()=='SWITCH'"
+                             :key="item.id"
+                             :prop="item.prop"
+                             :label="item.label"
+                             :min-width="item.width||0"
+                             :fixed="item.fixed"
+                             :style="item.cStyle"
+            >
+              <template #default="scope">
+                <el-switch
+                        v-model="scope.row[item.prop]"
+                        disabled>
+                </el-switch>
+              </template>
+            </el-table-column>
+           </template>
       </template>
-
       <!--操作-->
-      <template v-if="action.length>0">
-        <el-table-column
-                         label="操作"
-                         fixed="right">
-          <template slot-scope="scope">
-            <div class="action">
-              <span class="edit" v-if="action.includes('edit')"  title="查看|修改" @click="editData(scope.row)">
-                <i class="el-icon-edit-outline pointer"/>
-              </span>
-              <span class="delete" v-if="action.includes('delete')"  title="删除这条记录">
-                <template>
-                  <el-popconfirm
-                    title="您正在删除这条记录？"
-                    @confirm="deleteData(scope.row)"
-                    icon="el-icon-warning"
-                  >
-                    <i class="el-icon-delete pointer"  slot="reference"/>
-                  </el-popconfirm>
-                </template>
-              </span>
-              <span  v-for="action in actionOthers" v-show="!(action.isShow&&!action.isShow(scope.row))"  :title="action.title" @click="action.onClick(scope.row)">
-                <i :class="action.icon+' pointer'"/>
-              </span>&nbsp;
-            </div>
-          </template>
-        </el-table-column>
-      </template>
-      </el-table>
+      <el-table-column v-if="action.length>0" label="操作" fixed="right">
+        <template #default="scope">
+          <div class="action">
+                  <span class="edit" v-if="action.includes('edit')"  title="查看|修改" @click="editData(scope.row)">
+                    <i class="el-icon-edit-outline pointer"/>
+                  </span>
+            <span class="delete" v-if="action.includes('delete')"  title="删除这条记录">
+                       <el-popconfirm
+                               title="您正在删除这条记录？"
+                               @confirm="deleteData(scope.row)"
+                               icon="el-icon-warning"
+                       >
+                         <template  #reference>
+                               <i class="el-icon-delete pointer"/>
+                         </template>
+                        </el-popconfirm>
+                    </span>
+            <span  v-for="action in actionOthers" v-show="!(action.isShow&&!action.isShow(scope.row))"  :title="action.title" @click="action.onClick(scope.row)">
+                      <i :class="action.icon+' pointer'"/>
+                   </span>&nbsp;
+          </div>
+        </template>
+      </el-table-column>
+   </el-table>
     <!--分页-->
     <div class="pagination">
         <el-pagination
@@ -195,7 +197,8 @@
 
     <!--编辑框-->
     <div class="edit-dialog">
-      <tz-form-dialog :submit-api="apiUrl" :submit-before-func="editSubmitBeforeFunc" :edit-column-rules="editColumnRules" :submit-after-func="editSuccessHandle2" :show.sync="showEditDialog" :title="editTitle"
+      <tz-form-dialog :submit-api="apiUrl" :submit-before-func="editSubmitBeforeFunc" :edit-column-rules="editColumnRules"
+                      :submit-after-func="editSuccessHandle2" v-model:show="showEditDialog" :title="editTitle"
                       :edit-column="editColumn" :edit-column-default-value="editObjectData"
                       :readonly="tzFormReadonly"
                       :is-show-submit-btn="!tzFormReadonly"
@@ -212,8 +215,8 @@
 <script>
   import "../dialogDrag";
   import TZSearch from "./search"
-  import TZUtils from "@/utils/TZUtils";
   import TZFormDialog from "@/components/TZForm/dialog";
+  import TZUtils from "../../utils/TZUtils";
 
   export default {
       name: 'tz-table',
@@ -258,7 +261,10 @@
         maxHeight:[Number],//最大高度
         selection:[Boolean],//是否多选
         showIndex:[Boolean],//是否展示索引
-        cStyle: [String],//表格的style,
+        cStyle: {
+          type:String,
+          default:()=>""
+        },//表格的style,
         indexMethod:{//自定义索引，需要默认行为=》属性
           type:Function,
           default:null
@@ -312,11 +318,11 @@
           searchApiUrl:this.apiUrl,//当前的搜索的url-查询条件之后的，比如用于翻页的时候带上
           paginationData:{
             totalPages:1,
-            totalElements:1,
+            totalElements:0,
             size:10,//每页显示的行数
             number:1,//当前页
           },
-          maxHeightAuto:document.body.clientHeight,//自动计算的表格最大高度
+          maxHeightAuto:undefined,//自动计算的表格最大高度
           showEditDialog:false,
           filterTabsQuery:'',
           tzFormReadonly:false,//表单是否只读
@@ -351,7 +357,6 @@
           //这是一个异步的func
           this.$emit("edit-data-handle",data);
           this.editObjectData = data || TZUtils.deepClone(this.editColumnDefaultValue) ||{};
-
           //编辑状态点开时只读
           this.tzFormReadonly=data?true:false;
           //是否新建
@@ -422,9 +427,8 @@
         adjustTableHeight(){
           let func = ()=>{
             let clientHeight= document.documentElement.clientHeight;
-            if(!clientHeight)return;
             let filterTabsHeight=this.filterTabs.length>0?50:0;//顶部tabs50
-            this.maxHeightAuto =clientHeight-160-2-filterTabsHeight; //操作40 分页50 顶部50 2容错
+            this.maxHeightAuto =clientHeight-160-2-filterTabsHeight; //操作40 分页50 顶部50 table margin上下10 2容错
           };
           func();//先执行一次
           window.onresize = func;
@@ -447,7 +451,11 @@
                  }
                  break;
                }
+               default:{
+                   if(!item.value)return;//中断本次循环
+               }
              }
+
              //这里特别处理
              if(item.prop == "usable"){
                queryParam.push("queryAll=true");
@@ -458,6 +466,8 @@
                let dateArr = item.value;
                queryParam.push(item.prop+"@GTE="+TZUtils.formatDate(dateArr[0]));
                queryParam.push(item.prop+"@LTE="+TZUtils.formatDate(dateArr[1]));
+             }else if(["DATE","DATETIME"].indexOf(item.iType.toUpperCase())>-1) {
+               queryParam.push(item.prop+"@EQ="+TZUtils.formatDate(item.value));
              }else{
                queryParam.push(item.prop+"@EQ="+item.value);
              }
@@ -627,8 +637,9 @@
 
 <style lang="scss">
 .tz-table {
-  margin: 10px auto;
+  margin: 0px auto;
   width: 95%;
+  box-sizing: border-box;
   .tabs{
     height: 50px;
     box-sizing: border-box;
@@ -648,11 +659,6 @@
         white-space:nowrap!important
       }
     }
-    //解决右侧多出一个，滚动条的列
-    th.gutter
-    {
-      display: table-cell!important;
-    }
     .action{
       color:#409eff;
       >span{
@@ -668,6 +674,7 @@
     button{
       padding: 5px 10px;
       border-radius: 0;
+      min-height:unset;
     }
     .left{
        display: flex;

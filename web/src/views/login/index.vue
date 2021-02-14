@@ -46,7 +46,7 @@
         <div class="operation">
           <el-tag @click="handleRegister">注册</el-tag>
           <el-tag @click="$message.info('暂未提供修改密码功能')">忘记密码</el-tag>
-          <el-tag onClick="window.open('http://mp.weixin.qq.com/s?__biz=MzU1Nzc2NTM1MA==&mid=100000159&idx=1&sn=ae709de837e3b7c09ba43f6b4dee2c6b&chksm=7c3186164b460f00b00bf0eb771c8980c61461d0d867eef47628a8c24987c8bf5d19715cb0a5&scene=18#wechat_redirect')">系统框架介绍</el-tag>
+          <el-tag @click="openSystemIntroducePage">系统框架介绍</el-tag>
         </div>
 
        </el-form>
@@ -55,7 +55,7 @@
 
     <!--注册弹窗-->
     <!--:submit-func="submitFunc"-->
-    <tz-form-dialog :editColumnRules="editColumnRules" submit-api="/service_api/client/no_auth" :submit-after-func="registerSuccessHandle" :show.sync="showRegisterDialog" title="客户注册" :edit-column="registerColumn" submit-name="提交"></tz-form-dialog>
+    <tz-form-dialog :editColumnRules="editColumnRules" submit-api="/service_api/client/no_auth" :submit-after-func="registerSuccessHandle" v-model:show="showRegisterDialog" title="客户注册" :edit-column="registerColumn" submit-name="提交"></tz-form-dialog>
   </div>
 </template>
 
@@ -181,6 +181,9 @@ export default {
     }
   },
   methods: {
+    openSystemIntroducePage(){
+      window.open('http://mp.weixin.qq.com/s?__biz=MzU1Nzc2NTM1MA==&mid=100000159&idx=1&sn=ae709de837e3b7c09ba43f6b4dee2c6b&chksm=7c3186164b460f00b00bf0eb771c8980c61461d0d867eef47628a8c24987c8bf5d19715cb0a5&scene=18#wechat_redirect')
+    },
     //注册成功方法
     registerSuccessHandle(data){
       this.$notify({

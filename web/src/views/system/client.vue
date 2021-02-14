@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <tz-table  ref="tzTable"
-              :api-url="api" :filter-tabs="filterTabs" :action="['delete','edit']"
-              :table-column="tableColumn" showIndex
-              :edit-column="editColumn"
-              :edit-column-rules="editColumnRules"
-              :action-others='[{title:"通过审核",icon:"el-icon-circle-check",onClick:passApprove,isShow:isShowAction}]'
-               @after-delete-data-handle="()=>{this.updateFilterTabsStatus()}"
-              :edit-column-default-value="client"
-               @edit-data-handle="editDataHandle"
-    >
-    </tz-table>
-  </div>
+  <tz-table  ref="tzTable"
+             :api-url="api" :filter-tabs="filterTabs" :action="['delete','edit']"
+             :table-column="tableColumn" showIndex
+             :edit-column="editColumn"
+             :edit-column-rules="editColumnRules"
+             :action-others='[{title:"通过审核",icon:"el-icon-circle-check",onClick:passApprove,isShow:isShowAction}]'
+             @after-delete-data-handle="()=>{this.updateFilterTabsStatus()}"
+             :edit-column-default-value="client"
+             @edit-data-handle="editDataHandle"
+  >
+  </tz-table>
 </template>
 
 <script>

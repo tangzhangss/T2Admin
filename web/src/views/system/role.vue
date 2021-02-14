@@ -9,23 +9,25 @@
     </tz-table>
 
 
-    <el-drawer class="system-role-menu-drawer"
-               :with-header="false"
-               :visible.sync="menuDrawerShow"
-               direction="rtl">
-      <div style="text-align: right">
-        <el-button type="primary" class="tz-btn" @click="updateMenuIds">保存</el-button>
-      </div>
-      <el-tree
-        ref="tzTree"
-        v-loading="menuDrawerLoading"
-        :data="menuList"
-        show-checkbox
-        node-key="id"
-        @check="check"
-        :props="{children: 'children',label: 'title'}">
-      </el-tree>
-    </el-drawer>
+    <div class="system-role-menu-drawer">
+      <el-drawer
+              :with-header="false"
+              v-model="menuDrawerShow"
+              direction="rtl">
+        <div style="text-align: right">
+          <el-button type="primary" class="tz-btn" @click="updateMenuIds">保存</el-button>
+        </div>
+        <el-tree
+                ref="tzTree"
+                v-loading="menuDrawerLoading"
+                :data="menuList"
+                show-checkbox
+                node-key="id"
+                @check="check"
+                :props="{children: 'children',label: 'title'}">
+        </el-tree>
+      </el-drawer>
+    </div>
   </div>
 </template>
 

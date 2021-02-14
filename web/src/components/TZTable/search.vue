@@ -1,5 +1,7 @@
 <!--
   表格搜索组件
+
+  disabledDate:日期时间类型是否禁止选择未来的日期
 -->
 <template>
   <div class="tz-search">
@@ -15,15 +17,17 @@
               class="input-date"
               placeholder="选择日期"
               v-model="item.value"
-              :picker-options="datePickerOptions">
+              :disabled-date="item.disabledDate&&datePickerOptions.disabledDate"
+              :shortcuts="datePickerOptions.shortcuts">
             </el-date-picker>
             <el-date-picker  v-else-if="item.iType.toUpperCase() == 'DATETIME'"
                              type="datetime"
                              v-model="item.value"
                              class="input-date"
-                             format="yyyy-MM-dd HH:mm"
-                             placeholder="选择时间"
-                             :picker-options="datePickerOptions">
+                             format="YYYY-MM-DD HH:mm"
+                             placeholder="选择日期时间"
+                             :disabled-date="item.disabledDate&&datePickerOptions.disabledDate"
+                             :shortcuts="datePickerOptions.shortcuts">
             </el-date-picker>
             <el-date-picker  v-else-if="item.iType.toUpperCase() == 'DATERANGE'"
                              class="input-date"
@@ -32,17 +36,19 @@
                              range-separator="至"
                              start-placeholder="开始日期"
                              end-placeholder="结束日期"
-                             :picker-options="dateRangePickerOptions">
+                             unlink-panels
+                             :shortcuts="shortcuts">
             </el-date-picker>
             <el-date-picker  v-else-if="item.iType.toUpperCase() == 'DATETIMERANGE'"
                              class="input-date"
                              type="datetimerange"
-                             format="yyyy-MM-dd HH:mm"
+                             format="YYYY-MM-DD HH:mm"
                              v-model="item.value"
                              range-separator="至"
+                             unlink-panels
                              start-placeholder="开始时间"
                              end-placeholder="结束时间"
-                             :picker-options="dateRangePickerOptions">
+                             :shortcuts="shortcuts">
             </el-date-picker>
           </el-col>
         </el-row>
@@ -81,53 +87,49 @@
               },
               shortcuts: [{
                 text: '今天',
-                onClick(picker) {
-                  picker.$emit('pick', new Date());
-                }
+                value:new Date()
               }, {
                 text: '昨天',
-                onClick(picker) {
+                value:(()=> {
                   const date = new Date();
                   date.setTime(date.getTime() - 3600 * 1000 * 24);
-                  picker.$emit('pick', date);
-                }
+                  return date;
+                })()
               }, {
                 text: '一周前',
-                onClick(picker) {
+                value:(()=> {
                   const date = new Date();
                   date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                  picker.$emit('pick', date);
-                }
+                  return date;
+                })()
               }]
             },
-            //日期范围选择快捷方式
-            dateRangePickerOptions: {
-              shortcuts: [{
-                text: '最近一周',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                  picker.$emit('pick', [start, end]);
-                }
-              }, {
-                text: '最近一个月',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                  picker.$emit('pick', [start, end]);
-                }
-              }, {
-                text: '最近三个月',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                  picker.$emit('pick', [start, end]);
-                }
-              }]
-            },
+            //范围选择快捷方式
+            shortcuts: [{
+              text: '最近一周',
+              value:(()=> {
+                const end = new Date();
+                const start = new Date();
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                return [start, end];
+              })()
+            }, {
+              text: '最近一个月',
+              value:(()=> {
+                const end = new Date();
+                const start = new Date();
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                return [start, end];
+              })()
+            }, {
+              text: '最近三个月',
+              value:(()=> {
+                const end = new Date();
+                const start = new Date();
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                return [start, end];
+              })()
+            }],
             obj:[]//存储对象
           }
         },
@@ -191,7 +193,7 @@
           line-height: 23px;
         }
       }
-      .el-input__icon{
+      .el-input__icon,.el-input__prefix,.el-input__suffix{
         height:$height;
         line-height: $height;
       }

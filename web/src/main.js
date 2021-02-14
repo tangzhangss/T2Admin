@@ -1,31 +1,24 @@
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+//全局配置信息
+import {myApp} from "../config/global";
 
 import ElementPlus from 'element-plus';
-import 'element-ui/lib/theme-chalk/index.css'
-import '@/styles/index.scss' // global css
-import App from './App'
+import 'dayjs/locale/zh-cn';
+import locale from 'element-plus/lib/locale/lang/zh-cn';
+
+import 'element-plus/lib/theme-chalk/index.css';
+import './styles/index.scss' // global css
 import store from './store'
-import router from './router'
-import http from '@/utils/request'
-import cookie from 'js-cookie'
-import '@/icons' // icon
-import '@/permission' // permission control
+import {router} from './router'
+import http from './utils/request';
+import TZUtils from './utils/TZUtils';
+import './icons' // icon
+import './permission'
+import cookie from "js-cookie";
 
 
-//全局js文件--常量配置
-import "../config/global"
-import TZUtils from "@/utils/TZUtils"
-import {createApp} from "vue";
-const app = createApp(App);
-app.use(store);
-app.use(router);
-app.use(ElementPlus);
 //全局工具方法
-app.config.globalProperties.$cookie = cookie;
-app.config.globalProperties.$http = http;
-app.config.globalProperties.TZUtils = TZUtils;
+myApp.config.globalProperties.$cookie = cookie;
+myApp.config.globalProperties.$http = http;
+myApp.config.globalProperties.TZUtils = TZUtils;
 
-const vm = app.mount('#app')
-
-
-
+myApp.use(router).use(store).use(ElementPlus,{locale}).mount('#app')

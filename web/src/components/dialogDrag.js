@@ -1,10 +1,11 @@
-import Vue from 'vue';
-
+import {myApp} from '../../config/global';
+import dialog from "./TZForm/dialog";
 // v-dialogDrag: 弹窗拖拽属性
-Vue.directive('dialogDrag', {
-  bind(el, binding, vnode, oldVnode) {
+myApp.directive('dialogDrag', {
+  beforeMount(el, binding, vnode, oldVnode) {
     const dialogHeaderEl = el.querySelector('.el-dialog__header');
     const dragDom = el.querySelector('.el-dialog');
+    if(!(dialogHeaderEl && dragDom))return false;
     //dialogHeaderEl.style.cursor = 'move';
     dialogHeaderEl.style.cssText += ';cursor:move;'
     dragDom.style.cssText += ';top:0px;'

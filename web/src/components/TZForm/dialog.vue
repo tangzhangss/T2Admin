@@ -1,10 +1,12 @@
 <template>
-  <div>
-    <el-dialog  class="tz-form-dialog" :append-to-body='true' :width="width" v-loading="dialogLoading" :visible.sync="show" :title="title" :before-close="beforeClose">
-      <tz-form ref="tzForm"   :readonly="readonly" :edit-column="editColumn" :edit-column-rules="editColumnRules" :edit-column-default-value="editColumnDefaultValue"></tz-form>
-      <div style="display: flex;justify-content: flex-end" v-if="submitName">
-        <el-button class="tz-btn-submit" type="primary" @click="submit" v-show="isShowSubmitBtn">{{submitName}}</el-button>
-        <el-button v-for="item in otherAction" v-show="item.isShow" class="tz-btn-submit" :type="item.type" @click="item.onClick($refs['tzForm'].form)">{{item.title}}</el-button>
+  <div  class="tz-form-dialog">
+    <el-dialog top="50px" :append-to-body='true' :width="width" v-model="showValue" :title="title" :before-close="beforeClose">
+      <tz-form  v-loading="dialogLoading"  ref="tzForm"  :readonly="readonly" :edit-column="editColumn" :edit-column-rules="editColumnRules" :edit-column-default-value="editColumnDefaultValue"></tz-form>
+      <div style="display: flex;justify-content: flex-end">
+        <el-button class="tz-btn" type="primary" @click="submit" v-show="isShowSubmitBtn">{{submitName}}</el-button>
+        <template  v-for="item in otherAction">
+          <el-button v-show="item.isShow" class="tz-btn" :type="item.type||'primary'" @click="item.onClick($refs['tzForm'].form)">{{item.title}}</el-button>
+        </template>
       </div>
     </el-dialog>
   </div>
@@ -123,13 +125,23 @@
           })
         },
         closeDialog(){
-          this.$emit('update:show', false);
+          this.showValue=false;
         },
         beforeClose(done){
-          this.$emit('update:show', false);
-          done(false);//取消子组件关闭，由父组件关闭
+          //done(false);取消子组件关闭，由父组件关闭__!!!__elementplus不调用则不关闭
+          this.closeDialog();
         }
       },
+      computed:{
+        showValue:{
+          get(){
+            return this.show;
+          },
+          set(v){
+            this.$emit('update:show',v);
+          }
+        }
+      }
     }
 </script>
 
@@ -137,9 +149,6 @@
   .tz-form-dialog{
     .el-dialog__body{
       padding-top: 0 !important;
-    }
-    .el-dialog{
-      margin-top: 66px !important;
     }
   }
 

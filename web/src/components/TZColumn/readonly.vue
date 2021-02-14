@@ -1,5 +1,5 @@
 <template>
-  <div class="tz-column-edit">
+  <div class="tz-column-readonly">
     <div v-if='item.iType.toUpperCase() == "IMAGE"'>
       <el-image
         :style="item.style"
@@ -16,6 +16,10 @@
     </el-select>
     <el-switch disabled  v-model="form[item.prop]"  v-else-if="['SWITCH'].indexOf(item.iType.toUpperCase())>-1"></el-switch>
     <div class="select-show-quill-editor" v-else-if='item.iType.toUpperCase() == "QUILL-EDITOR"' v-html="form[item.prop]"></div>
+
+    <div :style="item.style" class="select-show-textarea" v-else-if='item.iType.toUpperCase() == "TEXTAREA"'  style="white-space: pre-wrap;">
+      {{form[item.showKey?item.showKey:item.prop]}}
+    </div>
     <div v-else class="input-show-text">
       {{form[item.showKey?item.showKey:item.prop]}}
     </div>
@@ -42,7 +46,7 @@
 <style lang="scss">
   $tz_input_border_color:#DCDFE6;
   $height:40px;
-  .tz-column-edit{
+  .tz-column-readonly{
     .input-show-text{
       border-bottom: 1px solid $tz_input_border_color;
       min-height: $height;
@@ -53,7 +57,10 @@
         background-color: unset;
       }
     }
-    .select-show-quill-editor{
+    .image{
+      border: 1px dashed #777;
+    }
+    .select-show-quill-editor,.select-show-textarea{
       border: 1px solid $tz_input_border_color;
       padding: 5px;
       max-height: 320px;

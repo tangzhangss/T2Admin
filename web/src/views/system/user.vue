@@ -15,33 +15,36 @@
 
     <el-dialog
       title="选择角色"
-      class="system-user-role-dialog"
-      :visible.sync="roleDrawerShow">
-      <el-checkbox-group v-model="checkRoleList" @change="checkRoleChange">
-        <el-checkbox v-for="item in roleList" :label="item.name"></el-checkbox>
-      </el-checkbox-group>
-
-      <div style="text-align: right">
-        <el-button type="primary" class="tz-btn" @click="updateRoleIds">保存</el-button>
+      v-model="roleDrawerShow">
+      <div v-if="roleList&&roleList.length>0">
+        <el-checkbox-group v-model="checkRoleList" @change="checkRoleChange">
+          <el-checkbox v-for="item in roleList" :label="item.name"></el-checkbox>
+        </el-checkbox-group>
+        <div style="text-align: right">
+          <el-button type="primary" class="tz-btn" @click="updateRoleIds">保存</el-button>
+        </div>
       </div>
+      <div v-else style="color: gray">[暂无定义角色]</div>
     </el-dialog>
 
     <el-dialog
       title="修改密码"
-      :visible.sync="modifyPwdDialogVisible"
+      v-model="modifyPwdDialogVisible"
       >
        <el-form label-position="right" label-width="auto" :inline="true">
-         <el-form-item label="新密码" prop="pass" style="display: flex;align-items: center">
+         <el-form-item label="新密码" prop="pass" style="display: flex;align-items: center" required>
            <el-input type="password" v-model="tempValue1" autocomplete="off"></el-input>
          </el-form-item>
-         <el-form-item label="确认密码" prop="checkPass" style="display: flex;align-items: center">
+         <el-form-item label="确认密码" prop="checkPass" style="display: flex;align-items: center" required>
            <el-input type="password"  v-model="tempValue2"  autocomplete="off"></el-input>
          </el-form-item>
        </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button class="tz-btn" @click="modifyPwdDialogVisible = false">取 消</el-button>
-        <el-button  class="tz-btn" type="primary" @click="modifyUserPwdExec">确 定</el-button>
-     </span>
+      <template #footer>
+        <div  class="dialog-footer">
+          <el-button class="tz-btn" @click="modifyPwdDialogVisible = false">取 消</el-button>
+          <el-button  class="tz-btn" type="primary" @click="modifyUserPwdExec">确 定</el-button>
+        </div>
+     </template>
     </el-dialog>
   </div>
 </template>
@@ -109,7 +112,7 @@
           {prop:"phone",label:"手机",iType:'text',iSpan:12},
           {prop:"email",label:"邮箱",iType:'text',required: true, rules:[{type: 'email',message: '请输入正确的邮箱地址',trigger:"blur"}],iSpan:12,},
           {prop:"username",label:"登录账号",placeholder:"如果不填，将默认为手机号",iType:'text',iSpan:12,tip:"密码默认123456,请保存用户信息之后再修改"},
-          {prop:"usable",label:"账号状态",iType:'switch'},
+          {prop:"usable",label:"账号状态",iType:'switch',iSpan:24},
           {prop:"remark",label:"备注",iType:'text',iSpan:24}
         ]
       }

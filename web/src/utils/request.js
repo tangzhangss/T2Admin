@@ -1,12 +1,11 @@
 import axios from 'axios'
-import { MessageBox, Message,Notification} from 'element-ui'
-import cookie from 'js-cookie'
+import { ElMessageBox, ElMessage,ElNotification} from 'element-plus'
 import store from "@/store";
 
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
+  withCredentials: true, // send cookies when cross-domain requests
   timeout: 10000 // request timeout,
 })
 
@@ -18,7 +17,7 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    Message({
+    ElMessage({
       message: error,
       type: 'error',
       duration: 5 * 1000
@@ -33,8 +32,8 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     //200才表示成功_其他表示业务处理失败
-    if(res.code!=200){
-      Notification({
+    if(!res.code||res.code!=200){
+      ElNotification({
         title:res.message,
         message: res.data,
         type: 'error',
@@ -45,17 +44,20 @@ service.interceptors.response.use(
     }
     return res;
   }, error => {
-    const res = error && error.response && error.response.data;
+    let res = error && error.response && error.response.data;
     //服务器内部错误box包含的状态码
     const handleCode=[500,405];
+
+    res=res||{};//可能不存在
+
     if(handleCode.indexOf(res.code) >= 0){
-        MessageBox({
-          title: '服务器内部错误',
-          dangerouslyUseHTMLString: true,
-          message:errorHtml(res),
-        }).then(r => {})
-    }else if(res.code==401) {
-      Notification({
+      ElMessageBox({
+        title: '服务器内部错误',
+        dangerouslyUseHTMLString: true,
+        message: errorHtml(res),
+      }).then(() =>{})
+    } else if(res.code==401) {
+      ElNotification({
         title:res.message,
         message: res.data,
         type: 'error',
@@ -64,8 +66,8 @@ service.interceptors.response.use(
       })
       store.commit("permission/CLEAR_TOKEN");
     }else {
-        Message({
-          message: res.message || res,//有可能返回的不是后端Result对象
+      ElMessage({
+          message: res.message || "加载失败，请刷新页面",//有可能返回的不是后端Result对象
           type: 'error',
           duration: 5 * 1000
         })

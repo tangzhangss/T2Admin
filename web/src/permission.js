@@ -1,19 +1,16 @@
-import router, {router404} from './router'
+import {router,router404} from './router'
 import store from './store'
-import { Message } from 'element-ui'
+import { ElMessage } from 'element-plus'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import cookie from 'js-cookie' // get token from cookie
-import getPageTitle from '@/utils/get-page-title'
-import Router from "vue-router";
-import Layout from "@/layout/index";
+import getPageTitle from "@/utils/get-page-title"
 
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async(to, from) => {
   // start progress bar
   NProgress.start()
   // set page title
@@ -21,45 +18,33 @@ router.beforeEach(async(to, from, next) => {
   let userInfo = store.getters.userInfo;
   if (userInfo) {
     if (to.path === '/login') {
-      next({ path: '/' })
       NProgress.done()
     } else {
       let userMenu = store.getters.userMenu;
-      if(userMenu){
-        next();
-      }else{
+      if(!userMenu){
         //去其他页面
         try{
           const routes = await store.dispatch('permission/generateRoutes');
-          await router.addRoutes(routes);
-          //测试用
-          // await router.addRoutes([{
-          //   path: '/system',
-          //   component:Layout,
-          //   redirect: '/Test',
-          //   children: [
-          //     {path:"menu",name:"Menu",meta:{"title":"左侧菜单","icon":"el-icon-menu"},component:()=>import('@/views/system/menu')}
-          //   ],
-          //   meta:{"title":"Test","icon":"el-icon-menu"}
-          // }]);
-          await router.addRoutes([router404]);//404页面放在最后
-          next({ ...to, replace: true })
+          for (let i=0;i<routes.length;i++){
+             await router.addRoute(routes[i]);
+          }
+          // await router.addRoute(router404);//404页面放在最后-vue-router4不需要了
+          // console.log("routers:",routes,router.getRoutes());
+          return to.path;
         }catch (error) {
           store.commit("permission/CLEAR_TOKEN");
-          Message.error(error.message || '系统错误')
+          ElMessage.error(error.message || '系统错误')
           console.log("ERROR:",error);
-          next(`/login?redirect=${to.path}`)
+          return `/login?redirect=${to.path}`;
           NProgress.done()
         }
       }
     }
   } else {
     /* has no token*/
-    if (whiteList.indexOf(to.path) !== -1) {
-      next()
-    } else {
-      next(`/login?redirect=${to.path}`)
+    if (whiteList.indexOf(to.path) == -1) {
       NProgress.done()
+      return `/login?redirect=${to.path}`;
     }
   }
 })

@@ -1,7 +1,7 @@
 import {router404, constantRoutes} from '@/router';
 import {importPage404,importComponent} from '@/../config/asyncRoute';
 import cookie from 'js-cookie';
-import '@/../config/global.js';
+import {app} from '@/../config/global.js';
 import TZUtils from "@/utils/TZUtils";
 import Layout from "@/layout/index";
 import http from '@/utils/request'
@@ -139,15 +139,14 @@ function parseRoute(item,isRoot){
       icon:item.icon
     },
     orderNo:item.orderNo,
-    alwaysShow:item.alwaysShow
+    alwaysShow:item.alwaysShow,
+    name:item.name
   }
   //根目录
   if(isRoot){
     route.component=Layout;
-    route.name="component";
     route.redirect=item.redirect;
   }else {
-      route.name=item.name;
       //子菜单重定向---一般不会用到
       if(TZUtils.trim(item.redirect)!="noRedirect"){
          route.redirect=item.redirect;

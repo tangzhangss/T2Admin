@@ -1,42 +1,44 @@
 <template>
+  <el-tooltip  class="tz-column-edit" :style="item.style"  :disabled="!item.tip" :content="item.tip" :placement="item.tipPlacement?item.tipPlacement:'right'">
+    <div>
+      <el-input  :disabled="item.disabled" :placeholder="item.placeholder" :style="item.style" clearable :type="item.iType" class="input-text"  v-model="form[item.prop]"  v-if="['TEXT','PASSWORD','TEXTAREA','NUMBER'].indexOf(item.iType.toUpperCase())>-1"></el-input>
+      <!--图片类型-->
+      <el-upload ref="elUpLoad" v-else-if='item.iType.toUpperCase() == "IMAGE"'
+                 action="/service_api/aliyunoss/upload_picture/no_auth"
+                 :before-upload="beforeImageUpload"
+                 :on-success="successImageUpload"
+                 :on-error="errorImageUpload"
+                 accept="image/*"
+                 :limit="1"
+                 :show-file-list="false"
+                 drag :style="item.style" v-loading="imageLoading">
+        <el-image
+                :style="item.style"
+                v-if="form[item.prop]" :src="form[item.prop]" class="image"
+                :fit="item.fit?item.fit:'fill'"></el-image>
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+      <!--switch-->
+      <el-switch :disabled="item.disabled"  :style="item.style"  v-model="form[item.prop]"  v-else-if="['SWITCH'].indexOf(item.iType.toUpperCase())>-1">
+      </el-switch>
+      <el-select v-model="form[item.prop]"  :multiple="item.multiple"  filterable clearable placeholder="请选择" v-else-if="['SELECT'].indexOf(item.iType.toUpperCase())>-1">
+        <el-option
+                v-for="option in item.options"
+                :key="option[item.selectKey]"
+                :label="option[item.selectLabel]"
+                :value="option[item.selectValue]">
+        </el-option>
+      </el-select>
 
-  <el-tooltip class="tz-column-readonly" :disabled="!item.tip" :content="item.tip" :placement="item.tipPlacement?item.tipPlacement:'right'">
-    <el-input  :disabled="item.disabled" :placeholder="item.placeholder" :style="item.style" clearable :type="item.iType" class="input-text"  v-model="form[item.prop]"  v-if="['TEXT','PASSWORD','TEXTAREA','NUMBER'].indexOf(item.iType.toUpperCase())>-1"></el-input>
-    <!--图片类型-->
-    <el-upload ref="elUpLoad" v-else-if='item.iType.toUpperCase() == "IMAGE"'
-               action="/service_api/aliyunoss/upload_picture/no_auth"
-               :before-upload="beforeImageUpload"
-               :on-success="successImageUpload"
-               :on-error="errorImageUpload"
-               accept="image/*"
-               :limit="1"
-               :show-file-list="false"
-               drag :style="item.style" v-loading="imageLoading">
-      <el-image
-        :style="item.style"
-        v-if="form[item.prop]" :src="form[item.prop]" class="image"
-        :fit="item.fit?item.fit:'fill'"></el-image>
-      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-    </el-upload>
-    <!--switch-->
-    <el-switch :disabled="item.disabled"  :style="item.style"  v-model="form[item.prop]"  v-else-if="['SWITCH'].indexOf(item.iType.toUpperCase())>-1">
-    </el-switch>
-    <el-select v-model="form[item.prop]"  :multiple="item.multiple"  filterable clearable placeholder="请选择" v-else-if="['SELECT'].indexOf(item.iType.toUpperCase())>-1">
-      <el-option
-        v-for="option in item.options"
-        :key="option[item.selectKey]"
-        :label="option[item.selectLabel]"
-        :value="option[item.selectValue]">
-      </el-option>
-    </el-select>
-    <!--富文本类型-->
-    <quill-editor
-      ref="tzQuillEditor"
-      v-model="form[item.prop]"
-      :options="editorOption"
-      @change="onEditorChange($event)"
-      v-else-if='item.iType.toUpperCase() == "QUILL-EDITOR"'
-    />
+      <!--富文本类型 VUE3.0版本的后面再弄-->
+<!--      <quill-editor-->
+<!--              ref="tzQuillEditor"-->
+<!--              v-model="form[item.prop]"-->
+<!--              :options="editorOption"-->
+<!--              @change="onEditorChange($event)"-->
+<!--              v-else-if='item.iType.toUpperCase() == "QUILL-EDITOR"'-->
+<!--      />-->
+    </div>
   </el-tooltip>
 
 
@@ -47,9 +49,9 @@
     import 'quill/dist/quill.snow.css';
     import 'quill/dist/quill.bubble.css';
     import { quillEditor } from 'vue-quill-editor';
-    import { ImageDrop } from 'quill-image-drop-module'
-    import ImageResize from 'quill-image-resize-module'
-    import { setQuillTitle } from "@/utils/vue-quill-title"
+    import {ImageDrop}  from 'quill-image-drop-module';
+    import {ImageResize} from 'quill-image-resize-module';
+    import { setQuillTitle } from "@/utils/vue-quill-title";
     Quill.register('modules/imageDrop', ImageDrop);
     Quill.register('modules/imageResize', ImageResize);
 
@@ -121,8 +123,6 @@
             if (response.code!=200){
               this.$message.error("图片上传失败");
             }else{
-              console.log(this.$refs,this.$refs.elUpLoad);
-              console.log(this.item.prop);
               this.$refs.elUpLoad.clearFiles(); //上传成功之后清除历史记录,不然再次点击修改会报错
               this.form[this.item.prop]=response.data;
             }
@@ -146,7 +146,12 @@
 
 <style lang="scss">
    $height:30px;
-  .tz-column-readonly{
+  .tz-column-edit{
+    .el-textarea__inner{
+      padding: 6px;
+      height: 100%;
+
+    }
     .el-upload{
       height: 80px;//上传框默认
       width: 80px;//上传框默认

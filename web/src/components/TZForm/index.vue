@@ -28,7 +28,7 @@
   <div class="tz-form">
       <el-form ref="tzForm" :model="form" :rules="editColumnRules" label-width="auto" :inline="true">
         <el-row :gutter="5" class="row">
-          <el-col  v-for="(item,index) in formColumn" :key="item.prop" :span="item.iSpan"  class="col">
+          <el-col  v-for="(item,index) in formColumn" :span="item.iSpan"  class="col">
             <!--文本输入框-->
             <el-form-item :label="item.label" :rules="item.rules" :prop="item.prop" v-show="item.isShow!==false && (item.isVisibleFunc?item.isVisibleFunc(form):true)">
               <!--仅仅展示-->
@@ -46,6 +46,7 @@
     import TZUtils from "@/utils/TZUtils";
     import TZColumnEdit from "@/components/TZColumn/edit";
     import TZColumnReadonly from "@/components/TZColumn/readonly";
+    import { nextTick } from 'vue';
 
     export default {
         name: "tz-form",
@@ -108,13 +109,14 @@
         //表单的值初始化
         editColumnDefaultValue:{
           handler(val){
-            this.form=TZUtils.deepClone2(val);
-
-            //因为刚开始进来是编辑状态没有加载这个组件
-            if(this.$refs["tzForm"]){
-              //每次初始值改变都清空校验规则
-              this.$refs["tzForm"].clearValidate();
-            }
+            nextTick(()=>{
+              this.form=TZUtils.deepClone2(val);
+              //因为刚开始进来是编辑状态没有加载这个组件
+              if(this.$refs["tzForm"]){
+                //每次初始值改变都清空校验规则
+                this.$refs.tzForm.clearValidate();
+              }
+            });
           },
           deep:true,
           immediate:true //true就表示会立即执行

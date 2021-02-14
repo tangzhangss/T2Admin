@@ -1,7 +1,7 @@
 # TZCC-REN ADMIN STSREM 管理后台(前端)
 
 基础框架：element-template 
-UI框架:element-ui
+UI框架:element-plus
 后端配合框架:my_admin_api(自制)
 
 ## 开发规范:

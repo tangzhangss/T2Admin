@@ -1,8 +1,7 @@
-import Vue from 'vue'
 import SvgIcon from '@/components/SvgIcon'// svg component
-
+import {myApp} from "../../config/global";
 // register globally
-Vue.component('svg-icon', SvgIcon)
+myApp.component('svg-icon', SvgIcon)
 
 const req = require.context('./svg', false, /\.svg$/)
 const requireAll = requireContext => requireContext.keys().map(requireContext)

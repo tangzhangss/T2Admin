@@ -9,7 +9,7 @@
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
-      <template slot="title">
+      <template #title><!--这里使用#而不是slot-->
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
       <sidebar-item
@@ -49,6 +49,8 @@ export default {
       type: String,
       default: ''
     }
+  },
+  created(){
   },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237

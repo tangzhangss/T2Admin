@@ -6,8 +6,19 @@
       <li>待完善</li>
     </ul>
     <el-divider class="divider-title" content-position="left">更新日志</el-divider>
-    <ul>
-      <li class="bold">v2.0.0(2020-01-17)</li>
+    <ul class="update-log">
+      <li>
+        <p class="bold">v2.0.1(2021-03-05)</p>
+        <div class="text">
+          <p>前端技术框架升级vue3.0</p>
+        </div>
+      </li>
+      <li>
+        <p class="bold">v2.0.0(2021-01-17)</p>
+        <div class="text">
+          <p>Init</p>
+        </div>
+      </li>
     </ul>
   </div>
 </template>
@@ -27,7 +38,11 @@ export default {
     color: gray;
   }
 }
-ul{
- font-size: 14px;
+.update-log{
+  font-size: 14px;
+  .text{
+    padding: 0 5px;
+    color: gray;
+  }
 }
 </style>

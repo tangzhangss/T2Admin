@@ -54,11 +54,12 @@
     }
 
     .svg-icon {
-      margin-right: 12px;
+      width: 24px;
+      margin-right: 5px;
     }
 
     .sub-el-icon {
-      margin-right: 12px;
+      //margin-right: 12px;
       //margin-left: -2px;
       font-size: inherit;
     }
@@ -113,7 +114,7 @@
         }
 
         .sub-el-icon {
-          margin-left: 19px;
+          margin-left: 15px;
         }
       }
     }
@@ -129,7 +130,7 @@
         }
 
         .sub-el-icon {
-          margin-left: 19px;
+          margin-left: 15px;
         }
 
         .el-submenu__icon-arrow {
@@ -190,11 +191,13 @@
 .el-menu--vertical {
   &>.el-menu {
     .svg-icon {
-      margin-right: 16px;
+      //margin-right: 12px;
+      width: 24px;
+      margin-right: 5px;
     }
     .sub-el-icon {
-      margin-right: 12px;
-      margin-left: -2px;
+      //margin-right: 12px;
+      //margin-left: -2px;
     }
   }
 
@@ -210,6 +213,7 @@
   >.el-menu--popup {
     max-height: 100vh;
     overflow-y: auto;
+    min-width: 140px;
 
     &::-webkit-scrollbar-track-piece {
       background: #d3dce6;
