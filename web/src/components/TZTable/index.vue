@@ -37,19 +37,27 @@
             </el-dialog>
           </div>
         </div>
-        <el-button type="primary" plain @click="editData()">新建</el-button>
+        <el-button v-if="operation.includes('create')" type="primary" plain @click="editData()">新建</el-button>
+
+        <template v-for="item in operationOthers">
+          <el-button v-if="item.isShow!==false" :type="item.type||'primary'" plain @click="item.onClick()">{{item.title}}</el-button>
+        </template>
       </div>
       <div class="right">
         <!--清空-->
-<!--        <el-popconfirm-->
-<!--          confirm-button-text='好的'-->
-<!--          cancel-button-text='不用了'-->
-<!--          icon="el-icon-warning"-->
-<!--          icon-color="red"-->
-<!--          title="您正在清空所有的数据？"-->
-<!--        >-->
-<!--          <el-button type="info" plain  slot="reference" style="margin-right: 5px">清空</el-button>-->
-<!--        </el-popconfirm>-->
+        <el-popconfirm
+          confirm-button-text='好的'
+          cancel-button-text='不用了'
+          icon="el-icon-warning"
+          icon-color="red"
+          title="您正在删除（清空）当前所有的数据？"
+          v-if="clear.show"
+          @confirm="clearTableData"
+        >
+            <template #reference>
+                <el-button type="info" plain>清空</el-button>
+            </template>
+        </el-popconfirm>
         <el-popover
           placement="bottom"
           trigger="click">
@@ -71,7 +79,7 @@
       :style="cStyle" :width="width"  :height="height"
       :row-class-name="tableRowClassName"
       :max-height="maxHeightValue"
-      highlight-current-row
+      :highlight-current-row="highlightCurrentRow"
       @current-change="handleCurrentChange"
       @selection-change="handleSelectionChange"
       @sort-change="handleSortChange"
@@ -157,16 +165,16 @@
            </template>
       </template>
       <!--操作-->
-      <el-table-column v-if="action.length>0" label="操作" fixed="right">
+      <el-table-column v-if="action.length>0 || actionOthers.length>0" label="操作" fixed="right">
         <template #default="scope">
           <div class="action">
-                  <span class="edit" v-if="action.includes('edit')"  title="查看|修改" @click="editData(scope.row)">
+                  <span class="edit" v-if="action.includes('edit')"  title="查看|修改" @click="editData(scope.row,scope.$index)">
                     <i class="el-icon-edit-outline pointer"/>
                   </span>
             <span class="delete" v-if="action.includes('delete')"  title="删除这条记录">
                        <el-popconfirm
                                title="您正在删除这条记录？"
-                               @confirm="deleteData(scope.row)"
+                               @confirm="deleteData(scope.row,scope.$index)"
                                icon="el-icon-warning"
                        >
                          <template  #reference>
@@ -175,20 +183,23 @@
                         </el-popconfirm>
                     </span>
             <span  v-for="action in actionOthers" v-show="!(action.isShow&&!action.isShow(scope.row))"  :title="action.title" @click="action.onClick(scope.row)">
-                      <i :class="action.icon+' pointer'"/>
+
+                        <i v-if="action.icon.includes('el-icon')" :class="action.icon+' pointer'"/>
+                        <svg-icon v-else :icon-class="action.icon" class="pointer"/>
                    </span>&nbsp;
           </div>
         </template>
       </el-table-column>
    </el-table>
     <!--分页-->
-    <div class="pagination">
+    <div class="pagination" v-if="pagination">
         <el-pagination
           background
-          layout="total, sizes, prev, pager, next, jumper"
+          :layout="paginationLayout"
           :total="paginationData.totalElements"
           :page-count="paginationData.totalPages"
           :current-page="paginationData.number"
+          :page-size="paginationData.size"
           @size-change="paginationSizeChange"
           @current-change="paginationCurrentChange"
         >
@@ -217,6 +228,7 @@
   import TZSearch from "./search"
   import TZFormDialog from "@/components/TZForm/dialog";
   import TZUtils from "../../utils/TZUtils";
+  import {nextTick} from 'vue'
 
   export default {
       name: 'tz-table',
@@ -225,6 +237,11 @@
         "tz-form-dialog":TZFormDialog
       },
       props: {
+          //是否选择高亮（单选+currentChange使用）
+          highlightCurrentRow:{
+              type:Boolean,
+              default:false
+          },
         editTitle:{
           type:String,
           default:()=>"编辑"
@@ -269,9 +286,18 @@
           type:Function,
           default:null
         },
+        paginationLayout:{
+            type:String,
+            default:"total, sizes, prev, pager, next, jumper"
+        },
         pagination:{
           type:Object,
-          default:null
+          default:{
+              totalPages:1,
+              totalElements:0,
+              size:10,//每页显示的行数
+              number:1,//当前页
+          }
         },
         //编辑---全局表单校验规则
         editColumnRules:{
@@ -292,6 +318,15 @@
           type:Function,
           default:()=>undefined
          },
+        //顶部左侧的操作按钮
+        operation:{
+          type:Array,
+          default:()=>['create']
+        },
+        operationOthers:{
+          type:Array,
+          default:()=>[]
+        },
         //操作选项如：edit,delete
         action:{
           type:Array,
@@ -304,6 +339,21 @@
         filterTabs:{
           type:Array,
           default:()=>[]
+        },
+        clear:{//是否展示清空按钮
+            type:Object,
+            default:{
+                show:false,
+                param:{}//清空的条件格式去后端get请求的map
+            }
+        },
+        beforeDeleteData:{
+            type:Function,
+            default:async(data)=>true
+        },
+        saveForceFlush:{//保存之后强制刷新数据,默认只有新建的时候才会刷新
+            type:Boolean,
+            default:false,
         }
       },
       data(){
@@ -316,22 +366,18 @@
           editObjectData:{},//新建-编辑对象
           filterModalVisible:false,//筛选静态框
           searchApiUrl:this.apiUrl,//当前的搜索的url-查询条件之后的，比如用于翻页的时候带上
-          paginationData:{
-            totalPages:1,
-            totalElements:0,
-            size:10,//每页显示的行数
-            number:1,//当前页
-          },
+          paginationData:null,
           maxHeightAuto:undefined,//自动计算的表格最大高度
           showEditDialog:false,
           filterTabsQuery:'',
           tzFormReadonly:false,//表单是否只读
           tzFormIsNewCreate:true,//表单是否是新建
+          tzFormIsIndex:true,//当前编辑选择的index(编辑回写不刷新表格)
         }
       },
       created(){
-        this.init();//数据初始化
-        this.initPaginationData();//初始化分页数据
+          this.initPaginationData();//初始化分页数据
+          this.init();//数据初始化
       },
       mounted(){
         //没有设定最大高度就进行自适应操作
@@ -349,11 +395,12 @@
           let query = item.value!=undefined?item.key+"@EQ="+item.value:'';
           if(this.filterTabsQuery != query){
               this.filterTabsQuery=query;
+              if(item.onClick)item.onClick();
               this.getTableData();
           }
         },
         //新建更新数据
-        editData(data){
+        editData(data,index){
           //这是一个异步的func
           this.$emit("edit-data-handle",data);
           this.editObjectData = data || TZUtils.deepClone(this.editColumnDefaultValue) ||{};
@@ -361,23 +408,34 @@
           this.tzFormReadonly=data?true:false;
           //是否新建
           this.tzFormIsNewCreate=data?false:true;
-
+          //当前编辑索引
+          this.tzFormIsIndex=index;
           this.showEditDialog=true;
         },
-        deleteData(data){
+        deleteData(data,index){
+            console.log(index);
           this.loading=true;
-          this.$http.delete(this.apiUrl,[data]).then((res)=>{
-            this.getTableData();
-            //删除数据之后
-            this.$emit("after-delete-data-handle",data);
-            setTimeout(()=>{this.$message.success("删除成功");},666);
-          }).finally(()=>{this.loading=false;})
+          this.beforeDeleteData(data).then((res)=>{
+              if(res!==false) {
+                  //删除操作
+                  this.$http.delete(this.apiUrl,[data]).then((res)=>{
+                      this.tableData.splice(index,1);//随便删除一个，避免抖动
+                      this.getTableData();
+                      this.$message.success("删除成功");
+                      //删除数据之后
+                      this.$emit("after-delete-data-handle",data);
+                  }).finally(()=>{this.loading=false;})
+              }else{
+                  this.loading=false;
+              }
+          })
         },
         init(){
           //2.将tableColumn的最后一个放在第一个（自定义组件时 el-table标签不接column的bug__第一个永远是最后一个）
           // let endElement=this.tableColumn.pop();
           // this.tableColumn.unshift(endElement);
           //column紧跟table标签没有这个问题---------
+
           /*
             1.初始化tableData
            */
@@ -385,8 +443,17 @@
           if (this.dataList){
             this.tableData = this.dataList;
           }else if(this.apiUrl){
-            //如果没有传入数据且有apiUrl就自己请求
-            this.getTableData();
+              /*
+                如果存在过滤条件就默认带上第一个
+                -- 20210227 by tangzhangss
+              */
+              let item = this.filterTabs.length>0?this.filterTabs[0]:undefined;
+              if(item && item.value!=undefined){
+                  this.filterTabsQuery = item.key+"@EQ="+item.value;
+              }
+              //---------------------------------
+              //如果没有传入数据且有apiUrl就自己请求
+              this.getTableData();
           }
           //复制tableCloumn并获取需要的信息
           /*
@@ -412,10 +479,7 @@
           this.tableFilterColumn=filterColumn;
         },
         initPaginationData(){
-          //如果是传入了分页对象就以分页对象为主或则默认分页对象
-          if(this.pagination){
-             this.paginationData=this.pagination
-          }
+            this.paginationData=TZUtils.deepClone(this.pagination);
         },
         //清除所有查询条件
         searchClear(){
@@ -482,7 +546,7 @@
           this.searchApiUrl=url;
           // console.log("查询条件:",url)
           //查询之前总是第一页
-          this.paginationData.number=1;
+          if(this.paginationData)this.paginationData.number=1;
           this.getTableData(url);
 
           //20210206 搜索之后关闭
@@ -492,12 +556,16 @@
           if(!url)url=this.apiUrl;
           this.loading=true;
 
+
           let paginationQuery ="";
-          if(/.*\?+.*/.test(url)){
-            paginationQuery+="&"+this.paginationQuery;
-          }else{
-            paginationQuery+="?"+this.paginationQuery;
+          if(this.paginationQuery){
+             if(/.*\?+.*/.test(url)){
+                paginationQuery+="&"+this.paginationQuery;
+             }else{
+                paginationQuery+="?"+this.paginationQuery;
+             }
           }
+
           let tUrl=url+paginationQuery;
           //加上顶部过滤条件
           if(this.filterTabsQuery){
@@ -585,9 +653,26 @@
             //   this.tableData.unshift(data);
             // }
             //v2.刷新表格 分页数据需要重新加载
-            this.getTableData();
+            console.log("是否强制刷新条件:",this.tzFormIsIndex,this.saveForceFlush);
+            if(this.tzFormIsIndex!==undefined && !this.saveForceFlush){
+                this.tableData[this.tzFormIsIndex]=data;
+            }else{
+                //刷新数据
+                this.getTableData();
+            }
           }
           return true;
+        },
+        //清空table数据
+        clearTableData(){
+            this.loading=true;
+            //获取请求地址，不带参数即没有 ?即后面的东西
+            let api = this.apiUrl.split("?")[0];
+            this.$http.delete(api+"/clean",this.clear.param).then((res)=>{
+                this.tableData=[];
+                this.getTableData();
+                this.$message.success("清空数据成功");
+            }).finally(()=>{this.loading=false;})
         }
        },
       computed:{
@@ -637,9 +722,12 @@
 
 <style lang="scss">
 .tz-table {
-  margin: 0px auto;
+  margin: 5px auto;
   width: 95%;
   box-sizing: border-box;
+   .el-button+.el-button{
+        margin-left: 5px;
+   }
   .tabs{
     height: 50px;
     box-sizing: border-box;

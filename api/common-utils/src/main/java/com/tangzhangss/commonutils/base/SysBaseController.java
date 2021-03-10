@@ -50,4 +50,11 @@ public abstract class SysBaseController<T extends SysBaseEntity,TT extends SysBa
         return Result.ok;
     }
 
+    @DeleteMapping("/clean")
+    public Result clean(@RequestBody Map mp) throws Exception{
+        myService.clean(mp);
+        return Result.ok;
+    }
+
+
 }

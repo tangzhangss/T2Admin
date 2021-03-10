@@ -5,6 +5,7 @@ import com.tangzhangss.commonutils.config.Attribute;
 import com.tangzhangss.commonutils.exception.ServiceException;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.uidgenerator.UidGeneratorService;
+import com.tangzhangss.commonutils.utils.BaseUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.slf4j.Logger;
@@ -61,6 +62,9 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         return isQueryAll;
     }
 
+    /*
+    如果usable属性不用于做假删，请一定重写此方法并返回true
+     */
     // 是否是真删，默认假删
     protected boolean bSureDelete() {
         return false;
@@ -160,7 +164,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      */
     public Page<T>  get(HttpServletRequest request, Map<String, String> paramsMap){
         int iPgIndex = 1;//默认第一页
-        int iPgSize =10;//默认1页10个
+        int iPgSize=Integer.MAX_VALUE;//默认不分页
         Sort sort;//分页
         Specification specification;
 
@@ -171,7 +175,6 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             if (StringUtils.isNotBlank(sPageSize)) iPgSize = Integer.parseInt(sPageSize);
             String queryAll = request.getParameter("queryAll");
             if (StringUtils.isNotBlank(queryAll) && queryAll.equals("true")) isQueryAll = true;
-            else isQueryAll = false;
 
                     /*
             前端有分组查询单独处理
@@ -183,14 +186,14 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             }
         }
 
-        if(paramsMap!=null){//paramsMap用于开人人员调用-不分页
-            iPgSize=Integer.MAX_VALUE;
-        }
 
         if(iPgIndex<=0)iPgIndex=1;
         PageRequest page = PageRequest.of(iPgIndex-1,iPgSize);
         specification = getCommonSpecification(request,paramsMap);
         Page<T> pageList = myDao.findAll(specification,page);
+
+        //每次查询完成之后报这个条件置为false;
+        isQueryAll = false;
 
         return pageList;
     }
@@ -454,10 +457,10 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         if(null==data.id){
             data.id=uidGeneratorService.getuid();
         }else{
-            //检查字段是否重复
-            this.checkUnionField(data);
             data.updateTime=LocalDateTime.now();
         }
+        //检查字段是否重复
+        this.checkUnionField(data);
         myDao.save(data);
         this.afterSaveData(data);
         return data;
@@ -474,12 +477,27 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             myDao.deleteAll(data);
         }else{
             for (T item:data){
-                item.setUsable(false);
+                if(!item.usable){//如果删除一个usable为false的始终都是真删除
+                    myDao.delete(item);
+                }else{
+                    item.setUsable(false);
+                    myDao.save(item);
+                }
             }
-            myDao.saveAll(data);
         }
         this.afterDeleteData(data);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void clean(Map map){
+        List<T> data = getWithMap(map);
+        this.beforeClean(data);
+        myDao.deleteAll(data);
+        this.afterClean(data);
+    }
+
+    protected void beforeClean(List<T> data){};
+    protected void afterClean(List<T> data){};
 
     // 保存前需要做的事请
     protected void beforeSaveData(T data) throws Exception{}
@@ -518,7 +536,11 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             String[] keys= mKey.split(",");
             StringBuffer sb = new StringBuffer();
             for (String key : keys){
-                field = aClass.getDeclaredField(key);
+                try{
+                    field = aClass.getDeclaredField(key);
+                }catch (NoSuchFieldException e){
+                    field = BaseUtil.getField(key,aClass);
+                }
                 //打开私有访问
                 field.setAccessible(true);
                 //获取属性值
@@ -528,7 +550,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             }
             //不是当前记录
             flMap.put("id@NEQ", data.getId().toString());
-            isQueryAll=true;//需要查询全部的包括usable(被禁用的)
+//            isQueryAll=true;//需要查询全部的包括usable(被禁用的)
             sb.append("被占用,请修改");
             System.out.println(sb.toString());
             // 如果有，则说明重复了
@@ -589,27 +611,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         return null;
     }
 
-    /**
-     * 获取类中的字段Field对象
-     * @param fieldName 字段属性名
-     * @param clazz 类
-     */
-    private  Field getField(String fieldName,Class clazz){
-        List<Field> fieldsList = new ArrayList<Field>();//保存所有的field
-        do{  // 遍历所有父类字节码对象
-            Field[] declaredFields = clazz.getDeclaredFields();  // 获取字节码对象的属性对象数组
-            fieldsList.addAll(Arrays.asList(declaredFields));
-            clazz = clazz.getSuperclass();  // 获得父类的字节码对象
-        }while (clazz != null);
-        //遍历field
-        for (Field field:fieldsList){
-            if(field.getName().equals(fieldName)){
-                //找到了匹配的
-                return field;
-            }
-        }
-        return null;
-    }
+
 
     /*
   返回当前字段名的类型转换之后的数据
@@ -617,54 +619,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     private Object parseObject(String key,Object value){
         //获取当前实体类的class对象
         Class entityClass  = getGenericType(0);
-        String fieldType="";
-        String []keys=key.split("\\.");
-        Field field=null;
-        if(keys.length>1){//多级
-            for(int i=0;i<keys.length;i++){
-                field = getField(keys[i],entityClass);
-                if (null==field)break;
-                entityClass=field.getType();
-                if(i==(keys.length-1)){fieldType = field.getGenericType().toString();}
-            }
-        }else{//一级
-            field = getField(key,entityClass);
-            if (null!=field)fieldType=field.getGenericType().toString();
-        }
-        switch (fieldType){
-            case "class java.lang.String":
-                //Srting直接跳过
-                break;
-            case "class java.lang.Integer":
-            case "int":
-                //当都查询Int类型的不会有问题，当时需要使用in范围查询需要进行类型转换
-                value=Convert.convert(Integer.class, value);
-                break;
-            case "class java.lang.Long":
-            case "long":
-                //当都查询Int类型的不会有问题，当时需要使用in范围查询需要进行类型转换
-                value=Convert.convert(Long.class, value);
-                break;
-            case "class java.time.LocalDate":
-                //格式 yyyy-MM-dd 前面必须四位
-                value = Convert.convert(LocalDate.class, value);
-                break;
-            case "class java.time.LocalDateTime":
-                //格式 精度只能高于---如有需要自行更改
-                value = Convert.convert(LocalDateTime.class, value);
-                break;
-            case "class java.util.Date":
-                //格式 精度只能高于---如有需要自行更改
-                value = Convert.convert(Date.class, value);
-                break;
-            case "class java.lang.Boolean":
-            case "boolean":
-                //格式 精度只能高于---如有需要自行更改
-                value = Convert.convert(Boolean.class, value);
-                break;
-        }
-
-        return value;
+        return BaseUtil.convertObject(entityClass,key,value);
     }
 
     /*

@@ -4,17 +4,18 @@
       <el-input  :disabled="item.disabled" :placeholder="item.placeholder" :style="item.style" clearable :type="item.iType" class="input-text"  v-model="form[item.prop]"  v-if="['TEXT','PASSWORD','TEXTAREA','NUMBER'].indexOf(item.iType.toUpperCase())>-1"></el-input>
       <!--图片类型-->
       <el-upload ref="elUpLoad" v-else-if='item.iType.toUpperCase() == "IMAGE"'
-                 action="/service_api/aliyunoss/upload_picture/no_auth"
+                 :action="item.imageUploadApi || '/service_api/aliyunoss/upload_picture'"
                  :before-upload="beforeImageUpload"
                  :on-success="successImageUpload"
                  :on-error="errorImageUpload"
                  accept="image/*"
                  :limit="1"
+                 :headers="{'X-Token':$store&&$store.getters&&$store.getters.userInfo&&$store.getters.userInfo.token}"
                  :show-file-list="false"
-                 drag :style="item.style" v-loading="imageLoading">
+                 drag :style="item.style?item.style:'width:80px;height:80px'" v-loading="imageLoading">
         <el-image
                 :style="item.style"
-                v-if="form[item.prop]" :src="form[item.prop]" class="image"
+                v-if="form[item.prop]" :src="form[item.prop]" class="image pointer"
                 :fit="item.fit?item.fit:'fill'"></el-image>
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
@@ -65,7 +66,7 @@
           form:{//这个对象采用引用绑定==》这个组件可以改变父组件的属性值
             type:Object,
             required: true
-          }
+          },
         },
         components: {
           quillEditor
@@ -153,8 +154,8 @@
 
     }
     .el-upload{
-      height: 80px;//上传框默认
-      width: 80px;//上传框默认
+      height: 100%;
+      width:  100%;
     }
     .el-upload-dragger,.el-upload--picture-card{
       display: flex;

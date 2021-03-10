@@ -12,28 +12,99 @@ UI框架:element-plus
     
 ## 说明文档（所有组件都是基于element-ui,使用习惯几乎一样）
 
+### TZEditableTable(可编辑表格-使用方式和表格一致，这里仅仅罗列注意事项)
+    根据表格列的readony属性判断该行是否可以编辑（所以编辑对象不能有这个属性）  
+ :table-column(表格的列)   
+   > required: true,(不能为空)
+   > validator: (value)=>{} 保存验证器，返回false不保存 true保存
+>
 ### TZTable(表格)
+
+    表格的删除是单独保存和修改删除，可编辑的表格是批量删除和保存修改
       
 “自定义展示列”=》通过列的名字（label）来区分=》请确保唯一
   hide:判定该列是否展示,
 
-“筛选”=》
+##### “筛选”=》
     需要对tableColumn给予fliterable（表示可作为筛选条件）
     iType(选填，筛选类型(对饮input类型)，如果没有就跟cType属性一直,如:时间段（dateRange datetimeRange）等需要自定义)
     iSpan:筛选条件占用总比例（24）的长度
     isShowFilter（默认展示该条件）
 
-编辑（新建）:
+##### 编辑（新建）:
  submit-api 配合后端框架使用
  edit-data-handle(data) 编辑时候数据处理
-操作行为:
-action-others='[{title:"创建子菜单",icon:"el-icon-circle-plus",onClick:editDataHandle(row),isShow:isShow(row)}]'
+##### 表格清空功能(prop)
+param的构造同后端get请求查询条件map结构
+```
+:clear="{
+   show:isShowClearBtn,
+   param:{
+       'usable@EQ':false
+        }
+}"
+``` 
+##### 操作行为:
+表格右上角的操作行为 :operation-others(prop)
+表格中每一行记录后面的操作信息如下，两者结构相同
+```
+:action-others='[{title:"创建子菜单",icon:"el-icon-circle-plus",onClick:editDataHandle(row),isShow:isShow(row)}]'
+```
+同时还有系统默认的一些行为可通过一下方式使用
+```
+:action=['create','delete',....]
+```
+##### 分页:
+pagination==null不显示分页数据
+```
+     paginationLayout:{
+                type:String,
+                default:"total, sizes, prev, pager, next, jumper"
+            },
+            pagination:{
+              type:Object,
+              default:{
+                  totalPages:1,
+                  totalElements:0,
+                  size:10,//每页显示的行数
+                  number:1,//当前页
+            }
+     },
+```
+##### 顶部tabs: (点击之后查询的时候会拼接此查询条件，默认第一个)
+    :filter-tabs="filterTabs"
+    ```
+    filterTabs:[
+              {
+                label:"全部",
+                badge:0,//右上角提示的值
+                key:"usable",
+                value:true,
+                onClick:()=>{this.isShowClearBtn=false}//回调
+              },
+              {
+                label:"回收站",
+                badge:0,//右上角提示的值
+                key:"usable",
+                value:false,
+                onClick:()=>{this.isShowClearBtn=true}//回调
+                apiKey:0//后端返回属性名-与后端对应-不重复（如设置badge的值）
+              },
+            ],
+    ```   
 
-成功回调 editSuccessHandle
-提交之前回调 editSubmitBeforeFunc
-提交之后回调 editSubmitAfterFunc
+##### 成功回调 editSuccessHandle
+##### 提交之前回调 editSubmitBeforeFunc
+##### 提交之后回调 editSubmitAfterFunc
+##### 删除之前的prop(异步方法，返回false===,取消删除)   
+```
+beforeDeleteData:{
+    type:Function,
+    default:async(data)=>true
+  }
+```
 
-示例(部分代码):
+##### 示例(部分代码,20201205版):
 ```
 <template>
   <div>

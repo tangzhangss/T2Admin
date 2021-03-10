@@ -17,27 +17,4 @@ import javax.persistence.Transient;
 @Data
 public class AlbumEntity extends SysBaseEntity {
     private String title;
-
-    /*
-    相册内容 url||url2||url3
-     */
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
-    @Transient
-    private String imageConnector="&:&";//图片链接符号
-
-    @Transient
-    private String [] images=new String[]{};
-
-    public String[] getImages() {
-        if(StringUtils.isNotBlank(content)){
-            images = content.split(imageConnector);
-        }
-        return images;
-    }
-
-    public void setImages(String[] images) {
-        this.content = StringUtils.join(images,imageConnector);
-    }
 }

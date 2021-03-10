@@ -3,7 +3,8 @@
     <div v-if='item.iType.toUpperCase() == "IMAGE"'>
       <el-image
         :style="item.style"
-        v-if="form[item.prop]" :src="form[item.prop]" class="image"
+        :preview-src-list="new Array(form[item.prop])"
+        v-if="form[item.prop]" :src="form[item.prop]" class="image pointer"
         :fit="item.fit?item.fit:'fill'"></el-image>
     </div>
     <el-select class="select-show-text" v-model="form[item.prop]" disabled  :multiple="item.multiple"  placeholder="请选择" v-else-if="['SELECT'].indexOf(item.iType.toUpperCase())>-1">

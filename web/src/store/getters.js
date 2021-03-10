@@ -4,5 +4,5 @@ export const getters = {
   userInfo: state => state.permission.userInfo, //用户信息
   userMenu: state => state.permission.userMenu, //用户菜单
   routes: state => state.permission.routes, //用户路由
-  hasAuth: state => state.permission.hasAuth,//用户是否具备token__不仅用token还需要有菜单
+  // hasAuth: state => state.permission.hasAuth,//用户是否具备token__不仅用token还需要有菜单
 }

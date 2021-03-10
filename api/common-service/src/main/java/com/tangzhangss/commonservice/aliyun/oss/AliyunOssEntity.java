@@ -7,6 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+/**
+ * endpoint
+ * bucket
+ * 属性请不要更改
+ * （更改之后已经存过的图片删除会找不到文件）
+ */
 @Entity
 @Table(name = "tbl_common_service_aliyun")
 @Data

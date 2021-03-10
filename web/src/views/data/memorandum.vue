@@ -1,10 +1,22 @@
 <template>
   <div>
     <tz-table  ref="tzTable"
-               :api-url="api" :action="['delete','edit']"
+               :api-url="api" :action="isShowClearBtn?['delete']:['delete','edit']"
                :table-column="tableColumn" showIndex
                :edit-column="editColumn"
-               :action-others='[{title:"查看",icon:"el-icon-view",onClick:openDataModal}]'
+               :action-others='[
+                       {title:"查看",icon:"el-icon-view",onClick:openDataModal},
+                       {title:"撤回",icon:"recall",onClick:updateWithUsable,isShow:()=>isShowClearBtn}
+               ]'
+               :operation="isShowClearBtn?[]:['create']"
+               :clear="{
+                 show:isShowClearBtn,
+                 param:{
+                   'usable@EQ':false
+                 }
+               }"
+               :filter-tabs="filterTabs"
+
     >
     </tz-table>
 
@@ -34,7 +46,24 @@
       return {
         api:"/data_api/memorandum",
         isDrawerShow:false,
+        isShowClearBtn:false,
         memorandum:{},//当前选中的memorandum
+        filterTabs:[
+          {
+            label:"正常记录",
+            badge:0,//右上角提示的值
+            key:"usable",
+            value:true,
+            onClick:()=>{this.isShowClearBtn=false}
+          },
+          {
+            label:"回收站",
+            badge:0,//右上角提示的值
+            key:"usable",
+            value:false,
+            onClick:()=>{this.isShowClearBtn=true}
+          },
+        ],
       }
     },
     created(){},
@@ -54,6 +83,15 @@
       }
     },
     methods:{
+      updateWithUsable(row){
+        row.usable=true;
+        let loading = TZUtils.fullLoading(this);
+        this.$http.post(this.api,row).then((data)=>{
+           loading.close();
+           this.$refs.tzTable.getTableData();
+           this.$message.success("撤回成功");
+        })
+      },
       openDataModal(row){
         this.isDrawerShow=true;
         this.memorandum=row;

@@ -111,7 +111,8 @@ export default {
           label:"LOGO",
           iType:"image",
           iSpan:24,
-          style:"width:80px;height:80px"
+          style:"width:80px;height:80px",
+          imageUploadApi:"/service_api/aliyunoss/upload_picture/no_auth",
         },
         {
           prop:"id",

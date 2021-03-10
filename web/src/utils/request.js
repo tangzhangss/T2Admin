@@ -67,7 +67,7 @@ service.interceptors.response.use(
       store.commit("permission/CLEAR_TOKEN");
     }else {
       ElMessage({
-          message: res.message || "加载失败，请刷新页面",//有可能返回的不是后端Result对象
+          message: res.message || "服务器加载失败，请刷新页面或稍后重试!",//有可能返回的不是后端Result对象
           type: 'error',
           duration: 5 * 1000
         })

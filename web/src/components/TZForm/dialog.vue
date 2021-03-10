@@ -92,7 +92,7 @@
       created() {},
       methods:{
         submitHandle(){
-          //优先使用自定义的处理时间
+          //优先使用自定义的处理事件
           let form = this.$refs["tzForm"].form;
           if(!this.submitFunc()){
             //使用api方式保存

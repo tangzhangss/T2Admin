@@ -1,7 +1,9 @@
 package com.tangzhangss.commonutils.test;
 
 import com.tangzhangss.commonutils.base.SysBaseController;
+import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,11 +15,23 @@ import java.util.Map;
 @RestController
 @RequestMapping("/test")
 public class TestController extends SysBaseController<TestEntity,TestService> {
+    @Autowired
+    QueryDslUtil queryDslUtil;
+    @Autowired
+    HttpServletRequest request;
 
     @GetMapping("/___")
     public Result ___(){
         System.out.println(1/0);
         myService.test();
+        return Result.ok;
+    }
+    @GetMapping("/querydsl/no_auth")
+    public Result querydsl(){
+        return Result.ok;
+    }
+    @GetMapping("/no_auth")
+    public Result no_auth(){
         return Result.ok;
     }
 

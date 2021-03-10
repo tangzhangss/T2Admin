@@ -11,6 +11,16 @@ import java.util.Map;
 @Service
 public class RoleService extends SysBaseService<RoleEntity, RoleDao> {
     @Override
+    protected boolean bSureDelete() {
+        return true;
+    }
+
+    @Override
+    protected boolean isQueryAll() {
+        return true;
+    }
+
+    @Override
     public Map<String, String> getCheckFields() {
         Map<String, String> map = new HashMap<>();
         map.put("name", "角色名");

@@ -1,4 +1,4 @@
-package com.tangzhangss.commondata.memorandum;
+package com.tangzhangss.commondata.album.picture;
 
 
 import com.tangzhangss.commonutils.base.SysBaseController;
@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/memorandum")
-public class MemorandumController extends SysBaseController<MemorandumEntity, MemorandumService> {
-
+@RequestMapping("/album_pic")
+public class AlbumPictureController extends SysBaseController<AlbumPictureEntity, AlbumPictureService> {
 
 }

@@ -1,6 +1,7 @@
 package com.tangzhangss.commonutils.base;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tangzhangss.commonutils.utils.ExceptionUtil;
 
 public class SysContext {
 
@@ -24,20 +25,18 @@ public class SysContext {
     用户ID
      */
     public static Long getUserId() {
-        try {
-            return userContext.get().getLong("id");
-        }catch (Exception e) {
+        if(userContext.get()==null){
             return null;
         }
+        return userContext.get().getLong("id");
     }
     /*
     客户ID
      */
     public static String getClientId(){
-        try {
-            return userContext.get().getString("clientId");
-        }catch (Exception e) {
+        if(userContext.get()==null){
             return null;
         }
+        return userContext.get().getString("clientId");
     }
 }
