@@ -1,18 +1,48 @@
 <template>
-  <section class="app-main">
-    <router-view :key="key" v-slot="{ Component }">
-        <transition name="fade-transform" mode="out-in">
-            <keep-alive include="Home,News">
-                <component class="view" :is="Component" />
-            </keep-alive>
-        </transition>
-    </router-view>
-  </section>
+    <section class="app-main">
+        <router-view v-if="isRouteAlive" v-slot="{ Component }">
+            <transition  name="fade-transform" mode="out-in">
+                <keep-alive :include="keepAlive">
+                    <component :is="Component" />
+                </keep-alive>
+            </transition>
+        </router-view>
+    </section>
 </template>
 
 <script>
+import {nextTick } from 'vue'
+
 export default {
   name: 'AppMain',
+  data(){
+    return {
+        keepAlive:[],
+        isRouteAlive:true
+    }
+  },
+  created() {
+      window.APP_MAIN_PAGE=this;
+  },
+  watch: {
+    $route() {
+        let routes = this.$store.getters.routeTabs;
+        let arr = [];
+        routes.forEach(r=>{
+            if(!r.noCache)arr.push(r.name);
+        });
+        arr.push("Home");//Home页面需要缓存
+        this.keepAlive=arr;
+    }
+  },
+  methods:{
+      reload(){
+          this.isRouteAlive=false;
+          nextTick(()=>{
+              this.isRouteAlive=true;
+          })
+      }
+  },
   computed: {
     key() {
       return this.$route.path

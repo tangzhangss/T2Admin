@@ -1,10 +1,11 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <TZRouteTabs class="tz-route-tabs-container" />
 
+<!--    <breadcrumb class="breadcrumb-container" />-->
     <div class="right-menu">
+      <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img :src="$store.getters.userInfo && $store.getters.userInfo.avatars" class="user-avatar">
@@ -62,6 +63,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import Breadcrumb from '@/components/Breadcrumb';
+import TZRouteTabs from '@/components/TZRouteTabs';
 import Hamburger from '@/components/Hamburger';
 import TZFormDialog from "@/components/TZForm/dialog";
 import TZUtils from "@/utils/TZUtils";
@@ -69,7 +71,8 @@ export default {
   components: {
     Breadcrumb,
     Hamburger,
-    TZFormDialog
+    TZFormDialog,
+    TZRouteTabs
   },
   data(){
     return {
@@ -220,7 +223,6 @@ export default {
 
     .avatar-container {
       /*margin-right: 30px;*/
-
       .avatar-wrapper {
         margin-top: 5px;
         margin-right: 20px;

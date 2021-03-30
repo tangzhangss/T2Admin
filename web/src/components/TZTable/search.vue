@@ -193,10 +193,10 @@
           line-height: 23px;
         }
       }
-      .el-input__icon,.el-input__prefix,.el-input__suffix{
+   /*   .el-input__icon,.el-input__prefix,.el-input__suffix{
         height:$height;
         line-height: $height;
-      }
+      }*/
     }
   }
 

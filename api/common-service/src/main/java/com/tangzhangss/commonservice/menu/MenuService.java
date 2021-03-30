@@ -6,6 +6,7 @@ import com.tangzhangss.commonservice.role.RoleService;
 import com.tangzhangss.commonutils.base.SysBaseService;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.config.Attribute;
+import com.tangzhangss.commonutils.utils.HashMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,14 @@ public class MenuService extends SysBaseService<MenuEntity, MenuDao> {
     @Autowired
     RoleService roleService;
 
+    @Override
+    protected Map<String, String> getCheckFields() {
+        return HashMapUtil.createHashMap().put("name","name").get();
+    }
+
     /*
-        菜单都是真实删除 usable字段用于禁用
-     */
+            菜单都是真实删除 usable字段用于禁用
+         */
     @Override
     protected boolean bSureDelete() {
         return true;

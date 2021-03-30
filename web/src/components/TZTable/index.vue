@@ -105,7 +105,7 @@
                              :key="item.id"
                              :prop="item.prop"
                              :label="item.label"
-                             :width="item.width"
+                             :min-width="item.width||0"
                              :fixed="item.fixed"
                              :data-type="item.dataType"
                              :formatter="item.formatter"
@@ -117,7 +117,7 @@
                              :key="item.id"
                              :prop="item.prop"
                              :label="item.label"
-                             :width="item.width||''"
+                             :min-width="item.width||0"
                              :fixed="item.fixed"
                              :style="item.cStyle"
             >
@@ -228,7 +228,7 @@
   import TZSearch from "./search"
   import TZFormDialog from "@/components/TZForm/dialog";
   import TZUtils from "../../utils/TZUtils";
-  import {nextTick} from 'vue'
+  import {nextTick} from "vue";
 
   export default {
       name: 'tz-table',
@@ -330,7 +330,7 @@
         //操作选项如：edit,delete
         action:{
           type:Array,
-          default:()=>[]
+          default:()=>["edit","delete"]
         },
         actionOthers:{
           type:Array,
@@ -399,10 +399,16 @@
               this.getTableData();
           }
         },
+        openEdit(data,isNew){
+            this.editData(data);
+            this.tzFormReadonly=false;//表单是否只读
+            this.tzFormIsNewCreate=isNew;//表单是否是新建
+        },
         //新建更新数据
         editData(data,index){
-          //这是一个异步的func
+          //这是一个异步的func_可能会修改页面渲染，等页面修改完成再执行以下操作
           this.$emit("edit-data-handle",data);
+
           this.editObjectData = data || TZUtils.deepClone(this.editColumnDefaultValue) ||{};
           //编辑状态点开时只读
           this.tzFormReadonly=data?true:false;
@@ -413,7 +419,6 @@
           this.showEditDialog=true;
         },
         deleteData(data,index){
-            console.log(index);
           this.loading=true;
           this.beforeDeleteData(data).then((res)=>{
               if(res!==false) {

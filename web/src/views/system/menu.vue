@@ -14,6 +14,7 @@
 
 <script>
   import TZTable from "@/components/TZTable/index";
+  import {nextTick} from "vue";
 
   export default {
     name: 'Menu',
@@ -32,12 +33,17 @@
           parentDesc:'',
         },
         isRoot:false,//是否是一级菜单
+        isExternalService:false,//是否外部服务菜单
         clientList:[],//所有客户的列表（不包括超级管理员）
+        domainList:[],//所有服务域名
       }
     },
     created() {
         this.$http.get("/service_api/client?id@NEQ="+window.superAdminClientId).then(res=>{
            this.clientList=res.data.content;
+        })
+        this.$http.get("/service_api/domain").then(res=>{
+           this.domainList=res.data.content;
         })
     },
     computed: {
@@ -59,12 +65,14 @@
       editColumn(){
         return [
           {prop:"parentId",label: "上级菜单",iType:'text',readonly:true,showKey:"parentDesc",isShow:!this.isRoot,iSpan:20},
+          {prop:"externalService", label:"外部服务", iType:'switch', iSpan:24,onChange:this.externalServiceChange,style:"width:200px"},
           {prop:"title", label:"菜单名", required:true,iType:'text',iSpan:12,style:"width:200px"},
-          {prop:"path",label:"path",iType:'text',tip:"仅且仅需要一级菜单以/开头", required:true, iSpan:12,style:"width:200px"},
+          {prop:"name",tip:"路由name需要保证唯一性", label:"name", iType:'text',iSpan:12,style:"width:200px"},
           {prop:"icon", label:"icon",tip:"支持element,svg图标",  iType:'text', iSpan:12,style:"width:200px"},
-          {prop:"name", tip:"路由name需要保证唯一性", label:"name", iType:'text',iSpan:12,style:"width:200px"},
+          {prop:"path",disabled:this.isExternalService,label:"path",iType:'text',tip:"仅且仅需要一级菜单以/开头", required:true, iSpan:12,style:"width:200px"},
           {prop:"redirect",tip:"一级菜单:当设置 noRedirect 的时候该路由在面包屑导航中不可被点击;其他:重定向",label:"redirect",iType:'text',iSpan:12,style:"width:200px"},
-          {prop:"url",isShow:!this.isRoot, tip:"一级菜单可不填,以/开头", label:"页面路径", iType:'text',iSpan:12,style:"width:200px"},
+          {prop:"domainId",isVisibleFunc:(item)=> item.externalService,label:"服务域名", iType:'select',iSpan:12,style:"width:200px",options:this.domainList,selectKey:"id",selectLabel:"name",selectValue:"id"},
+          {prop:"url",isShow:(!this.isRoot)||this.isExternalService,tip:"一级菜单可不填,以/开头", label:"页面路径", iType:'text',iSpan:12,style:"width:200px"},
           {prop:"orderNo", label:"排序", iType:'number', iSpan:12,style:"width:200px"},
           {prop:"systemic", label:"系统菜单", iType:'switch', iSpan:6,},
           {prop:"usable", label:"是否启用", iType:'switch', iSpan:6},
@@ -82,6 +90,21 @@
           //表示是一级菜单
           this.isRoot=true;
         }
+        if(data && data.domainId){
+          data.externalService=true;
+          this.externalServiceInit(data);
+        }
+        if(data&&data.externalService){
+          this.isExternalService=true;
+        }else{this.isExternalService=false}
+      },
+      externalServiceInit(data){
+        data.path="iFrame/${id}";
+        data.name=data.name||"IFrame";
+      },
+      externalServiceChange(data){
+        this.isExternalService=data.externalService
+        if(this.isExternalService)this.externalServiceInit(data);
       },
       //这个是创建子菜单使用-需要配合editDataHandle
       createDataHandle(data){
@@ -89,7 +112,9 @@
         this.menu.parentId=data.id;
         this.menu.parent=data;
         let initData = this.menu;
-        this.$refs.tzTable.editData(initData);
+
+        //打开编辑框
+        this.$refs.tzTable.openEdit(initData,true);
       },
       getParentDesc(data,res=[]){
         let parent = data.parent;

@@ -12,6 +12,10 @@ export default {
     to: {
       type: String,
       required: true
+    },
+    item: {
+      type: Object,
+      required: true
     }
   },
   computed: {
@@ -35,7 +39,9 @@ export default {
         }
       }
       return {
-        to: to
+        to: {
+          name:this.item.name,
+        },
       }
     }
   }

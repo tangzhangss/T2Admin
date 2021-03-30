@@ -28,15 +28,17 @@
   <div class="tz-form">
       <el-form ref="tzForm" :model="form" :rules="editColumnRules" label-width="auto" :inline="true">
         <el-row :gutter="5" class="row">
-          <el-col  v-for="(item,index) in formColumn" :span="item.iSpan"  class="col">
-            <!--文本输入框-->
-            <el-form-item :label="item.label" :rules="item.rules" :prop="item.prop" v-show="item.isShow!==false && (item.isVisibleFunc?item.isVisibleFunc(form):true)">
-              <!--仅仅展示-->
-              <tz-column-readonly v-if="item.readonly || readonly" :form="form" :item="item"></tz-column-readonly>
-              <!--编辑-->
-              <tz-column-edit v-else :form="form" :item="item"></tz-column-edit>
-            </el-form-item>
-          </el-col>
+          <template v-for="(item,index) in formColumn">
+            <el-col  v-if="item.isShow!==false && (item.isVisibleFunc?item.isVisibleFunc(form):true)"  :span="item.iSpan"  class="col">
+              <!--文本输入框-->
+              <el-form-item :label="item.label" :rules="item.rules" :prop="item.prop">
+                <!--仅仅展示-->
+                <tz-column-readonly v-if="item.readonly || readonly" :form="form" :item="item"></tz-column-readonly>
+                <!--编辑-->
+                <tz-column-edit v-else :form="form" :item="item"></tz-column-edit>
+              </el-form-item>
+            </el-col>
+          </template>
         </el-row>
       </el-form>
   </div>

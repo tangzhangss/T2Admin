@@ -20,7 +20,7 @@
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
       <!--switch-->
-      <el-switch :disabled="item.disabled"  :style="item.style"  v-model="form[item.prop]"  v-else-if="['SWITCH'].indexOf(item.iType.toUpperCase())>-1">
+      <el-switch :disabled="item.disabled" @change="item.onChange&&item.onChange(form)"  :style="item.style"  v-model="form[item.prop]"  v-else-if="['SWITCH'].indexOf(item.iType.toUpperCase())>-1">
       </el-switch>
       <el-select v-model="form[item.prop]"  :multiple="item.multiple"  filterable clearable placeholder="请选择" v-else-if="['SELECT'].indexOf(item.iType.toUpperCase())>-1">
         <el-option
@@ -175,23 +175,15 @@
       }
     }
     //----------------------
-    .input-text {
-      .el-input__inner {
-        height: $height;
-        line-height: $height;
-        padding: 0 6px;
-      }
+    .el-input__inner {
+      height: $height;
+      line-height: $height;
+      padding: 0 6px;
     }
     .input-date {
       display: flex;
       align-items: center;
       height: $height;
-
-      .el-input__inner {
-        height: $height;
-        line-height: $height;
-      }
-
       .el-range-separator {
         line-height: 23px;
       }

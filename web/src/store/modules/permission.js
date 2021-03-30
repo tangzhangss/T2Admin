@@ -1,10 +1,10 @@
-import {router404, constantRoutes} from '@/router';
+import {constantRoutes} from '@/router';
 import {importPage404,importComponent} from '@/../config/asyncRoute';
 import cookie from 'js-cookie';
-import {app} from '@/../config/global.js';
 import TZUtils from "@/utils/TZUtils";
 import Layout from "@/layout/index";
 import http from '@/utils/request'
+import store from "../index";
 
 
 function getUserCookie(key){
@@ -14,17 +14,17 @@ function getUserCookie(key){
 }
 const state = {
   routes: [],
+  routeTabs:[],
   addRoutes: [],
   userMenu:null,
   userInfo:getUserCookie(window.userInfoCookieKey),
-  router404:router404,
+  externalServiceMap:new Map(),
 }
 
 const mutations = {
   SET_ROUTES: (state,routes) => {
     state.addRoutes = routes;
     let routes_temp = constantRoutes.concat(routes);
-    routes_temp.push(state.router404);//404页面放在最后
     state.routes = routes_temp;
   },
   SET_USER_MENU:(state,menus)=>{
@@ -45,6 +45,40 @@ const mutations = {
     state.userInfo=null;
     state.userMenu=null;
 
+  },
+  UPDATE_ROUTE_TAB:(state,route)=>{
+    //存在才缓存
+    if(!(route.meta && route.meta.title)){
+        return false;
+    }
+    //遍历路由表看存在当前路由，如果不存在就添加存在就不管
+    let oldRoute = state.routeTabs.filter(r=>r.path==route.path);
+    if(oldRoute.length==0){
+      let maxTabCount=8;//最大的tab数量
+      if(state.routeTabs.length>=maxTabCount){
+        //最多8个
+        state.routeTabs.splice(0,state.routeTabs.length-(maxTabCount-1));
+      }
+      if(!route.meta.noCache){
+        state.routeTabs.push(route);
+      }
+    }
+  },
+  DELETE_ROUTE_TAB:(state, deletedPath)=>{
+    //遍历路由表看存在当前路由，如果不存在就添加存在就不管
+    let tabs = state.routeTabs;
+    let index = -1;
+    for(let i =0;i<tabs.length;i++){
+      if(tabs[i].path==deletedPath){
+        index=i;
+        break;
+      }
+    }
+    if(index!=-1)tabs.splice(index,1);
+  },
+  UPDATE_EXTERNAL_SERVICE:(state,obj)=>{
+    console.log(obj);
+     state.externalServiceMap.set(obj.key,obj.value);
   }
 }
 function setRoutes(commit,menu) {
@@ -136,7 +170,9 @@ function parseRoute(item,isRoot){
     path:item.path,
     meta: {
       title:item.title,
-      icon:item.icon
+      icon:item.icon,
+      noCache:item.noCache,
+      id:item.id,
     },
     orderNo:item.orderNo,
     alwaysShow:item.alwaysShow,
@@ -153,7 +189,18 @@ function parseRoute(item,isRoot){
       }
       //由于加载机制的问题必须在外部调用
       try {
-        route.component=importComponent(item.url);
+        if(item.domainId && item.domain){
+          route.component=require('@/views/iFrame.vue').default;
+          let addr = item.domain.devAddress;
+          if(process.env.IS_PROD){
+            addr=item.domain.proAddress;
+          }
+          store.commit('permission/UPDATE_EXTERNAL_SERVICE',
+              {key:item.id,value:handleUrl(addr,item.url)});
+          route.path= route.path.replace("${id}",item.id);
+        }else{
+          route.component=importComponent(item.url);
+        }
       }catch (e) {
         if(e.message && e.message.includes('Cannot find module')){
            console.error("页面加载失败:",e.message);
@@ -165,6 +212,11 @@ function parseRoute(item,isRoot){
       }
   }
   return route;
+}
+function handleUrl(domain,path){
+  if(!/.*?\/$/.test(domain))domain += "/";
+  if(!/^\/.*/.test(path))path="/"+path;
+  return domain+"#"+path;
 }
 function arrayToTreeAssist(res,array,key){
   //没有元素了

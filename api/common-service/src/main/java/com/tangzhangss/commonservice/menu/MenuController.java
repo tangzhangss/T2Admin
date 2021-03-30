@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,6 @@ public class MenuController extends SysBaseController<MenuEntity, MenuService> {
     QueryDslUtil queryDslUtil;
     @Autowired
     UserService userService;
-
     /*
      用户菜单
      */

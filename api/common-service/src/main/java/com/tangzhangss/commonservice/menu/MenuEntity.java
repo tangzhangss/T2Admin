@@ -1,5 +1,6 @@
 package com.tangzhangss.commonservice.menu;
 
+import com.tangzhangss.commonservice.domain.DomainEntity;
 import com.tangzhangss.commonutils.base.SysBaseEntity;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
@@ -40,9 +41,15 @@ public class MenuEntity extends SysBaseEntity {
 
     private int orderNo;//排序序号
 
+    private Long domainId;//服务域名Id
+
     @OneToOne
     @JoinColumn(name = "parentId", referencedColumnName = "id", insertable = false, updatable = false)
     private MenuEntity parent;
+
+    @OneToOne
+    @JoinColumn(name = "domainId", referencedColumnName = "id", insertable = false, updatable = false)
+    private DomainEntity domain;
 
     /*
         系统菜单每一个租户都有，但是非系统菜单只有某一些租户有
