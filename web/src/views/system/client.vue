@@ -71,8 +71,8 @@
           {prop:"email",label:"管理邮箱",filterable:true,iSpan:6,},
           {prop:"address",label:"地址",filterable:true,iSpan:6,width:"80"},
           {prop:"usable",label:"账号状态",cType:"switch",filterable:true,iSpan:6,width:"80"},
-          {prop:"createTime",label:"创建时间",cType:'dateTime',filterable:true,iType:"datetimeRange",iSpan:18,sortable:true},
-          {prop:"updateTime",label:"更新时间",cType:'dateTime',filterable:true,iType:"datetimeRange",iSpan:18},
+          {prop:"createTime",hide:true,label:"创建时间",cType:'dateTime',filterable:true,iType:"datetimeRange",iSpan:18,sortable:true},
+          {prop:"updateTime",hide:true,label:"更新时间",cType:'dateTime',filterable:true,iType:"datetimeRange",iSpan:18},
           {prop:"remark",label:"备注"}
         ]
       },

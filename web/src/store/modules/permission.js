@@ -77,7 +77,6 @@ const mutations = {
     if(index!=-1)tabs.splice(index,1);
   },
   UPDATE_EXTERNAL_SERVICE:(state,obj)=>{
-    console.log(obj);
      state.externalServiceMap.set(obj.key,obj.value);
   }
 }

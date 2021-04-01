@@ -46,15 +46,15 @@
 </template>
 
 <script>
-    import 'quill/dist/quill.core.css';
-    import 'quill/dist/quill.snow.css';
-    import 'quill/dist/quill.bubble.css';
-    import { quillEditor } from 'vue-quill-editor';
-    import {ImageDrop}  from 'quill-image-drop-module';
-    import {ImageResize} from 'quill-image-resize-module';
-    import { setQuillTitle } from "@/utils/vue-quill-title";
-    Quill.register('modules/imageDrop', ImageDrop);
-    Quill.register('modules/imageResize', ImageResize);
+    // import 'quill/dist/quill.core.css';
+    // import 'quill/dist/quill.snow.css';
+    // import 'quill/dist/quill.bubble.css';
+    // import { quillEditor } from 'vue-quill-editor';
+    // import {ImageDrop}  from 'quill-image-drop-module';
+    // import {ImageResize} from 'quill-image-resize-module';
+    // import { setQuillTitle } from "@/utils/vue-quill-title";
+    // Quill.register('modules/imageDrop', ImageDrop);
+    // Quill.register('modules/imageResize', ImageResize);
 
     export default {
         name: "tz-column-edit",
@@ -69,7 +69,7 @@
           },
         },
         components: {
-          quillEditor
+          // quillEditor
         },
         data(){
           return {
@@ -110,7 +110,7 @@
         },
         created() {
           //设置富文本title
-          setQuillTitle();
+          // setQuillTitle();
         },
         methods:{
           onEditorChange({ quill, html, text }) {

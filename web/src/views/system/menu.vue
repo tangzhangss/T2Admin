@@ -2,11 +2,16 @@
   <div>
     <tz-table ref="tzTable"
               :api-url="api" :action="['delete','edit']"
+              :dataList="dataList"
+              @get-table-data-list="getTableDataList"
               :table-column="tableColumn" showIndex :edit-column="editColumn"
               :edit-column-rules="editColumnRules"
               :edit-column-default-value="menu"
               @edit-data-handle="editDataHandle"
               :action-others='[{title:"创建子菜单",icon:"el-icon-circle-plus-outline",onClick:createDataHandle}]'
+              :pagination="null"
+              row-key="id"
+              :saveForceFlush="true"
     >
     </tz-table>
   </div>
@@ -15,6 +20,7 @@
 <script>
   import TZTable from "@/components/TZTable/index";
   import {nextTick} from "vue";
+  import TZUtils from "../../utils/TZUtils";
 
   export default {
     name: 'Menu',
@@ -32,6 +38,7 @@
           usable:true,
           parentDesc:'',
         },
+        dataList:[],
         isRoot:false,//是否是一级菜单
         isExternalService:false,//是否外部服务菜单
         clientList:[],//所有客户的列表（不包括超级管理员）
@@ -39,27 +46,34 @@
       }
     },
     created() {
+        let loading = TZUtils.fullLoading(this);
         this.$http.get("/service_api/client?id@NEQ="+window.superAdminClientId).then(res=>{
            this.clientList=res.data.content;
         })
         this.$http.get("/service_api/domain").then(res=>{
            this.domainList=res.data.content;
         })
+        this.$http.get(this.api).then(res=>{
+            let menu = res.data.content;
+            //将菜单拼接成属性的结构
+            this.setDataList(menu);
+            loading.close();
+        })
     },
     computed: {
       tableColumn(){
         return [
           // {prop:"icon",label:"icon",iSpan:8},
-          {prop:"title",label:"菜单名",filterable:true,isShowFilter:true,iSpan:8},
-          {prop:"parent.title",label:"上级菜单",filterable:true,isShowFilter:true,iSpan:8,},
-          {prop:"path",label:"path",iSpan:6},
-          {prop:"url",label:"url",width:"120"},
+          {prop:"title",label:"菜单名",filterable:true,isShowFilter:true,iSpan:8,width:"200"},
+          // {prop:"parent.title",label:"上级菜单",filterable:true,isShowFilter:true,iSpan:8,},
+          {prop:"path",label:"path",iSpan:6,width:"200"},
+          {prop:"url",label:"url",width:"200"},
           {prop:"orderNo",label:"排序"},
-          {prop:"createTime",label:"创建时间",cType:'dateTime',filterable:true,iType:"datetimeRange",iSpan:18},
-          {prop:"updateTime",label:"更新时间",cType:'dateTime',iSpan:18},
-          {prop:"remark",label:"备注"},
           {prop:"systemic",label:"系统创建",cType:"switch",filterable:true,iSpan:6,width:"80"},
           {prop:"usable",label:"是否启用",cType:"switch",filterable:true,iSpan:6,width:"80"},
+          {prop:"createTime",hide:true,label:"创建时间",width:"200",cType:'dateTime',filterable:true,iType:"datetimeRange",iSpan:18},
+          {prop:"updateTime",hide:true,label:"更新时间",width:"200",cType:'dateTime',iSpan:18},
+          // {prop:"remark",label:"备注"},
         ]
       },
       editColumn(){
@@ -81,6 +95,14 @@
       }
     },
     methods:{
+      setDataList(data){
+        let list = TZUtils.arrayToTree(data,"parentId");
+        TZUtils.treeSort(list,"orderNo",true);
+        this.dataList=list;
+      },
+      getTableDataList(data){
+        this.setDataList(data);
+      },
       //创建 回调 这里data表示父级菜单信息或则undefined
       editDataHandle(data){
         if(data && data.parentId){
@@ -112,7 +134,6 @@
         this.menu.parentId=data.id;
         this.menu.parent=data;
         let initData = this.menu;
-
         //打开编辑框
         this.$refs.tzTable.openEdit(initData,true);
       },

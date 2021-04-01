@@ -20,7 +20,48 @@ function getType(val){
   let reg = /^\[object\s(\w*)\]$/;
   return reg.exec(Object.prototype.toString.call(val))[1];
 }
-
+/*
+ 树型转换辅助方法
+ */
+function arrayToTreeAssist(res,array,key){
+  //没有元素了
+  if(array.length==0)return false;
+  //这里需要倒叙遍历因为需要删除子元素
+  for(let i = array.length - 1; i >= 0; i--){
+    let item = array[i];
+    res.some(item2=>{
+      if(item[key]==item2.id){
+        if(!item2.children)item2.children=[];
+        item2.children.push(item);
+        array.splice(i,1);//删除这个item
+        return true;
+      }
+      if(item2.children){//有至少一个子元素
+        //查询children中是否存在当前元素的父级
+        let res = arrayToTreeAssist2(item2.children,item,key);
+        if (res!==undefined){//这里可能索引是0
+          array.splice(i,1);//删除这个item
+          return true;
+        }
+      }
+    })
+  }
+  //一直循环，知道array里面的元素为空
+  arrayToTreeAssist(res,array,key);
+}
+function arrayToTreeAssist2(children,item,key){
+  for (let i=0;i<children.length;i++){
+    let c = children[i];
+    if(c.id==item[key]){
+      if(!c.children) c.children=[];
+      c.children.push(item);
+      return i;
+    }
+    if(c.children){
+      arrayToTreeAssist2(c.children,item,key);
+    }
+  }
+}
 
 
 const TZUtils={
@@ -127,6 +168,48 @@ const TZUtils={
       spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.6)'
     });
+  },
+  /*
+    对象数组转树型
+    数组对象array
+    用于关联的key 如:parentId
+    由底向上
+  */
+  arrayToTree:function(array,key){
+      let res=[];
+      //先找出根元素
+      for(let i = array.length - 1; i >= 0; i--){
+        let item = array[i];
+        if(!item[key]){
+          res.push(item);
+          array.splice(i,1);//删除这个item
+        }
+      }
+      if(res.length!=0){//存在根目录才执行
+        arrayToTreeAssist(res,array,key);
+      }
+    //res是最后的结果
+    return res;
+  },
+  /**
+   * 排序(树状结构)
+   * @param arr 数组
+   * @param key 排序的字段
+   * @param isASC 是否从小到大
+   * @param childKey 孩子节点的key
+   */
+  treeSort(arr,key,isASC=true,childKey='children'){
+    let sort = function (arr) {
+      if(isASC){
+        arr = arr.sort((a,b)=>a[key]-b[key]);
+      }else{
+        arr = arr.sort((a,b)=>b[key]-a[key]);
+      }
+      arr.forEach(obj=>{
+        if(obj[childKey])sort(obj[childKey]);
+      })
+    }
+    return sort(arr);
   }
 }
 export default TZUtils

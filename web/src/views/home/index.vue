@@ -8,6 +8,12 @@
     <el-divider class="divider-title" content-position="left">更新日志</el-divider>
     <ul class="update-log">
       <li>
+        <p class="bold">v2.0.2(2021-04-01)</p>
+        <div class="text">
+          <p>优化组件样式，新增卡片式路由导航</p>
+        </div>
+      </li>
+      <li>
         <p class="bold">v2.0.1(2021-03-05)</p>
         <div class="text">
           <p>前端技术框架升级vue3.0</p>

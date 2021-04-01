@@ -31,8 +31,12 @@ UI框架:element-plus
     iSpan:筛选条件占用总比例（24）的长度
     isShowFilter（默认展示该条件）
 
-##### 编辑（新建）:
- submit-api 配合后端框架使用
+##### 主要属性:
+ api-url 配合后端框架使用(
+        拉取提交删除的utl,对应post get delete请求
+    )
+ dataList 表格数据（优先使用dataList的数据，所以getTableData拉取数据之后会调用回调处理数据@get-table-data-list（data））   
+    =>自己传入dataList之后请注意监听@get-table-data-list事件
  edit-data-handle(data) 编辑时候数据处理
 ##### 表格清空功能(prop)
 param的构造同后端get请求查询条件map结构

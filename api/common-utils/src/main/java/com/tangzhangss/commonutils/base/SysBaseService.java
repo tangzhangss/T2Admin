@@ -175,7 +175,6 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             if (StringUtils.isNotBlank(sPageSize)) iPgSize = Integer.parseInt(sPageSize);
             String queryAll = request.getParameter("queryAll");
             if (StringUtils.isNotBlank(queryAll) && queryAll.equals("true")) isQueryAll = true;
-
                     /*
             前端有分组查询单独处理
             这里的分组查询只是为了分页,以及配置表格搜索，（前端表格组件接口统一）没有真实数据，所以前端使用分组查询之后，后端需要自己写接口构建数据
@@ -185,8 +184,12 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                 return getGroupByAndPageResult(request,groupValue);
             }
         }
-
-
+        if(paramsMap!=null){
+            String sPageIndex = paramsMap.get("pageIndex");
+            String sPageSize = paramsMap.get("pageSize");
+            if (StringUtils.isNotBlank(sPageIndex)) iPgIndex = Integer.parseInt(sPageIndex);
+            if (StringUtils.isNotBlank(sPageSize)) iPgSize = Integer.parseInt(sPageSize);
+        }
         if(iPgIndex<=0)iPgIndex=1;
         PageRequest page = PageRequest.of(iPgIndex-1,iPgSize);
         specification = getCommonSpecification(request,paramsMap);
@@ -226,10 +229,6 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         while (parameterNames.hasMoreElements()) {
             String key = parameterNames.nextElement();
             String value = request.getParameter(key);
-            if (key.equals("iPageSize")) continue;
-            if (key.equals("iPageIndex")) continue;
-            if (key.equals("orderBy")) continue;
-            if (key.equals("queryAll")) continue;
             //null和空不过滤 可以查询空串
 //            if (value==null||value.isEmpty()) continue;
             Predicate predicate = getPredicate(key,value,builder,root);
@@ -247,13 +246,12 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      */
     private CriteriaQuery getQueryByParams(Root root, CriteriaQuery cq, CriteriaBuilder builder,HttpServletRequest request, Map<String,String> paramMap) {
         List<Predicate> predicates = new ArrayList<>();
+        // 自定义的排序
+        List<Order> orders = new LinkedList<>();
 
         if (request != null){
-            // 自定义的排序
-            List<Order> orders = getOrderByStr(request.getParameter("orderBy"), root);
-
+            orders.addAll(getOrderByStr(request.getParameter("orderBy"), root));
             predicates = getQueryConditionByRequest(root,builder,request);
-
             //分组查询不能带这个条件 ,后端调用的接口做查询也不需要排序
             //即：仅前端调用需要按照时间排序
             //分组查询参数只是为了获取分页数据以及前端查询条件-也需要后端重新定义接口配合-所以不需要时间排序
@@ -261,11 +259,13 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                 // 默认按创建时间排序
                 orders.add(new OrderImpl(getExpression("createTime",root),false));
             }
-            cq.orderBy(orders);
         }
+
         if (paramMap!=null){
+            orders.addAll(getOrderByStr(paramMap.get("orderBy"), root));
             predicates.addAll(getPredicatesByMap(paramMap,root,builder));
         }
+        cq.orderBy(orders);
 
         //不管哪个查询都把lientId带上
         //超级管理员拥有所有权限..这个值不由系统维护
@@ -389,7 +389,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
     // 根据字符串获取排序，规则 sField1@DESC,sField2,sField3
     private List<Order> getOrderByStr(String str, Root root) {
-        List<Order> orders = new ArrayList<>();
+        List<Order> orders = new LinkedList<>();
         if (StringUtils.isBlank(str)) return orders;
         // 获取前端传过来的排序
         String orderBy = str;

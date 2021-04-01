@@ -83,6 +83,8 @@
       @current-change="handleCurrentChange"
       @selection-change="handleSelectionChange"
       @sort-change="handleSortChange"
+      :tree-props="treeProps"
+      :row-key="rowKey"
     >
       <!--多选时显示-->
       <el-table-column v-if="selection"
@@ -354,6 +356,15 @@
         saveForceFlush:{//保存之后强制刷新数据,默认只有新建的时候才会刷新
             type:Boolean,
             default:false,
+        },
+        //树型结构的row-key
+        rowKey:{
+          type:String,
+          default:undefined,
+        },
+        treeProps:{
+            type:Object,
+            default:{children: 'children', hasChildren: 'hasChildren'},
         }
       },
       data(){
@@ -440,7 +451,6 @@
           // let endElement=this.tableColumn.pop();
           // this.tableColumn.unshift(endElement);
           //column紧跟table标签没有这个问题---------
-
           /*
             1.初始化tableData
            */
@@ -560,8 +570,6 @@
         getTableData:function(url){
           if(!url)url=this.apiUrl;
           this.loading=true;
-
-
           let paginationQuery ="";
           if(this.paginationQuery){
              if(/.*\?+.*/.test(url)){
@@ -570,7 +578,6 @@
                 paginationQuery+="?"+this.paginationQuery;
              }
           }
-
           let tUrl=url+paginationQuery;
           //加上顶部过滤条件
           if(this.filterTabsQuery){
@@ -658,7 +665,7 @@
             //   this.tableData.unshift(data);
             // }
             //v2.刷新表格 分页数据需要重新加载
-            console.log("是否强制刷新条件:",this.tzFormIsIndex,this.saveForceFlush);
+            // console.log("是否强制刷新条件:",this.tzFormIsIndex,this.saveForceFlush);
             if(this.tzFormIsIndex!==undefined && !this.saveForceFlush){
                 this.tableData[this.tzFormIsIndex]=data;
             }else{
@@ -722,6 +729,12 @@
           };
         }
       },
+      watch:{
+          //表格数据改变
+          dataList(newVal){
+            this.tableData=newVal;
+          }
+      }
     }
 </script>
 

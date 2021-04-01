@@ -6,7 +6,6 @@
                 :label="item.meta && item.meta.title"
                 :name="item.path"
         >
-
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -71,8 +70,33 @@
         display: inline-block;
         font-size: 14px;
         line-height: 50px;
+        .el-tabs__active-bar{
+            background: none;
+        }
         .el-tabs__item{
-            padding: 0 10px !important;
+            height: 32px;
+            line-height:32px;
+            padding: 0 5px !important;
+            margin-left:5px;
+            border: 1px solid #d8dce5;
+            &.is-active{
+                color: white;
+                background-color: #42b983;
+                border:1px solid #42b983;
+                box-sizing: border-box;
+                &::before {
+                    content: "";
+                    background: #fff;
+                    display: inline-block;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    position: relative;
+                    margin-right: 2px;
+                }
+            }
+            &:hover{
+            }
         }
         .el-tabs__nav-wrap::after{
             background-color:unset;

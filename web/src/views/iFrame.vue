@@ -11,7 +11,6 @@
         name: "IFrame",
         watch:{
             $route(){
-                console.log(this.$route);
                 this.setSrc();
             }
         },
