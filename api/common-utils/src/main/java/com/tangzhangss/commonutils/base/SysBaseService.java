@@ -454,10 +454,10 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     public T save(T data) throws Exception {
         checkIsSystemCreate(data);
         this.beforeSaveData(data);
-        if(null==data.id){
-            data.id=uidGeneratorService.getuid();
+        if(null==data.getId()){
+            data.setId(uidGeneratorService.getuid());
         }else{
-            data.updateTime=LocalDateTime.now();
+            data.setUpdateTime(LocalDateTime.now());
         }
         //检查字段是否重复
         this.checkUnionField(data);
@@ -792,10 +792,15 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         };
     }
 
+
     /*
     根据mapString查询数据
         key=value&key=value
      */
+    public List<T> getCustomWithMap(Map map){
+        List<T> result = myDao.findAll(getJpaSpecification(map));
+        return  result;
+    }
     public List<T> getCustomWithMapString(String mapstr){
         Map<String,String> mp = new HashMap<>();
         String [] rows = mapstr.split("&");

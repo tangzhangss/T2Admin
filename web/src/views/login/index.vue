@@ -60,15 +60,11 @@
 </template>
 
 <script>
-import TZFormDialog from "@/components/TZForm/dialog";
-import Layout from '@/layout';
-import {resetRouter} from '@/router/index';
 import TZUtils from "@/utils/TZUtils";
 
 export default {
   name: 'Login',
   components:{
-    "tz-form-dialog":TZFormDialog
   },
   data() {
     const validateUsername = (rule, value, callback) => {
@@ -105,7 +101,7 @@ export default {
       redirect: undefined,
       showRegisterDialog:false,
       registerColumn:[
-        {
+       this.$service_tool.setImageUploadHeaders({
           prop:"logo",
           tip:"点击或拖拽上传，大小不能超过1MB",
           label:"LOGO",
@@ -113,7 +109,7 @@ export default {
           iSpan:24,
           style:"width:80px;height:80px",
           imageUploadApi:"/service_api/aliyunoss/upload_picture/no_auth",
-        },
+        }),
         {
           prop:"id",
           label:"账户",

@@ -13,13 +13,13 @@
 </template>
 
 <script>
-  import TZTable from "@/components/TZTable/index";
+  // import TZTable from "@/components/TZTable/index";
   import TZUtils from "@/utils/TZUtils";
 
   export default {
     name: 'Client',
     components: {
-      "tz-table":TZTable,
+      // "tz-table":TZTable,
     },
     data:function(){
       return {
@@ -78,7 +78,7 @@
       },
       editColumn(){
         return [
-          {prop:"logo", tip:"点击或拖拽上传，大小不能超过1MB", label:"LOGO", iType:"image", iSpan:24, style:"width:80px;height:80px"},
+          this.$service_tool.setImageUploadHeaders({prop:"logo",tip:"点击或拖拽上传，大小不能超过1MB", label:"LOGO", iType:"image", iSpan:24, style:"width:80px;height:80px"}),
           {prop:"id",label:"账户",tip:"唯一标识,注册后不可更改",disabled:!this.isNew,iType:"text", iSpan:24,style:"width:200px",placeholder:"CD1024",},
           {prop:"name",label:"公司",iType:"text",required:true,placeholder:"成都1024科技有限责任公司",iSpan:12,},
           {prop:"phone",label:"手机",iType:"text",placeholder:"15520449931",iSpan:12,},

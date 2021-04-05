@@ -1,5 +1,6 @@
 package com.tangzhangss.commonservice.user;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tangzhangss.commonservice.aspect.syslog.SysLog;
@@ -47,7 +48,7 @@ public class UserController extends SysBaseController<UserEntity, UserService> {
     @PostMapping("/modify_pwd_by_client")
     public Result modifyPwdByClient(@RequestBody JSONObject params) {
         String password = params.getString("password");
-        UserEntity user = JSON.parseObject(SysContext.getUser().toJSONString(), UserEntity.class);
+        UserEntity user = JSONUtil.toBean(SysContext.getUser(),UserEntity.class);
         if (!user.getUsername().equals(user.getClientId())) ExceptionUtil.throwException("无权限执行此操作");
         user.setPassword(BaseUtil.twiceMd5Salt(password));
         userDao.save(user);

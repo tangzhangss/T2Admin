@@ -34,13 +34,11 @@
 </template>
 
 <script>
-  import TZTable from "@/components/TZTable/index";
   import TZUtils from "@/utils/TZUtils";
 
   export default {
     name: 'Memorandum',
     components: {
-      "tz-table":TZTable,
     },
     data:function(){
       return {

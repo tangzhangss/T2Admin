@@ -43,16 +43,13 @@
 </template>
 
 <script>
-  import TZTable from "@/components/TZTable/index";
-  import TZEditableTable from "@/components/TZEditableTable/index";
+
   import {ElImageViewer} from 'element-plus'
   import TZUtils from "../../utils/TZUtils";
 
   export default {
     name: 'Album',
     components: {
-      "tz-table":TZTable,
-      "tz-editable-table":TZEditableTable,
       "el-image-viewer":ElImageViewer
     },
     data:function(){
@@ -80,11 +77,12 @@
       },
       picEditColumn(){
         return [
-          {
-            prop:"url", label:"图片",imageUploadApi:"/service_api/aliyunoss/upload_picture/deletable",iType:"image",
+          this.$service_tool.setImageUploadHeaders({
+            prop:"url", label:"图片",imageUploadApi:"/service_api/aliyunoss/upload_picture/deletable"
+            ,iType:"image",
             width:"100px",height:"50px",style:"width:40px;height:40px",
             required: true,
-          }
+          }),
         ];
       },
     },

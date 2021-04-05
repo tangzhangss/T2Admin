@@ -1,6 +1,6 @@
 package com.tangzhangss.commonservice.menu;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONObject;
 import com.tangzhangss.commonservice.role.RoleEntity;
 import com.tangzhangss.commonservice.role.RoleService;
 import com.tangzhangss.commonutils.base.SysBaseService;
@@ -49,13 +49,13 @@ public class MenuService extends SysBaseService<MenuEntity, MenuDao> {
         }
 
         //如果是企业管理员
-        if (currentUser.getString("clientId").equals(currentUser.getString("username"))) {
+        if (currentUser.getStr("clientId").equals(currentUser.getStr("username"))) {
             //直接拿企业的菜单
             userMenu = getClientMenuList();
-        } else if (StringUtils.isNotBlank(currentUser.getString("roleIds"))) {
+        } else if (StringUtils.isNotBlank(currentUser.getStr("roleIds"))) {
             //企业员工
             //有角色-查询这些角色拥有的菜单
-            List<RoleEntity> roles = roleService.getWithMapString("name@IN=" + currentUser.getString("roleIds"));
+            List<RoleEntity> roles = roleService.getWithMapString("name@IN=" + currentUser.getStr("roleIds"));
             Set<String> menuList = new HashSet<>();
             roles.forEach(role -> {
                 menuList.addAll(Arrays.asList(StringUtils.split(role.getMenuIds(), ",")));

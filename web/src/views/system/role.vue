@@ -32,12 +32,12 @@
 </template>
 
 <script>
-  import TZTable from "@/components/TZTable/index";
+  // import TZTable from "@/components/TZTable/index";
   import {arrayToTree,getLeafNode} from "@/utils/treeUtils";
   export default {
     name: 'Role',
     components: {
-      "tz-table":TZTable,
+      // "tz-table":TZTable,
     },
     data:function(){
       return {

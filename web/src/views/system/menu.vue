@@ -18,14 +18,11 @@
 </template>
 
 <script>
-  import TZTable from "@/components/TZTable/index";
-  import {nextTick} from "vue";
   import TZUtils from "../../utils/TZUtils";
 
   export default {
     name: 'Menu',
     components: {
-      "tz-table":TZTable,
     },
     data:function(){
       return {
@@ -124,8 +121,9 @@
         data.path="iFrame/${id}";
         data.name=data.name||"IFrame";
       },
-      externalServiceChange(data){
-        this.isExternalService=data.externalService
+      externalServiceChange(val,data){
+        console.log(val,data);
+        this.isExternalService=val;
         if(this.isExternalService)this.externalServiceInit(data);
       },
       //这个是创建子菜单使用-需要配合editDataHandle

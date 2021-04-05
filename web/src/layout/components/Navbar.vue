@@ -27,14 +27,14 @@
       </el-dropdown>
     </div>
 
-    <TZFormDialog
+    <tz-form-dialog
       :readonly="!isEdit"
       :edit-column-default-value="clientInfo" :edit-column-rules="editColumnRules" submit-api="/service_api/client" v-model:show="showClientDialog" title="企业信息" :edit-column="editColumn"
       :submitName="isCurrentClientAdmin?isEdit?'保存':'修改':''" :submit-before-func="editClientInfo"
       :other-action="[
                         {type:'',title:'取消',isShow:isEdit&&isCurrentClientAdmin,onClick:()=>{isEdit=false}}
                       ]"
-    ></TZFormDialog>
+    ></tz-form-dialog>
 
     <el-dialog
       title="修改密码"
@@ -65,13 +65,11 @@ import { mapGetters } from 'vuex';
 import Breadcrumb from '@/components/Breadcrumb';
 import TZRouteTabs from '@/components/TZRouteTabs';
 import Hamburger from '@/components/Hamburger';
-import TZFormDialog from "@/components/TZForm/dialog";
 import TZUtils from "@/utils/TZUtils";
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    TZFormDialog,
     TZRouteTabs
   },
   data(){
@@ -98,7 +96,7 @@ export default {
     ]),
     editColumn(){
       return [
-        {prop:"logo", tip:"点击或拖拽上传，大小不能超过1MB", label:"LOGO", iType:"image", iSpan:24, style:"width:80px;height:80px"},
+        this.$service_tool.setImageUploadHeaders({prop:"logo", tip:"点击或拖拽上传，大小不能超过1MB", label:"LOGO", iType:"image",iSpan:24, style:"width:80px;height:80px"}),
         {prop:"id",label:"账户",tip:"唯一标识,注册后不可更改",disabled:true,iType:"text", iSpan:24,style:"width:200px",placeholder:"CD1024",},
         {prop:"name",label:"公司",iType:"text",required:true,placeholder:"成都1024科技有限责任公司",iSpan:12,},
         {prop:"phone",label:"手机",iType:"text",placeholder:"15520449931",iSpan:12,},

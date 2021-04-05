@@ -50,14 +50,14 @@
 </template>
 
 <script>
-  import TZTable from "@/components/TZTable/index";
+  // import TZTable from "@/components/TZTable/index";
   import {arrayToTree} from "@/utils/treeUtils";
   import TZUtils from "@/utils/TZUtils";
 
   export default {
     name: 'User',
     components: {
-      "tz-table":TZTable,
+      // "tz-table":TZTable,
     },
     data:function(){
       return {
@@ -100,14 +100,14 @@
       },
       editColumn(){
         return [
-          {
+          this.$service_tool.setImageUploadHeaders({
             prop:"avatars",
             tip:"点击或拖拽上传，大小不能超过1MB",
             label:"用户头像",
             iType:"image",
             iSpan:24,
             style:"width:80px;height:80px"
-          },
+          }),
           {prop:"name",label:"用户名",iType:'text',required:true,iSpan:12},
           {prop:"phone",label:"手机",iType:'text',iSpan:12},
           {prop:"email",label:"邮箱",iType:'text',required: true, rules:[{type: 'email',message: '请输入正确的邮箱地址',trigger:"blur"}],iSpan:12,},

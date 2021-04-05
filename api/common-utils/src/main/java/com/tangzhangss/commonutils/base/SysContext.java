@@ -1,7 +1,7 @@
 package com.tangzhangss.commonutils.base;
 
-import com.alibaba.fastjson.JSONObject;
-import com.tangzhangss.commonutils.utils.ExceptionUtil;
+
+import cn.hutool.json.JSONObject;
 
 public class SysContext {
 
@@ -37,6 +37,6 @@ public class SysContext {
         if(userContext.get()==null){
             return null;
         }
-        return userContext.get().getString("clientId");
+        return userContext.get().getStr("clientId");
     }
 }

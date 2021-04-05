@@ -1,7 +1,10 @@
 package com.tangzhangss.commonutils.filter;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
+
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONUtil;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.service.RedisService;
 import org.apache.commons.lang.StringUtils;
@@ -70,11 +73,11 @@ public class AuthFilter implements Filter {
 
         if (StringUtils.isNotBlank(tzTk)) {
             //token格式为(Header:X-Token)UUID.randomUUID()+"&"+用户ID
-            String data = String.valueOf(redisService.get(tzTk));
+            Object data = redisService.get(tzTk);
             if (data!=null) {
-                userInfo = JSONObject.parseObject(data);
+                userInfo = JSONUtil.parseObj(data);
                 //存在该用户重新更新时间
-                redisService.set(tzTk, JSON.toJSONString(userInfo),54000l);//15分钟没有操作提示重新登录
+                redisService.set(tzTk, JSONUtil.toJsonStr(userInfo),54000l);//15分钟没有操作提示重新登录
             }
         }
         String path = req.getServletPath();//获取请求路径

@@ -1,5 +1,4 @@
-import {myApp} from '../../config/global';
-import dialog from "./TZForm/dialog";
+import {myApp} from '../../config/global.js';
 // v-dialogDrag: 弹窗拖拽属性
 myApp.directive('dialogDrag', {
   beforeMount(el, binding, vnode, oldVnode) {
