@@ -5,6 +5,7 @@
     <div class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
+        <TZRouteTabs class="tz-route-tabs-container" />
       </div>
       <app-main />
     </div>
@@ -14,13 +15,15 @@
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import TZRouteTabs from '@/components/TZRouteTabs';
 
 export default {
   name: 'Layout',
   components: {
     Navbar,
     Sidebar,
-    AppMain
+    AppMain,
+    TZRouteTabs
   },
   mixins: [ResizeMixin],
   computed: {
@@ -53,7 +56,9 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/mixin.scss";
   @import "~@/styles/variables.scss";
-
+  .tz-route-tabs-container{
+    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  }
   .app-wrapper {
     @include clearfix;
     position: relative;

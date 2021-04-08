@@ -30,4 +30,7 @@ public class ServiceTestEntity extends SysBaseEntity {
     private String columnOne;
     private Integer columnTwo;
     private LocalDate columnThere;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String editor;
 }

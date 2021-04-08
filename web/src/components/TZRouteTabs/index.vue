@@ -67,16 +67,22 @@
 
 <style lang="scss">
     .tz-route-tabs{
+        background-color: white;
+        width: 100%;
         display: inline-block;
         font-size: 14px;
-        line-height: 50px;
+        margin-top: 2px;
+        box-sizing: border-box;
+        line-height: 30px;
+        height:30px;
         .el-tabs__active-bar{
             background: none;
         }
         .el-tabs__item{
-            height: 32px;
-            line-height:32px;
-            padding: 0 5px !important;
+            font-size: 12px;
+            height: 26px;
+            line-height: 26px;
+            padding: 0 8px !important;
             margin-left:5px;
             border: 1px solid #d8dce5;
             &.is-active{
@@ -88,8 +94,8 @@
                     content: "";
                     background: #fff;
                     display: inline-block;
-                    width: 10px;
-                    height: 10px;
+                    width:8px;
+                    height:8px;
                     border-radius: 50%;
                     position: relative;
                     margin-right: 2px;

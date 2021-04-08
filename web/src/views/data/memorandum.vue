@@ -76,7 +76,7 @@
       editColumn(){
         return [
           {prop:"title", label:"标题", iType:"text",required:true,iSpan:24},
-          {prop:"content", label:"内容", iType:"textarea", iSpan:24,style:"width:100%;height:300px"},
+          {prop:"content", label:"内容",iType:"editor", iSpan:24},
         ];
       }
     },

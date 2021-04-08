@@ -1,11 +1,13 @@
 <template>
   <div class="navbar">
-
-    <TZRouteTabs class="tz-route-tabs-container" />
-
-<!--    <breadcrumb class="breadcrumb-container" />-->
+    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
-      <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+      <div  title="刷新" style="display: inline-block;height:100%">
+         <svg-icon icon-class="refresh" class="right-menu-item hover-effect refresh" @click="refreshCurrentPage"></svg-icon>
+      </div>
+      <screenfull  class="right-menu-item hover-effect screenfull"/>
+
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img :src="$store.getters.userInfo && $store.getters.userInfo.avatars" class="user-avatar">
@@ -58,19 +60,22 @@
     </el-dialog>
 
   </div>
+
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import Breadcrumb from '@/components/Breadcrumb';
-import TZRouteTabs from '@/components/TZRouteTabs';
 import Hamburger from '@/components/Hamburger';
 import TZUtils from "@/utils/TZUtils";
+import Screenfull from '@/components/Screenfull'
+
+
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    TZRouteTabs
+    Screenfull
   },
   data(){
     return {
@@ -112,6 +117,13 @@ export default {
     }
   },
   methods: {
+    refreshCurrentPage(){
+      //刷新当前路由组件
+      window.APP_MAIN_PAGE.reload();
+      //下面这种不好用，每次刷新之后页面会出现空白然后从新点击进入才会刷新出来
+      //有空再研究
+      // this.$router.replace("/refresh")
+    },
     modifyClientUserPwd:function(){
       this.modifyPwdDialogVisible=true;
       this.isEdit=false;
@@ -195,7 +207,19 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .screenfull{
+      margin-right: 10px;
+      display: inline-block;
+      height: 28px;
+    }
+    .refresh{
+      width: 32px;
+      font-size: 18px;
+      padding: 0 4px !important;
+    }
     &:focus {
       outline: none;
     }

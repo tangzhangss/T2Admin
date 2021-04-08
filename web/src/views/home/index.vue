@@ -10,7 +10,9 @@
       <li>
         <p class="bold">v2.0.2(2021-04-01)</p>
         <div class="text">
+          <p>顶部功能优化</p>
           <p>优化组件样式，新增卡片式路由导航</p>
+          <p>引入tinymce富文本编辑器</p>
         </div>
       </li>
       <li>
