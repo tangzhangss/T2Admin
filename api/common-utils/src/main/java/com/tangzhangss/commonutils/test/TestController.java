@@ -1,12 +1,13 @@
 package com.tangzhangss.commonutils.test;
 
+import com.alibaba.nacos.api.annotation.NacosInjected;
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.naming.NamingService;
 import com.tangzhangss.commonutils.base.SysBaseController;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -26,6 +27,16 @@ public class TestController extends SysBaseController<TestEntity,TestService> {
         myService.test();
         return Result.ok;
     }
+
+    @NacosInjected
+    private NamingService namingService;
+
+    @GetMapping("/nacos_get_service/no_auth")
+    @ResponseBody
+    public Result get(@RequestParam String serviceName) throws NacosException {
+        return Result.ok.data(namingService.getAllInstances(serviceName));
+    }
+
     @GetMapping("/querydsl/no_auth")
     public Result querydsl(){
         return Result.ok;

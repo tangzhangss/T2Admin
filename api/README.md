@@ -45,6 +45,27 @@
 
 ### 项目部署（gitlab自动部署）
 	自行查看项目目录下的.gitlab-ci.yml文件
+	
+### nacos配置
+安装配置
+   
+    -下载:https://github.com/alibaba/nacos/releases/tag/2.0.0-bugfix
+    -将\nacos\conf\nacos-mysql.sql文件初始化到数据库
+    -配置\nacos\conf\application.properties
+    -启动 -m standalone(默认集群模式，单机模式启动使用)
+    -文件路径不要含有中文！！！
+    
+项目中配置
+
+    -server.port
+    (application-common.propertise中默认)
+    -nacos.discovery.server-addr=127.0.0.1:8848
+    （注册服务的ip地址）
+    -spring.application.ip=127.0.0.1	
+    
+如果需要注册服务需要配置属性
+
+    -spring.application.name=""    
 		  
 
 
