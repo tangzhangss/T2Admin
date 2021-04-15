@@ -11,8 +11,7 @@
         <!--其他工具-->
         <hutool-all>5.4.6</hutool-all>
         <lombok.version>1.18.0</lombok.version>
-        <!--0.2.1版本注册服务报错!!!-->
-        <nacos-discovery-spring-boot.version>0.2.3</nacos-discovery-spring-boot.version>
+        <nacos.version>2.1.1.RELEASE</nacos.version>
     </properties>
 
     <parent>
@@ -36,11 +35,20 @@
     <packaging>pom</packaging>
 
     <dependencies>
+        <!--feign 远程调用-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+        </dependency>
         <!--nacos服务注册与配置中心-->
         <dependency>
-            <groupId>com.alibaba.boot</groupId>
-            <artifactId>nacos-discovery-spring-boot-starter</artifactId>
-            <version>${nacos-discovery-spring-boot.version}</version>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>${nacos.version}</version>
         </dependency>
         <!-- 用于日志切面中，以 json 格式打印出入参（本来使用阿里的 FASTJSON, 但是对于文件上传的接口，打印参数会报错，换为 Gson） -->
         <dependency>
@@ -103,6 +111,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>2.2.9.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.SR4</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

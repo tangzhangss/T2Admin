@@ -58,14 +58,35 @@
 项目中配置
 
     -server.port
-    (application-common.propertise中默认)
-    -nacos.discovery.server-addr=127.0.0.1:8848
-    （注册服务的ip地址）
-    -spring.application.ip=127.0.0.1	
-    
+    --------------------------------------------------
+     (application-common.propertise中默认)
+    -spring.cloud.nacos.discovery.server-addr=${NACOS-SERVER-ADDR:127.0.0.1:8848}
+    -spring.cloud.nacos.discovery.ip=${SPRING-APPLICATION-IP:127.0.0.1}
+    -------------------------------------------------- 
 如果需要注册服务需要配置属性
 
     -spring.application.name=""    
 		  
+### fegin配置
+
+接口编写和配置自行搜索，一下是封装之后的调用实例(所有使用fegin调用的接口返回对象需要common-utils包Result结构!!!!);
 
 
+       FeginRemoteCall call = ()->serviceTestFeginInterface.getData("a","b",null);
+       Result result = FeginConfig.apply(call,true);
+
+将外部服务的结构原样返回，成功的结果类似,如：
+        
+    {
+        "code": 404,
+        "message": "Not Found",
+        "data": "访问的页面不存在"
+    }
+
+如果apply的第二个参数为true,将再次包裹Result直接抛出异常全局捕获事务回滚处理等，异常信息如下:
+
+    {
+        "code": 602,
+        "message": "远程调用失败",
+        "data": "{\"result\":{\"code\":404,\"data\":\"访问的页面不存在\",\"message\":\"Not Found\"},\"service\":\"COMMON-DATA\"}"
+    }

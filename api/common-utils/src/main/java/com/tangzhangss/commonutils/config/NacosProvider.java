@@ -9,14 +9,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+/**
+ * 之前用的springboot的 需要自己注册，换成spring cloud的就不用了
+ */
+//@Component
 public class NacosProvider implements CommandLineRunner {
     @NacosInjected
     private NamingService namingService;
 
-    @Value("${nacos.application.name:none}")
+    @Value("${spring.application.name:none}")
     private String applicationName;
-    @Value("${nacos.application.ip:none}")
+    @Value("${spring.application.ip:none}")
     private String applicationIp;
     @Value("${server.port}")
     private Integer serverPort;
