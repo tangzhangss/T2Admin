@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/client")
-public class ClientController {
+public class ClientApi {
     @Autowired
     ClientDao clientDao;
     @Autowired

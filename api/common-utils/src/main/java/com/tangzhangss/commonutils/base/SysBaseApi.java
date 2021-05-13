@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-public abstract class SysBaseController<T extends SysBaseEntity,TT extends SysBaseService> {
+public abstract class SysBaseApi<T extends SysBaseEntity,TT extends SysBaseService> {
 
     @Autowired
     protected TT myService;

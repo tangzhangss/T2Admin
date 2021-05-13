@@ -1,6 +1,6 @@
 package com.tangzhangss.commonservice.role;
 
-import com.tangzhangss.commonutils.base.SysBaseController;
+import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.resultdata.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/role")
-public class RoleController extends SysBaseController<RoleEntity, RoleService> {
+public class RoleApi extends SysBaseApi<RoleEntity, RoleService> {
     @Autowired
     RoleDao roleDao;
 

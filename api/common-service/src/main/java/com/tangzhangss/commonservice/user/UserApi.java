@@ -1,10 +1,9 @@
 package com.tangzhangss.commonservice.user;
 
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tangzhangss.commonservice.aspect.syslog.SysLog;
-import com.tangzhangss.commonutils.base.SysBaseController;
+import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.utils.BaseUtil;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-public class UserController extends SysBaseController<UserEntity, UserService> {
+public class UserApi extends SysBaseApi<UserEntity, UserService> {
 
     @Autowired
     UserDao userDao;

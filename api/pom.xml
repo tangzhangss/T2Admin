@@ -25,7 +25,6 @@
         <module>common-utils</module>
         <module>common-service</module>
         <module>common-data</module>
-        <module>client-shopmall</module>
     </modules>
 
 

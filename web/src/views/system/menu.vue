@@ -34,6 +34,7 @@
           systemic:true,
           usable:true,
           parentDesc:'',
+          externalService:false
         },
         dataList:[],
         isRoot:false,//是否是一级菜单
@@ -113,6 +114,7 @@
           data.externalService=true;
           this.externalServiceInit(data);
         }
+        console.log(data,data.externalService, data.domainId)
         if(data&&data.externalService){
           this.isExternalService=true;
         }else{this.isExternalService=false}

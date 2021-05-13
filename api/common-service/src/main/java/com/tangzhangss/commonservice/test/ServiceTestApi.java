@@ -2,23 +2,19 @@ package com.tangzhangss.commonservice.test;
 
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import com.tangzhangss.commonutils.base.SysBaseController;
+import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.config.FeginConfig;
 import com.tangzhangss.commonutils.config.FeginRemoteCall;
 import com.tangzhangss.commonutils.resultdata.Result;
-import com.tangzhangss.commonutils.resultdata.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 @RestController
 @RequestMapping("/service_test")
-public class ServiceTestController extends SysBaseController<ServiceTestEntity, ServiceTestService> {
+public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestService> {
     @Autowired
     ServiceTestDao testDao;
     @Autowired

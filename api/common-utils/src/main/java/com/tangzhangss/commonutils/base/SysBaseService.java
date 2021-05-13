@@ -32,6 +32,7 @@ import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @PropertySource({"classpath:application.properties"})
@@ -252,19 +253,21 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         if (request != null){
             orders.addAll(getOrderByStr(request.getParameter("orderBy"), root));
             predicates = getQueryConditionByRequest(root,builder,request);
-            //分组查询不能带这个条件 ,后端调用的接口做查询也不需要排序
-            //即：仅前端调用需要按照时间排序
-            //分组查询参数只是为了获取分页数据以及前端查询条件-也需要后端重新定义接口配合-所以不需要时间排序
-            if (StringUtils.isBlank(request.getParameter("groupBy")) && paramMap==null) {
-                // 默认按创建时间排序
-                orders.add(new OrderImpl(getExpression("createTime",root),false));
-            }
         }
 
         if (paramMap!=null){
             orders.addAll(getOrderByStr(paramMap.get("orderBy"), root));
             predicates.addAll(getPredicatesByMap(paramMap,root,builder));
         }
+        //分组查询不能带这个条件
+        //即：仅前端调用需要按照时间排序
+        //分组查询参数只是为了获取分页数据以及前端查询条件-也需要后端重新定义接口配合-所以不需要时间排序
+        //如果有排序条件也不需要排序
+        if ((request!=null&&StringUtils.isBlank(request.getParameter("groupBy")))||orders.size()==0){
+            // 默认按创建时间排序
+            orders.add(new OrderImpl(getExpression("createTime",root),false));
+        }
+
         cq.orderBy(orders);
 
         //不管哪个查询都把lientId带上
@@ -647,8 +650,14 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      * 此接口仅仅供后端调用！！
      * @param whereMap 查询条件(xxx.yyyEQ=,...) 解析规则和baseService,get方法一样
      * @param groupKey
-     * @param groupMap 分组条件 (xxxx.yyy,sum)，   *      * 前面数属性，后面是聚合函数
-     *                   分组之后如果有聚合函数-属性名就是聚合函数名
+     * @param groupMap 分组条件 (“xxxx.yyy as xy”,sum)，
+     *                 *      * 前面数属性，后面是聚合函数
+     *                   分组之后如果有聚合函数_属性名就是聚合函数名(默认)
+     * 注意：
+     *     concat操作 如果需要使用别名 需要确保连接的字符串不能包含:(英文)
+     *       {A,B,C}这种格式的返回值 都会去掉前后的括号{A:A,B:B}这种不会
+     *     如果value里面含有:且需要需要去掉前后{} 不实用as赋予别名
+     *
      * @return
      */
     public List<Map<String,Object>> queryByGroup(Map whereMap, String[] groupKey, Map groupMap){
@@ -683,11 +692,16 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                 Object value = t.get(e);
                 //是聚合concat部分,因为这个聚合函数现在pgsql返回的数组形式所以在这里处理一下
                 //如果解决了，删除这段代码
+                String concat = (String) value;
+                Matcher matcher = Pattern.compile("^\\{(?:[^:]+,?)+}$").matcher(concat);
                 if (key.endsWith("_concat")){
-                    String concat = (String) value;
+                    //concat的结果集  pgsql有前后括号 mysql没有
                     if(Pattern.compile("^\\{.*}$").matcher(concat).matches()){
                         value=concat.substring(1,concat.length()-1);
                     }
+                }else if (matcher.matches()){
+                    //不能包含:的这种 {a,b,c,d,e,s}
+                    value=concat.substring(1,concat.length()-1);
                 }
                 //-------------------------------------
                 mp.put(key,value);
@@ -700,6 +714,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     /**
      *
      * 获取当前CriteriaQuery添加分组条件之后的CriteriaQuery
+     *
      */
     private CriteriaQuery getGroupByParams(Root root, CriteriaQuery cq, CriteriaBuilder cb, String[] groupKey, Map<String, String> paramMap) {
 
@@ -716,53 +731,72 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         while (it.hasNext()) {
             Map.Entry<String, String> entry = it.next();
             String key=entry.getKey();
+            String keyAlias = null;
+            //可以有as 别名
+            Pattern pattern = Pattern.compile("^(.+?)\\s+as\\s+(.+)$");
+            Matcher matcher = pattern.matcher(key);
+            if (matcher.find()){
+                key = matcher.group(1);
+                keyAlias = matcher.group(2);
+            }
             Path p = getExpression(key, root);
             String func = entry.getValue();
             if (StringUtils.isNotBlank(func)) {
                 String[] funcArr = func.split(",");
                 for (int i = 0; i < funcArr.length; i++) {
                     String cFunc=funcArr[i];
-                    String tfunc =cFunc.toUpperCase();
-                    switch (tfunc) {
-                        case "SUM":
-                            selectionList.add(cb.sum(p).alias(key+"_"+cFunc));
-                            break;
-                        case "COUNT":
-                            selectionList.add(cb.count(p).alias(key+"_"+cFunc));
-                            break;
-                        case "MAX":
-                            selectionList.add(cb.max(p).alias(key+"_"+cFunc));
-                            break;
-                        case "MIN":
-                            selectionList.add(cb.min(p).alias(key+"_"+cFunc));
-                            break;
-                        case "CONCAT":
-                            //数据库调用聚合连接的函数名
-                            //下面这里需要再外面包一个concat或则其他的方法，不然会报一个错，原因不知
-                            //如果直接调用cb.function生成的sql语句不能执行
-                            String sqlName = driverClassName.toUpperCase();
-
-                            if(sqlName.contains("POSTGRESQL")) {
-                                //pgsql--返回的是字符串数组
-                                selectionList.add(cb.concat("{}",cb.function("array_agg", String.class, p)).alias(key+"_"+cFunc));
-                                //一直提示方法不存在-后面再弄-这里解决了请删除上面queryByGroup相关代码
-                                //selectionList.add(cb.concat("",cb.function("string_agg", String.class, p,cb.literal(","))).alias(key+"_"+cFunc));
-
-                            }
-                            if(sqlName.toUpperCase().contains("MYSQL")) {
-                                selectionList.add(cb.concat("",cb.function("GROUP_CONCAT",String.class,p)).alias(key+"_"+cFunc));
-                            }
-                            break;
-                        default:
-                            selectionList.add(p.alias(key+"_"+cFunc));
+                    //没有设置别名-默认
+                    if(keyAlias==null){
+                        keyAlias = key+"_"+cFunc;
                     }
+                    Selection sl = getFunSl(cFunc,cb,p).alias(keyAlias);
+                    selectionList.add(sl);
                 }
             }else{
-                selectionList.add(p.alias(key));
+                String tKey = keyAlias==null?key:keyAlias;
+                selectionList.add(p.alias(tKey));
             }
         }
         return  cq.multiselect(selectionList).groupBy(exList);
     }
+
+    protected Selection getFunSl(String cFunc,CriteriaBuilder cb,Path p) {
+        Selection sl = null;
+        switch (cFunc.toUpperCase()) {
+            case "SUM":
+                sl = cb.sum(p);
+                break;
+            case "COUNT":
+                sl = cb.count(p);
+                break;
+            case "MAX":
+                sl = cb.max(p);
+                break;
+            case "MIN":
+                sl = cb.min(p);
+                break;
+            case "CONCAT":
+                //数据库调用聚合连接的函数名
+                //下面这里需要再外面包一个concat或则其他的方法，不然会报一个错，原因不知
+                //如果直接调用cb.function生成的sql语句不能执行
+                String sqlName = driverClassName.toUpperCase();
+
+                if(sqlName.contains("POSTGRESQL")) {
+                    //pgsql--返回的是字符串数组
+                    sl=cb.concat("{}",cb.function("array_agg", String.class, p));
+                    //一直提示方法不存在-后面再弄-这里解决了请删除上面queryByGroup相关代码
+                    //selectionList.add(cb.concat("",cb.function("string_agg", String.class, p,cb.literal(","))).alias(keyAlias));
+                }
+                if(sqlName.toUpperCase().contains("MYSQL")) {
+                    sl=cb.concat("",cb.function("GROUP_CONCAT",String.class,p));
+                }
+                break;
+            default:
+                sl = p;
+        }
+        return sl;
+    }
+
 
     /**
      * 获取一个实体对象

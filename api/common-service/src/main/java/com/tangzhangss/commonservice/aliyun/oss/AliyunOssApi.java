@@ -1,7 +1,7 @@
 package com.tangzhangss.commonservice.aliyun.oss;
 
 
-import com.tangzhangss.commonutils.base.SysBaseController;
+import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.resultdata.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/aliyunoss")
-public class AliyunOssController extends SysBaseController<AliyunOssEntity, AliyunOssService> {
+public class AliyunOssApi extends SysBaseApi<AliyunOssEntity, AliyunOssService> {
 
     @PostMapping("/upload_picture")
     public Result uploadPicture(@RequestParam("file") MultipartFile file) throws Exception {

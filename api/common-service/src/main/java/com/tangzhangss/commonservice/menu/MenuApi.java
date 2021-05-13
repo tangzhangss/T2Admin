@@ -1,11 +1,10 @@
 package com.tangzhangss.commonservice.menu;
 
 
-import com.mysql.cj.QueryResult;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Expression;
 import com.tangzhangss.commonservice.user.UserService;
-import com.tangzhangss.commonutils.base.SysBaseController;
+import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.utils.HashMapUtil;
@@ -16,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
-public class MenuController extends SysBaseController<MenuEntity, MenuService> {
+public class MenuApi extends SysBaseApi<MenuEntity, MenuService> {
 
     @Autowired
     HttpServletRequest request;
@@ -50,7 +48,7 @@ public class MenuController extends SysBaseController<MenuEntity, MenuService> {
         QueryResults queryResults = queryDslUtil.getJPAQuery(
                 (List<Expression<?>>) ListUtil.createLinkedList().add(QMenuEntity.menuEntity.clientId).get()
                 ,QMenuEntity.menuEntity)
-                .getQueryResults(request, HashMapUtil.createHashMap().put("url@LIKE", "").get());
+                .getQueryResults(request, HashMapUtil.createHashMap().put("url@LIKE", "").get(),null);
         return Result.ok.data(queryResults);
     }
 }

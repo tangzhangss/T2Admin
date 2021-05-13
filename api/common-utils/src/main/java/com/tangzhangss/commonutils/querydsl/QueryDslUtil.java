@@ -16,14 +16,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class QueryDslUtil{
@@ -37,13 +35,13 @@ public class QueryDslUtil{
 
     /**
      *
-     * @param qExpression 查询字段
-     * @param entity from的实体
+     * @param selectExpression 查询字段
+     * @param fromEntityExpression from的实体
      * @return
      */
-    public QueryDslUtil getJPAQuery(List<Expression<?>>qExpression,EntityPath entity){
-        fromEntity.set(entity);
-        jpaQuery.set(new JPAQueryFactory(em).select(new QueryResultMap(qExpression)).from(entity));
+    public QueryDslUtil getJPAQuery(List<Expression<?>>selectExpression,EntityPath fromEntityExpression){
+        fromEntity.set(fromEntityExpression);
+        jpaQuery.set(new JPAQueryFactory(em).select(new QueryResultMap(selectExpression)).from(fromEntityExpression));
         return this;
     }
     public JPAQuery get(){
@@ -52,13 +50,16 @@ public class QueryDslUtil{
     /**
      * querydsl 查询方法
      *
-     * 条件构建不支持级联（A.b@EQ）
+     * 条件构建不支持级联（A.b@EQ --- 20210421支持）
      * 不支持排序分组，如果有排序分组请在调用此方法之前处理query对象
      * @param request 前端请求--构建查询条件-格式如：base里面的get()
      * @param paramsMap 后端条件构建
+     * @param entityPathMap 后端条件构建
+     *                      A.b@EQ  =>  map.put("A",entityPath)
+     *                      A.B.c@EQ  =>  map.put("A.B",entityPath)
      * @return
      */
-    public QueryResults getQueryResults(HttpServletRequest request, Map<String, String> paramsMap) {
+    public QueryResults getQueryResults(HttpServletRequest request, Map<String, String> paramsMap,Map<String,EntityPath> entityPathMap) {
         JPAQuery query = jpaQuery.get();
         if (query == null) {
             return null;
@@ -82,7 +83,13 @@ public class QueryDslUtil{
                 String value = request.getParameter(key);
                 //只有包含@的才算作条件构造
                 if (key.contains("@")) {
-                    BooleanExpression b = this.getQQueryExpression(key, value);
+                    BooleanExpression b;
+                    if(key.contains(".")){
+                        key = key.substring(0,key.lastIndexOf("."));
+                        b = this.getQQueryExpression(key,value,entityPathMap.get(key));
+                    }else{
+                        b = this.getQQueryExpression(key,value,null);
+                    }
                     if (b != null) {
                         query.where(b);
                     }
@@ -93,17 +100,24 @@ public class QueryDslUtil{
             Iterator it = paramsMap.entrySet().iterator();
             while(it.hasNext()) {
                 Map.Entry<String, String> entry = (Map.Entry)it.next();
-                BooleanExpression b = this.getQQueryExpression(entry.getKey(), entry.getValue());
+                String key = entry.getKey();
+                BooleanExpression b;
+                if(key.contains(".")){
+                    key = key.substring(0,key.lastIndexOf("."));
+                    b = this.getQQueryExpression(key,entry.getValue(),entityPathMap.get(key));
+                }else{
+                    b = this.getQQueryExpression(key,entry.getValue(),null);
+                }
                 if (b != null) {
                     query.where(b);
                 }
             }
         }
 
-        query.offset(iPgIndex-1).limit(iPgSize);
+        query.offset((iPgIndex-1)*iPgSize).limit(iPgSize);
 
         //必须带上clientId
-        BooleanExpression b = getQQueryExpression("clientId@EQ",SysContext.getClientId());
+        BooleanExpression b = getQQueryExpression("clientId@EQ",SysContext.getClientId(),null);
         if(b != null){
             query.where(b);
         }
@@ -118,7 +132,7 @@ public class QueryDslUtil{
      * @return
      */
     @SneakyThrows
-    public BooleanExpression getQQueryExpression(String key, Object value) {
+    public BooleanExpression getQQueryExpression(String key, Object value, EntityPath entityPath) {
         if(StringUtils.isBlank(key)){
             ExceptionUtil.throwException("key参数错误!");
         }
@@ -126,7 +140,7 @@ public class QueryDslUtil{
         String [] arr = key.split("@");
         String sType = arr[1];
         if(key.length()!=2)ExceptionUtil.throwException("key参数错误!");
-        Object o = fromEntity;
+        Object o = Optional.ofNullable(entityPath).orElse(fromEntity.get());
 
         SimpleExpression l = (SimpleExpression) BaseUtil.readAttributeValue(o,arr[0]);
         if (l==null) return  null;
