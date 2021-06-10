@@ -31,8 +31,8 @@
       tableColumn(){
         return [
           {prop:"name",label:"服务",filterable:true,isShowFilter:true,iSpan:6},
-          {prop:"proAddress",label:"生产环境地址",filterable:true,isShowFilter:true,iSpan:8,width:"200"},
-          {prop:"devAddress",label:"开发环境地址",filterable:true,isShowFilter:true,iSpan:8,width:"200"},
+          {prop:"proAddress",label:"生产环境地址",filterable:true,isShowFilter:true,iSpan:6,width:"200"},
+          {prop:"devAddress",label:"开发环境地址",filterable:true,isShowFilter:true,iSpan:6,width:"200"},
           {prop:"usable",label:"是否启用",cType:"switch",filterable:true,iSpan:6,width:"80"},
           {prop:"createTime",label:"创建时间",cType:'dateTime',width:"200",hide:true,iSpan:18},
           {prop:"updateTime",label:"更新时间",cType:'dateTime',width:"200",hide:true,iSpan:18},

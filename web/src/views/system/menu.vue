@@ -12,6 +12,7 @@
               :pagination="null"
               row-key="id"
               :saveForceFlush="true"
+              :showIndex="false"
     >
     </tz-table>
   </div>
@@ -99,7 +100,12 @@
         this.dataList=list;
       },
       getTableDataList(data){
-        this.setDataList(data);
+        //这个只有搜索调用-搜索之后不需要组成树状结构
+        if(data.url.indexOf("title")>-1){
+          this.dataList=data.dataList;
+        }else{
+          this.setDataList(data.dataList);
+        }
       },
       //创建 回调 这里data表示父级菜单信息或则undefined
       editDataHandle(data){

@@ -6,6 +6,7 @@ import com.tangzhangss.commonutils.exception.ServiceException;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.uidgenerator.UidGeneratorService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
+import com.tangzhangss.commonutils.utils.ExceptionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TupleElement;
@@ -55,13 +57,21 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     @Autowired
     protected UidGeneratorService uidGeneratorService;
 
-    // 是否查全部
-    protected boolean isQueryAll=false;
-
-    // 是否查询全部，已删除的
+    // 是否查全部-默认false
+    protected ThreadLocal<Boolean> isQueryAll= ThreadLocal.withInitial(() -> false);
+    // 是否查询全部，已删除的-后端重写之后以后端的为主
     protected boolean isQueryAll(){
-        return isQueryAll;
+        return isQueryAll.get();
     }
+
+    // 是否分组-默认false
+    protected ThreadLocal<Boolean> isGroupBy= ThreadLocal.withInitial(() -> false);
+
+
+
+    @PostConstruct
+    public void init(){}
+
 
     /*
     如果usable属性不用于做假删，请一定重写此方法并返回true
@@ -76,6 +86,9 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> cq = builder.createTupleQuery();
         Root root = cq.from(getGenericType(0));
+
+        this.isGroupBy.set(true);
+
         getQueryByParams(root,cq,builder,request,null);
         queryByGroup(groupValue,builder,root,cq);
         int count = getCqCount(cq,builder);
@@ -166,8 +179,6 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     public Page<T>  get(HttpServletRequest request, Map<String, String> paramsMap){
         int iPgIndex = 1;//默认第一页
         int iPgSize=Integer.MAX_VALUE;//默认不分页
-        Sort sort;//分页
-        Specification specification;
 
         if (request!=null) {
             String sPageIndex = request.getParameter("pageIndex");
@@ -175,7 +186,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             if (StringUtils.isNotBlank(sPageIndex)) iPgIndex = Integer.parseInt(sPageIndex);
             if (StringUtils.isNotBlank(sPageSize)) iPgSize = Integer.parseInt(sPageSize);
             String queryAll = request.getParameter("queryAll");
-            if (StringUtils.isNotBlank(queryAll) && queryAll.equals("true")) isQueryAll = true;
+            if (StringUtils.isNotBlank(queryAll) && queryAll.equals("true")) isQueryAll.set(true);
                     /*
             前端有分组查询单独处理
             这里的分组查询只是为了分页,以及配置表格搜索，（前端表格组件接口统一）没有真实数据，所以前端使用分组查询之后，后端需要自己写接口构建数据
@@ -193,11 +204,10 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         }
         if(iPgIndex<=0)iPgIndex=1;
         PageRequest page = PageRequest.of(iPgIndex-1,iPgSize);
-        specification = getCommonSpecification(request,paramsMap);
+        Specification specification = getCommonSpecification(request,paramsMap);
         Page<T> pageList = myDao.findAll(specification,page);
 
-        //每次查询完成之后报这个条件置为false;
-        isQueryAll = false;
+
 
         return pageList;
     }
@@ -263,7 +273,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         //即：仅前端调用需要按照时间排序
         //分组查询参数只是为了获取分页数据以及前端查询条件-也需要后端重新定义接口配合-所以不需要时间排序
         //如果有排序条件也不需要排序
-        if ((request!=null&&StringUtils.isBlank(request.getParameter("groupBy")))||orders.size()==0){
+        if (!this.isGroupBy.get()||orders.size()==0){
             // 默认按创建时间排序
             orders.add(new OrderImpl(getExpression("createTime",root),false));
         }
@@ -296,6 +306,12 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         return  predicates;
     }
 
+    /**
+     * 构建查询条件
+     * @param key 如：Ａ＠ＥＱ Ａ.B@IN A@LIKE  A_EQ,B_LIKE@OR
+     * 多字段OR查询  A_EQ,B_LIKE@OR => (A@EQ=value or B@LIKE=value)
+     *            也可省略_EQ,_LIKE 默认_EQ
+     */
     protected Predicate getPredicate(String key, Object value,CriteriaBuilder builder,Root<T> root){
         Predicate predicate = null;
         String [] arr = key.split("@");
@@ -309,6 +325,25 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
         //必须至少包含id@EQ，即分割之后两个元素
         if (arr.length>=2) {
+
+
+            //A.b_EQ,B_LIKE@OR="str"
+            if(arr[1].toUpperCase().equals("OR")){
+                List<Predicate> predicateList = new ArrayList<>();
+                String[] sList = sKey.split(",");
+                for(int i=0;i<sList.length;i++){
+                    String[] s = sList[i].split("_");
+                    String tKey = s[0];
+                    String tC="EQ";
+                    if(s.length>1){
+                        tC = s[1];
+                    }
+                    predicateList.add(getPredicate(tKey+"@"+tC,value,builder,root));
+                }
+                return builder.or(predicateList.toArray(new Predicate[predicateList.size()]));
+            }
+
+
             //url传过来全是String类型的这里需要转换一下_有些条件不需要转换（如：范围查询单独转换）
             if(isParseObject(arr[1])){
                 value = parseObject(sKey,value);
@@ -448,7 +483,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     public Result put(List<T> datas) throws Exception {
         for(T data : datas){
             //生成Id
-            data = save(data);
+            save(data);
         }
         return new Result(HttpStatus.OK,datas);
     }
@@ -635,6 +670,47 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         return true;
     }
 
+    /**
+     * 检测和设置编码
+     */
+    public void checkAndSetCodeFormula(TT data,String code,String columnName) throws Exception{
+        List<TT> datas = new LinkedList();
+        datas.add(data);
+        String[] codes = new String[]{code};
+        checkAndSetCodeFormula(datas,codes,columnName);
+    }
+    /**
+     * 检测和设置编码 多个
+     */
+    public void checkAndSetCodeFormula(List<TT> datas,String [] codes,String columnName) throws Exception{
+        if (datas.size()!=codes.length) ExceptionUtil.throwException("参数错误,数据记录数与编码数量不一致");
+        //查询编码是否存在于数据库
+        //20200126
+        //给一个偏移量，如果存在相同的编码改为:  编码-偏移量
+        //如 C0001 => C0001-1
+        Map map = new HashMap();
+        map.put(columnName+"@IN",StringUtils.join(codes,","));
+        List<TT> items = getWithMap(map);
+        //编码重复的加上偏移量
+        for (int i = 0; i < items.size(); i++) {
+            int index = Arrays.binarySearch(codes, BaseUtil.readAttributeValue(items.get(i),columnName));
+            if (index==-1)continue;
+            String code = codes[i];
+            int offset=1;
+            String newCode;
+            for (;;){
+                newCode = code+"-"+offset;
+                Object o = getOneWithMapString(columnName+"@EQ:"+newCode);
+                if(o==null)break;
+                offset++;
+            }
+            codes[i] = newCode;
+        }
+        //将新的code赋值给datas
+        for (int i = 0; i < datas.size(); i++) {
+            BaseUtil.setAttributeValue(datas.get(i),columnName,codes[i]);
+        }
+    }
 
 
     /**
@@ -667,6 +743,8 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         //这个值不能为null
         if(whereMap==null)whereMap=new HashMap();
 
+        this.isGroupBy.set(true);
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root root = cq.from(getGenericType(0));//具体实体的Root
@@ -692,7 +770,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                 Object value = t.get(e);
                 //是聚合concat部分,因为这个聚合函数现在pgsql返回的数组形式所以在这里处理一下
                 //如果解决了，删除这段代码
-                String concat = (String) value;
+                String concat = String.valueOf(value);
                 Matcher matcher = Pattern.compile("^\\{(?:[^:]+,?)+}$").matcher(concat);
                 if (key.endsWith("_concat")){
                     //concat的结果集  pgsql有前后括号 mysql没有

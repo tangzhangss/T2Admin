@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.crypto.SecureUtil;
 import com.tangzhangss.commonutils.config.Attribute;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -106,14 +107,14 @@ public class BaseUtil {
     }
     /**
      * 根据路径获取文件内容
-     * @param path 路径
+     * @param path 路径 classpath 路径
      */
     public static String readFileContent(String path,String charset) throws IOException {
-        InputStream inputStream = BaseUtil.class.getClassLoader().getResourceAsStream(path);
+        InputStream inputStream = new ClassPathResource(path).getInputStream();
         return  readInputStream(inputStream,charset);
     }
     public static String readFileContent(String path) throws IOException {
-        InputStream inputStream = BaseUtil.class.getClassLoader().getResourceAsStream(path);
+        InputStream inputStream = new ClassPathResource(path).getInputStream();
         return  readInputStream(inputStream,null);
     }
 

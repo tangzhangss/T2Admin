@@ -4,7 +4,6 @@ import {myApp} from "../config/global";
 console.log("---------")
 import webComponent from 'tangzhangss-web-component';
 import 'tangzhangss-web-component/dist/tangzhangss-web-component.css';
-import 'tangzhangss-web-component/';
 console.log("已引入ＴＺＣＣ＿ＲＥＮ　ＡＤＭＩＮ　ＳＹＳＴＥＭ前端组件:",webComponent)
 console.log("---------")
 import ElementPlus from 'element-plus';

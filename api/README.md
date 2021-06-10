@@ -4,6 +4,8 @@
 	-springboot2.2.9.RELEASE
 	-maven 3.6.3
 	-openjdk 11
+	-mysql8.0(主键生成策略使用的是百度的雪花算法，worker_node表使用的mysql自增Id)
+	
 
 ### 服务器配置
 	安装maven

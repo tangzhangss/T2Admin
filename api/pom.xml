@@ -101,6 +101,12 @@
             <version>${querydsl.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--配置文件注入-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

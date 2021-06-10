@@ -5,6 +5,7 @@ import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.tangzhangss.commonutils.base.SysBaseApi;
+import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.syscode.SysCodeService;
@@ -33,7 +34,11 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
         myService.test();
         return Result.ok;
     }
-
+    @GetMapping("/no_auth")
+    public Result getNoAuth() throws NacosException {
+        SysContext.setUser(new JSONObject().set("clientId",10000));
+        return Result.ok.data(myService.get(request,null));
+    }
     @NacosInjected
     private NamingService namingService;
 
@@ -88,10 +93,6 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
     @GetMapping("/querydsl/no_auth")
     public Result querydsl(){
         QTestEntity qTestEntity =QTestEntity.testEntity;
-        return Result.ok;
-    }
-    @GetMapping("/no_auth")
-    public Result no_auth(){
         return Result.ok;
     }
 
