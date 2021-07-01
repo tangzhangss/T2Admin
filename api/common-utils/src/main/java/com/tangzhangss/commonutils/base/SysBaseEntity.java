@@ -1,5 +1,6 @@
 package com.tangzhangss.commonutils.base;
 
+import com.tangzhangss.commonutils.config.Attribute;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -22,7 +23,12 @@ public class SysBaseEntity {
     protected Long creatorId=SysContext.getUserId();//创建用户Id
 
     @Column(nullable = false)
+    protected String creatorName=SysContext.getUserName();//创建用户名字（不联动更新）
+
+
+    @Column(nullable = false)
     protected String clientId=SysContext.getClientId();//客户ID(一个客户对应多个关联用户)
+
 
     protected LocalDateTime updateTime;
 
@@ -32,6 +38,4 @@ public class SysBaseEntity {
     protected String remark="";//备注
 
     protected boolean systemic=false;//是否是系统初始化-做一些其他操作,比如:系统提供的不可删除和修改甚至查看
-
-
 }

@@ -2,10 +2,13 @@ package com.tangzhangss.commonutils.filter;
 
 
 
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.tangzhangss.commonutils.base.SysContext;
+import com.tangzhangss.commonutils.config.Attribute;
 import com.tangzhangss.commonutils.service.RedisService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -28,8 +32,11 @@ public class AuthFilter implements Filter {
 
     public static final String AUTH = "X-Token";
     //正则匹配
-    public static List<String> unAuthUrl = Arrays.asList("^/static.*", "^/user/login",".*/no_auth.*");
-
+    private static List<String> unAuthUrl = ListUtil.list(false,"^/static.*", "^/user/login",".*/no_auth.*");
+    //增加不授权的url
+    public static void addUnAuthUrl(String urlRegex){
+        unAuthUrl.add(urlRegex);
+    }
     @Value("${custom.debug:false}")
     private boolean isDebug;
 
@@ -84,6 +91,10 @@ public class AuthFilter implements Filter {
         // 判断如果没登录则报错
         if (userInfo==null && !allowedPath(path)) return invalidTokenMsgHandle(servletRequest,servletResponse,"长时间没有操作，为了您的数据安全，请重新登录!");
 
+        //设置匿名请求的用户信息
+        if(userInfo==null){
+            userInfo = getAnonymousSysContext();
+        }
         SysContext.setUser(userInfo);
 
         return true;
@@ -94,11 +105,23 @@ public class AuthFilter implements Filter {
      */
     private boolean allowedPath(String path){
         for (String urlRegex:unAuthUrl){
-            if(Pattern.compile(urlRegex).matcher(path).matches())
+            if(Pattern.compile(urlRegex).matcher(path).matches()){
                 return true;
+            }
         }
-
         return false;
+    }
+
+    /**
+     * 处理没有登录的用户请求 上下文
+     */
+    private JSONObject getAnonymousSysContext() {
+        JSONObject context = new JSONObject();
+        context.set("id",Attribute.NO_AUTH_USER_ID);
+        context.set("name",Attribute.NO_AUTH_USER_NAME);
+        context.set("clientId",Attribute.NO_AUTH_CLIENT_ID);
+
+        return context;
     }
 
     @Override

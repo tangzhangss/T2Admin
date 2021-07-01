@@ -1,9 +1,26 @@
 package com.tangzhangss.commonutils.utils;
 
+import cn.hutool.json.JSONObject;
+import lombok.val;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.*;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class FileUtil {
 
@@ -73,6 +90,236 @@ public class FileUtil {
         }
         BigInteger bigInt = new BigInteger(1, digest.digest());
         return bigInt.toString(16);
+    }
+
+
+    // @描述：是否是2003的excel，返回true是2003
+    public static boolean isExcel2003(String filePath)  {
+        return filePath.matches("^.+\\.(?i)(xls)$");
+    }
+    //@描述：是否是2007的excel，返回true是2007
+    public static boolean isExcel2007(String filePath)  {
+        return filePath.matches("^.+\\.(?i)(xlsx)$");
+    }
+    /**
+     * 验证EXCEL文件
+     * @param filePath
+     * @return
+     */
+    public static boolean validateExcel(String filePath){
+        if (filePath == null || !(isExcel2003(filePath) || isExcel2007(filePath))){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 解析Excel文件
+     */
+    public static List<List<Object>> analysisExcel(File excelFile) throws Exception {
+        try(FileInputStream fileInputStream = new FileInputStream(excelFile)){
+            Workbook wb = null;
+            //        Workbook wb = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(
+//                sType)?new XSSFWorkbook(new FileInputStream(tempFile)):new HSSFWorkbook(new FileInputStream(tempFile));
+            if (isExcel2007(excelFile.getName())) {
+                wb = new XSSFWorkbook(fileInputStream);
+            } else {
+                wb = new HSSFWorkbook(fileInputStream);
+            }
+            List<List<Object>> list = new LinkedList<List<Object>>();
+            // 读取第一张表格内容
+            Sheet sheet = wb.getSheetAt(0);
+            Row row = null;
+            Cell cell = null;
+            for (int i = 0; i <= (sheet.getPhysicalNumberOfRows() - 1); i++) {
+                row = sheet.getRow(i);
+                if (row == null){
+                    ExceptionUtil.throwException("解析错误，请删除中间的空行");
+                }
+                List<Object> linked = new LinkedList<Object>();
+
+                //行的解析状态
+                Integer[] iStatus= new Integer[1];//状态0:该行正常5:该行警告信息/10:该行错误校验不通过
+                iStatus[0]=0;
+                StringBuffer sMessage= new StringBuffer();//错误信息
+
+                for (int j = 0; j <= row.getLastCellNum()-1; j++) {
+                    Object value = null;
+                    cell = row.getCell(j);
+                    if (cell == null) {
+                        linked.add(null);//每一个单元格都一一对应
+                        if(sheet.getRow(1).getCell(j).getStringCellValue().endsWith("*")){
+                            iStatus[0] = 10;
+                            sMessage.append(sheet.getRow(1).getCell(j)+"不能为空;");
+                        }
+                        continue;
+                    }
+                    switch (cell.getCellType()) {
+                        case XSSFCell.CELL_TYPE_STRING:
+                            //if当前列不是string类型的出现警告信息
+                            if(i>1) checkCellFormat("String",sheet,j,iStatus,sMessage);
+
+                            value = cell.getStringCellValue();
+                            break;
+                        case XSSFCell.CELL_TYPE_NUMERIC:
+                            //日期数据返回LONG类型的时间戳
+                            if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                                if("DateTime".equals(getSheetCellType(sheet,j))){
+                                    if(i>1) checkCellFormat("DateTime",sheet,j,iStatus,sMessage);
+                                    value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cell.getDateCellValue());
+                                }else{
+                                    if(i>1) checkCellFormat("Date",sheet,j,iStatus,sMessage);
+                                    value = new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
+                                }
+                            } else {
+                                //数值类型返回double类型的数字
+                                if(i>1) checkCellFormat("Number",sheet,j,iStatus,sMessage);
+                                if("i".equals(getColumnTypePrefix(sheet,j))){
+                                    value = (int)cell.getNumericCellValue();
+                                }else{
+                                    value = cell.getNumericCellValue();
+                                }
+                            }
+                            break;
+                        case XSSFCell.CELL_TYPE_BOOLEAN:
+                            //布尔类型
+                            if(i>1) checkCellFormat("Boolean",sheet,j,iStatus,sMessage);
+                            value = cell.getBooleanCellValue();
+                            break;
+                        case XSSFCell.CELL_TYPE_BLANK:
+                            //空单元格
+                            if(sheet.getRow(1).getCell(j).getStringCellValue().endsWith("*")){
+                                iStatus[0] = 10;
+                                sMessage.append(sheet.getRow(1).getCell(j)+"不能为空;");
+                            }
+                            value=null;
+                            break;
+                        default:
+                            value = cell.toString();
+                    }
+
+                    linked.add(value);
+                }
+//            System.out.println(linked);
+                if (linked.size()!= 0) {
+                    //添加解析状态
+                    if(i==1){
+                        linked.add("解析状态");
+                        linked.add("错误/警告");
+                    }else if(i==0){
+                        linked.add("iStatus");
+                        linked.add("sMessage");
+                    }else{
+                        linked.add(iStatus[0]);
+                        linked.add(sMessage);
+                    }
+                    list.add(linked);
+                }
+            }
+            return list;
+        }catch (Exception e){
+            throw e;
+        }
+
+    }
+
+    /**
+     * multipartFile 对象转 file对象
+     */
+    public static File multipartFileTransferToFile(MultipartFile multipartFile) throws IOException {
+        if(multipartFile==null)return null;
+//        选择用缓冲区来实现这个转换即使用java 创建的临时文件 使用 MultipartFile.transferto()方法 。
+        File file = null;
+        String originalFilename = multipartFile.getOriginalFilename();
+        String prefix=originalFilename.substring(0,originalFilename.lastIndexOf("."));
+        String suffix=originalFilename.substring(originalFilename.lastIndexOf("."));
+        file=File.createTempFile(prefix,suffix);
+        multipartFile.transferTo(file);
+        file.deleteOnExit();
+        return file;
+    }
+
+    /**
+     * url路径 生成 转file对象
+     */
+    public static File urlPathTransferToFile(String urlPath) throws IOException {
+        if(StringUtils.isBlank(urlPath))return null;
+
+        URL url = new URL(urlPath);
+        URLConnection urlConn = url.openConnection();
+        InputStream input = FileUtil.cloneInputStream(urlConn.getInputStream());
+
+//        选择用缓冲区来实现这个转换即使用java 创建的临时文件 使用 MultipartFile.transferto()方法 。
+        File file = null;
+        String prefix=urlPath.substring(urlPath.lastIndexOf("/")+1,urlPath.lastIndexOf("."));
+        String suffix=urlPath.substring(urlPath.lastIndexOf("."));
+        file=File.createTempFile(prefix,suffix);
+        //写入文件
+        cn.hutool.core.io.FileUtil.writeFromStream(input,file);
+        file.deleteOnExit();
+        return file;
+    }
+
+
+    private static void checkCellFormat(String cType, Sheet sheet, int j, Integer[] iStatus, StringBuffer sMessage){
+        //需要的格式
+        String sctype = getSheetCellType(sheet,j);
+        //String类型的都可以填
+        if(!sctype.equals("String")&&!cType.equals(sctype)){
+            iStatus[0] = iStatus[0]>5?iStatus[0]:5;
+            sMessage.append(sheet.getRow(1).getCell(j).toString()+"格式错误，需要:"+sctype+";");
+        }
+    }
+    //获取列的类型前缀
+    private static String getColumnTypePrefix(Sheet sheet,int j){
+        String col=sheet.getRow(0).getCell(j).toString();
+        char symbol = col.charAt(0);
+        return String.valueOf(symbol);
+    }
+    private static String getSheetCellType(Sheet sheet,int j){
+        String col=sheet.getRow(0).getCell(j).toString();
+        char symbol = col.charAt(0);
+//        System.out.println(col+"_"+symbol);
+        switch (symbol){
+            case 'u':
+            case 's':return "String";
+            case 'd':return "Date";
+            case 't':return "DateTime";
+            case 'i':
+            case 'n':return "Number";
+            case 'b':return "Boolean";
+        }
+        return null;
+    }
+
+    /*
+     *将list<list<>>格式的excel数据格式转成 list<map<>>
+     */
+    public static List<Map<Object, Object>> getJsonObject(List<List<Object>> list){
+        if(null == list){
+            return null;
+        }
+        if (list.size()<2){
+            return new ArrayList<>(1);
+        }
+        List<Map<Object,Object>> result = new LinkedList<>();
+        for (int i=2;i<list.size();i++){
+            Map<Object,Object> rowMap = new HashMap<>();
+            for (int j=0;j<list.get(i).size();j++){
+                rowMap.put(list.get(0).get(j),list.get(i).get(j));
+            }
+            result.add(rowMap);
+        }
+        return result;
+    }
+
+    public static JSONObject getExcelHeaderData(List<List<Object>> list) {
+        JSONObject data = new JSONObject();
+        int size = list.get(0).size()-2;
+        for (int j=0;j<size;j++){
+            data.set(String.valueOf(list.get(0).get(j)),list.get(1).get(j));
+        }
+        return data;
     }
 
 }

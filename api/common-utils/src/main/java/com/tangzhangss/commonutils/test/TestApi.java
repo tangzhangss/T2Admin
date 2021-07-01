@@ -4,11 +4,13 @@ import cn.hutool.json.JSONObject;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.syscode.SysCodeService;
+import com.tangzhangss.commonutils.utils.ListUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,12 +35,12 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
     public Result ___(){
         System.out.println(1/0);
         myService.test();
-        return Result.ok;
+        return Result.ok();
     }
     @GetMapping("/no_auth")
     public Result getNoAuth() throws NacosException {
         SysContext.setUser(new JSONObject().set("clientId",10000));
-        return Result.ok.data(myService.get(request,null));
+        return Result.ok().data(myService.get(request,null));
     }
     @NacosInjected
     private NamingService namingService;
@@ -45,7 +48,7 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
     @GetMapping("/nacos_get_service/no_auth")
     @ResponseBody
     public Result get(@RequestParam String serviceName) throws NacosException {
-        return Result.ok.data(namingService.getAllInstances(serviceName));
+        return Result.ok().data(namingService.getAllInstances(serviceName));
     }
 
     @GetMapping("/get_code/no_auth")
@@ -83,17 +86,27 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
                 }
             }
         }).start();
-        return Result.ok;
+        return Result.ok();
     }
     @GetMapping("/get_code/no_auth/{code}")
     @ResponseBody
     public Result getCode2(@PathVariable("code")String code) throws NacosException {
-        return Result.ok.data(sysCodeService.getDeclareSerialNo(code,null));
+        return Result.ok().data(sysCodeService.getDeclareSerialNo(code,null));
     }
     @GetMapping("/querydsl/no_auth")
     public Result querydsl(){
         QTestEntity qTestEntity =QTestEntity.testEntity;
-        return Result.ok;
+        SysContext.setUser(new JSONObject().set("clientId",10000));
+
+        queryDslUtil.setJPAQuery(ListUtil.createArrayList().add(qTestEntity.i.max().as("i"))
+                .add(qTestEntity.localDate.max().as("localDate"))
+                .add(qTestEntity.id.max().as("id"))
+                .add(qTestEntity.remark.max().as("remark")).get(),qTestEntity)
+                .get().groupBy(qTestEntity.clientId);
+
+        Object res = queryDslUtil.getQueryFetchResults(request,null,null);
+
+        return Result.ok().data(res);
     }
 
     @GetMapping("/group_by")
@@ -109,6 +122,6 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
         //where条件
         Map<String,String> whereMao=new HashMap<>();
 
-        return Result.ok.data(myService.queryByGroup(whereMao,groupKey,groupMap,request));
+        return Result.ok().data(myService.queryByGroup(whereMao,groupKey,groupMap,request));
     }
 }

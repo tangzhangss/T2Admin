@@ -7,10 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * endpoint
- * bucket
- * 属性请不要更改
- * （更改之后已经存过的图片删除会找不到文件）
+   外部地址设置，用于外部菜单选择
  */
 @Entity
 @Table(name = "tbl_common_service_domain")

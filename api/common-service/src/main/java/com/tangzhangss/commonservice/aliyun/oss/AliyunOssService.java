@@ -34,10 +34,10 @@ public class AliyunOssService extends SysBaseService<AliyunOssEntity, AliyunOssD
      *
      * @return
      */
-    private String getFilePath() {
+    private String getFilePath(String pathType) {
         String clientId = SysContext.getClientId();
         long userId = SysContext.getUserId();
-        String path = clientId + "/picture/" + userId;
+        String path = clientId + "/"+pathType+"/" + userId;
         return path;
     }
 
@@ -57,13 +57,24 @@ public class AliyunOssService extends SysBaseService<AliyunOssEntity, AliyunOssD
 
 
     public String uploadPicture(MultipartFile file) throws Exception {
-        String fileName = getFilePath() + "/"+file.getOriginalFilename();
+        String fileName = getFilePath("picture") + "/"+file.getOriginalFilename();
         AliyunOssEntity aliyunOss = getAliyunOssConfig();
         return this.upload(fileName, file.getInputStream(), aliyunOss) + aliyunOss.getPictureStyle();
     }
 
+    public String uploadFile(MultipartFile file,String pathType) throws Exception {
+        String fileName = getFilePath(pathType)+"/"+file.getOriginalFilename();
+        AliyunOssEntity aliyunOss = getAliyunOssConfig();
+        return this.upload(fileName,file.getInputStream(), aliyunOss);
+    }
+
+    /**
+     * 因为是可删除的图片，所以需要保证每次上传的名字都不一样，不然如果是相同文件（同一个文件）会一起删掉
+     * ==>可能其他地方也用到了这个相同的图片 而只是想在某一处相处这个图片 需要保证每个图片地址或内容都不一样
+     * 详情看upload方法
+     */
     public String uploadPictureDeletable(MultipartFile file)throws Exception{
-        String fileName = getFilePath() + "/"+System.currentTimeMillis()+"_"+file.getOriginalFilename();
+        String fileName = getFilePath("picture") + "/"+System.currentTimeMillis()+"_"+file.getOriginalFilename();
         AliyunOssEntity aliyunOss = getAliyunOssConfig();
         return this.upload(fileName,file.getInputStream(), aliyunOss) + aliyunOss.getPictureStyle();
     }
@@ -72,6 +83,11 @@ public class AliyunOssService extends SysBaseService<AliyunOssEntity, AliyunOssD
         String fileName = "noAuth/" + file.getOriginalFilename();
         AliyunOssEntity aliyunOss = AliyunOssEntity.defaultConfig;
         return this.upload(fileName, file.getInputStream(), aliyunOss) + aliyunOss.getPictureStyle();
+    }
+    public String uploadNoAuth(MultipartFile file) throws Exception {
+        String fileName = "noAuth/"+file.getOriginalFilename();
+        AliyunOssEntity aliyunOss = AliyunOssEntity.defaultConfig;
+        return this.upload(fileName,file.getInputStream(), aliyunOss);
     }
 
     /*

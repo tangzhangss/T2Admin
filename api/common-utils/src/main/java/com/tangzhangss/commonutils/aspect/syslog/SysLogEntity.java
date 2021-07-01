@@ -1,6 +1,5 @@
-package com.tangzhangss.commonservice.aspect.syslog;
+package com.tangzhangss.commonutils.aspect.syslog;
 
-import com.tangzhangss.commonservice.user.UserEntity;
 import com.tangzhangss.commonutils.base.SysBaseEntity;
 import lombok.Data;
 
@@ -12,7 +11,6 @@ import java.io.Serializable;
 @Data
 public class SysLogEntity extends SysBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-
     //用户操作
     private String operation;
     //请求方法
@@ -26,9 +24,4 @@ public class SysLogEntity extends SysBaseEntity implements Serializable {
     //返回结果
     @Column(columnDefinition = "TEXT")
     private String result;
-
-    @OneToOne
-    @JoinColumn(name = "creatorId", referencedColumnName = "id", insertable = false, updatable = false)
-    private UserEntity creator;
-
 }

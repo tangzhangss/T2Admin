@@ -2,7 +2,7 @@ package com.tangzhangss.commonservice.user;
 
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.tangzhangss.commonservice.aspect.syslog.SysLog;
+import com.tangzhangss.commonutils.aspect.syslog.SysLog;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.resultdata.Result;
@@ -37,7 +37,7 @@ public class UserApi extends SysBaseApi<UserEntity, UserService> {
     public Result modifyPwd(@RequestBody UserEntity user) {
         user.setPassword(BaseUtil.twiceMd5Salt(user.getPassword()));
         userDao.save(user);
-        return Result.ok.data(user);
+        return Result.ok().data(user);
     }
 
     /*
@@ -51,7 +51,7 @@ public class UserApi extends SysBaseApi<UserEntity, UserService> {
         if (!user.getUsername().equals(user.getClientId())) ExceptionUtil.throwException("无权限执行此操作");
         user.setPassword(BaseUtil.twiceMd5Salt(password));
         userDao.save(user);
-        return Result.ok.data(user);
+        return Result.ok().data(user);
     }
 
 }

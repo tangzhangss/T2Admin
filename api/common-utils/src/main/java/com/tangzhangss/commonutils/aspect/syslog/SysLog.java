@@ -1,4 +1,4 @@
-package com.tangzhangss.commonservice.aspect.syslog;
+package com.tangzhangss.commonutils.aspect.syslog;
 
 import java.lang.annotation.*;
 

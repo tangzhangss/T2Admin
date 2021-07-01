@@ -13,10 +13,7 @@ import java.lang.reflect.Field;
 import java.net.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,6 +79,27 @@ public class BaseUtil {
         return ip;
     }
 
+    /**
+     * 获取本机ip
+     */
+    public static String getLocalIP() throws SocketException {
+        String ip = null;
+        Enumeration allNetInterfaces;
+        allNetInterfaces = NetworkInterface.getNetworkInterfaces();
+        while (allNetInterfaces.hasMoreElements()) {
+            NetworkInterface netInterface = (NetworkInterface) allNetInterfaces
+                    .nextElement();
+            List<InterfaceAddress> InterfaceAddress = netInterface
+                    .getInterfaceAddresses();
+            for (InterfaceAddress add : InterfaceAddress) {
+                InetAddress Ip = add.getAddress();
+                if (Ip != null && Ip instanceof Inet4Address) {
+                    ip = Ip.getHostAddress();
+                }
+            }
+        }
+        return ip;
+    }
     public static String twiceMd5Salt(String str){
         return SecureUtil.md5(SecureUtil.md5(str+ Attribute.MD5_SALT)+StringUtils.reverse(Attribute.MD5_SALT));
     }

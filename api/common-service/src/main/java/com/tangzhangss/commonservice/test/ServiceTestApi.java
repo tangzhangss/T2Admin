@@ -27,12 +27,12 @@ public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestSer
         JSONObject object = new JSONObject();
         object.set("clientId","tzcc_ren");
         SysContext.setUser(object);
-        return Result.ok.data(myService.get(request,null));
+        return Result.ok().data(myService.get(request,null));
     }
     @GetMapping("/feign/no_auth")
     public Result getFeignTest() {
         FeginRemoteCall call = ()->serviceTestFeginInterface.getData("a","b",null);
-        Result result = FeginConfig.apply(call);
+        Result result = FeginConfig.apply(call,"---");
         return result;
     }
 
@@ -41,6 +41,6 @@ public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestSer
         JSONObject object = new JSONObject();
         object.set("clientId","tzcc_ren");
         SysContext.setUser(object);
-        return Result.ok.data(myService.save(serviceTestEntity));
+        return Result.ok().data(myService.save(serviceTestEntity));
     }
 }

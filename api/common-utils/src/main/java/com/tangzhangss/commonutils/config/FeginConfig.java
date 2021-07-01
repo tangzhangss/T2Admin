@@ -45,8 +45,8 @@ public class FeginConfig {
                 //直接将结果返回去
                 exception = new HystrixBadRequestException(json);
                 // 将返回内容反序列化为Result，这里应根据自身项目作修改
-                Result result = JSONUtil.toBean(json, Result.class);
-                System.out.println("fegin调用发生错误:"+json);
+//                Result result = JSONUtil.toBean(json, Result.class);
+//                System.out.println("fegin调用发生错误:"+json);
             } catch (IOException ex) {
                 ex.printStackTrace();
                 exception=ex;
@@ -55,20 +55,38 @@ public class FeginConfig {
         }
     }
 
-    public static Result apply(FeginRemoteCall feginRemoteCall,boolean isHandle){
-        return applyExec(feginRemoteCall,true);
+    public static Result apply(FeginRemoteCall feginRemoteCall,String serverName,boolean isHandle){
+        return applyExec(feginRemoteCall,serverName,isHandle);
     }
-    public static Result apply(FeginRemoteCall feginRemoteCall){
-        return applyExec(feginRemoteCall,false);
+    public static Result apply(FeginRemoteCall feginRemoteCall,String serverName){
+        return applyExec(feginRemoteCall,serverName,false);
     }
 
     /**
      * 执行调用处理
      * @param feginRemoteCall 调用方法
-     * @param isHandle 是否抛出异常
+     * @param serverName 调用外部服务的 spring.application.name （服务名称）
+     * @param isHandle
+     *
+     * 将外部服务的结构原样返回，成功的结果类似,如：
+     *
+     *     {
+     *         "code": 404,
+     *         "message": "Not Found",
+     *         "data": "访问的页面不存在"
+     *     }
+     *
+     * 如果apply的第二个参数为true,将再次包裹Result直接抛出异常全局捕获事务回滚处理等，异常信息如下:
+     *
+     *     {
+     *         "code": 602,
+     *         "message": "远程调用失败",
+     *         "data": "{\"result\":{\"code\":404,\"data\":\"访问的页面不存在\",\"message\":\"Not Found\"},\"service\":\"COMMON-DATA\"}"
+     *     }
+     *
      * @return result 正常结果返回
      */
-    private static Result applyExec(FeginRemoteCall feginRemoteCall, boolean isHandle){
+    private static Result applyExec(FeginRemoteCall feginRemoteCall,String serverName, boolean isHandle){
         Result result=null;
         try{
             result = feginRemoteCall.call();
@@ -81,7 +99,7 @@ public class FeginConfig {
             }
         }
         if(result.getCode()!=200 && isHandle){
-            JSONObject jsonRes = new JSONObject().set("service", "COMMON-DATA").set("result", result);
+            JSONObject jsonRes = new JSONObject().set("service",serverName).set("result", result);
             ExceptionUtil.throwException(JSONUtil.toJsonStr(jsonRes),ResultCode.BUSINESS_REMOTE_CALL_FAILED);
         }
         return result;

@@ -31,6 +31,16 @@ public class SysContext {
         return userContext.get().getLong("id");
     }
     /*
+    用户名
+     */
+    public static String getUserName() {
+        if(userContext.get()==null){
+            return null;
+        }
+        return userContext.get().getStr("name");
+    }
+
+    /*
     客户ID
      */
     public static String getClientId(){

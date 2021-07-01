@@ -1,7 +1,6 @@
 package com.tangzhangss.commonutils.querydsl;
 
 import cn.hutool.core.convert.Convert;
-import com.alibaba.fastjson.JSONObject;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
@@ -15,11 +14,8 @@ import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -39,7 +35,7 @@ public class QueryDslUtil{
      * @param fromEntityExpression from的实体
      * @return
      */
-    public QueryDslUtil getJPAQuery(List<Expression<?>>selectExpression,EntityPath fromEntityExpression){
+    public QueryDslUtil setJPAQuery(List<Expression<?>>selectExpression,EntityPath fromEntityExpression){
         fromEntity.set(fromEntityExpression);
         jpaQuery.set(new JPAQueryFactory(em).select(new QueryResultMap(selectExpression)).from(fromEntityExpression));
         return this;
@@ -49,6 +45,8 @@ public class QueryDslUtil{
     }
     /**
      * querydsl 查询方法
+     * 这个方法带分页  不能多字段分组
+     * 默认带clientId,不会携带usable=true,,需要请在request和paramsMap 添加 usable@eq,true or false
      *
      * 条件构建不支持级联（A.b@EQ --- 20210421支持）
      * 不支持排序分组，如果有排序分组请在调用此方法之前处理query对象
@@ -59,11 +57,24 @@ public class QueryDslUtil{
      *                      A.B.c@EQ  =>  map.put("A.B",entityPath)
      * @return
      */
-    public QueryResults getQueryResults(HttpServletRequest request, Map<String, String> paramsMap,Map<String,EntityPath> entityPathMap) {
+    public QueryResults getQueryFetchResults(HttpServletRequest request, Map<String, String> paramsMap,Map<String,EntityPath> entityPathMap) {
         JPAQuery query = jpaQuery.get();
-        if (query == null) {
-            return null;
-        }
+        if (query == null) { return null; }
+        HandleJPAQuery(request,paramsMap,entityPathMap);
+        return query.fetchResults();
+    }
+
+    /**
+     * 同上，这个没有分页 可多字段分组
+     */
+    public List getQueryFetch(HttpServletRequest request, Map<String, String> paramsMap, Map<String,EntityPath> entityPathMap) {
+        JPAQuery query = jpaQuery.get();
+        if (query == null) { return null;}
+        HandleJPAQuery(request,paramsMap,entityPathMap);
+        return query.fetch();
+    }
+    protected void HandleJPAQuery(HttpServletRequest request, Map<String, String> paramsMap,Map<String,EntityPath> entityPathMap){
+        JPAQuery query = jpaQuery.get();
         int iPgIndex = 1;
         int iPgSize = Integer.MAX_VALUE;
         if (request != null){
@@ -113,7 +124,6 @@ public class QueryDslUtil{
                 }
             }
         }
-
         query.offset((iPgIndex-1)*iPgSize).limit(iPgSize);
 
         //必须带上clientId
@@ -121,8 +131,6 @@ public class QueryDslUtil{
         if(b != null){
             query.where(b);
         }
-
-        return query.fetchResults();
     }
     /**
      * 获取qQuery的条件
@@ -139,7 +147,7 @@ public class QueryDslUtil{
         if (key.indexOf("@")==-1) return null;
         String [] arr = key.split("@");
         String sType = arr[1];
-        if(key.length()!=2)ExceptionUtil.throwException("key参数错误!");
+        if(arr.length!=2)ExceptionUtil.throwException("key参数错误!");
         Object o = Optional.ofNullable(entityPath).orElse(fromEntity.get());
 
         SimpleExpression l = (SimpleExpression) BaseUtil.readAttributeValue(o,arr[0]);

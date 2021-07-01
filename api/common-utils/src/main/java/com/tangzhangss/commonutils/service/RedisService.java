@@ -41,7 +41,7 @@ public class RedisService {
             operations.set(key, value);
             result = true;
         } catch (Exception e) {
-            if(isDebug)e.printStackTrace();
+            e.printStackTrace();
         }
         return result;
     }
@@ -59,7 +59,7 @@ public class RedisService {
             redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
             result = true;
         } catch (Exception e) {
-            if(isDebug)e.printStackTrace();
+            e.printStackTrace();
         }
         return result;
     }

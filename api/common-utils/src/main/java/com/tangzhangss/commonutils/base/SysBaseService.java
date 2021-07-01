@@ -288,7 +288,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         }
         // 不管哪个查询都把usable带上(默认查询usable==true的)
         Predicate usablePredicate = getPredicate("usable@EQ",true,builder,root);
-        if (usablePredicate!=null&&!isQueryAll()) predicates.add(usablePredicate);
+        if (!isQueryAll()&&usablePredicate!=null) predicates.add(usablePredicate);
 
         return cq.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
     }
@@ -727,6 +727,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      * @param whereMap 查询条件(xxx.yyyEQ=,...) 解析规则和baseService,get方法一样
      * @param groupKey
      * @param groupMap 分组条件 (“xxxx.yyy as xy”,sum)，
+     *                 分组条件 (“xxxx.yyy as xy_sum,count_sum”,"sum,count")，
      *                 *      * 前面数属性，后面是聚合函数
      *                   分组之后如果有聚合函数_属性名就是聚合函数名(默认)
      * 注意：
@@ -823,11 +824,15 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                 String[] funcArr = func.split(",");
                 for (int i = 0; i < funcArr.length; i++) {
                     String cFunc=funcArr[i];
+                    String alias= "";
                     //没有设置别名-默认
                     if(keyAlias==null){
-                        keyAlias = key+"_"+cFunc;
+                        alias = key+"_"+cFunc;
+                    }else{
+                        String[] keyAliasArr = keyAlias.split(",");
+                        alias = keyAliasArr[i];
                     }
-                    Selection sl = getFunSl(cFunc,cb,p).alias(keyAlias);
+                    Selection sl = getFunSl(cFunc,cb,p).alias(alias);
                     selectionList.add(sl);
                 }
             }else{

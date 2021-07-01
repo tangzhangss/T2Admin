@@ -1,23 +1,21 @@
-package com.tangzhangss.commonservice.aspect.syslog;
+package com.tangzhangss.commonutils.aspect.syslog;
 
-import com.google.gson.Gson;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.tangzhangss.commonutils.base.SysBaseService;
-import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 
 /**
  * 系统日志，切面处理类
@@ -27,9 +25,8 @@ import java.time.LocalDateTime;
 @Service
 public class SysLogService extends SysBaseService<SysLogEntity, SysLogDao> {
 
-    @Pointcut("@annotation(com.tangzhangss.commonservice.aspect.syslog.SysLog)")
-    public void logPointCut() {
-    }
+    @Pointcut("@annotation(com.tangzhangss.commonutils.aspect.syslog.SysLog)")
+    public void logPointCut() {}
 
     @Around("logPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
@@ -39,7 +36,7 @@ public class SysLogService extends SysBaseService<SysLogEntity, SysLogDao> {
         //执行时长(毫秒)
         long time = System.currentTimeMillis() - beginTime;
         //保存日志
-        saveSysLog(point, time, new Gson().toJson(result));
+        saveSysLog(point, time, JSONUtil.toJsonPrettyStr(result));
         return result;
     }
 
@@ -59,7 +56,7 @@ public class SysLogService extends SysBaseService<SysLogEntity, SysLogDao> {
         //请求的参数
         Object[] args = joinPoint.getArgs();
         try {
-            String params = new Gson().toJson(args);
+            String params = JSONUtil.toJsonPrettyStr(args);
             sysLogEntity.setParams(params);
         } catch (Exception e) {
         }
@@ -73,6 +70,7 @@ public class SysLogService extends SysBaseService<SysLogEntity, SysLogDao> {
         sysLogEntity.setId(uidGeneratorService.getuid());
         //设置返回结果
         sysLogEntity.setResult(result);
+
         //保存系统日志
         myDao.save(sysLogEntity);
     }

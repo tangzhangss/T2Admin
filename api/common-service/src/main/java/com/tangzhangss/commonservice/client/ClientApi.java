@@ -66,12 +66,12 @@ public class ClientApi {
     @DeleteMapping
     public Result delete(@RequestBody List<ClientEntity> data) throws Exception {
         myService.deleteAll(data);
-        return Result.ok;
+        return Result.ok();
     }
 
     @PostMapping
     public Result post(@RequestBody ClientEntity data) throws Exception {
-        return Result.ok.data(myService.save(data));
+        return Result.ok().data(myService.save(data));
     }
 
     @GetMapping("/get_approved_status")
@@ -92,7 +92,7 @@ public class ClientApi {
             }
             map.put(key, item.get("id_count"));
         });
-        return Result.ok.data(map);
+        return Result.ok().data(map);
     }
 
     /*
@@ -108,7 +108,7 @@ public class ClientApi {
         client.setApproved(true);
         client.setAuditTime(LocalDateTime.now());
         myService.save(client);//这里会更新用户的信息
-        return Result.ok;
+        return Result.ok();
     }
 
 

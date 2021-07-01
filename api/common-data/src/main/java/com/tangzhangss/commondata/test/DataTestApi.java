@@ -13,6 +13,6 @@ public class DataTestApi {
     @GetMapping("get_data/no_auth")
     Result getData(String a,String b) throws InterruptedException {
         Thread.sleep(8000);
-        return Result.ok.data(new JSONObject().set("a",a+"___").set("b",b+"+++"));
+        return Result.ok().data(new JSONObject().set("a",a+"___").set("b",b+"+++"));
     }
 }

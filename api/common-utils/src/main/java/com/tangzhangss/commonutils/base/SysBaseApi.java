@@ -41,19 +41,19 @@ public abstract class SysBaseApi<T extends SysBaseEntity,TT extends SysBaseServi
      */
     @PostMapping
     public Result post(@RequestBody T data) throws Exception{
-        return Result.ok.data(myService.save(data));
+        return Result.ok().data(myService.save(data));
     }
 
     @DeleteMapping
     public Result delete(@RequestBody List<T> data) throws Exception{
         myService.deleteAll(data);
-        return Result.ok;
+        return Result.ok();
     }
 
     @DeleteMapping("/clean")
     public Result clean(@RequestBody Map mp) throws Exception{
         myService.clean(mp);
-        return Result.ok;
+        return Result.ok();
     }
 
 

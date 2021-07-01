@@ -32,7 +32,7 @@ public class MenuApi extends SysBaseApi<MenuEntity, MenuService> {
      */
     @GetMapping("/get_user_menu")
     public Result getUserMenu() {
-        return Result.ok.data(myService.getUserMenuList());
+        return Result.ok().data(myService.getUserMenuList());
     }
 
     /*
@@ -40,15 +40,15 @@ public class MenuApi extends SysBaseApi<MenuEntity, MenuService> {
      */
     @GetMapping("get_client_menu")
     public Result getClientMenu() {
-        return Result.ok.data(myService.getClientMenuList());
+        return Result.ok().data(myService.getClientMenuList());
     }
 
     @GetMapping("/querydsl_test")
     public Result querydslTest(){
-        QueryResults queryResults = queryDslUtil.getJPAQuery(
+        queryDslUtil.setJPAQuery(
                 (List<Expression<?>>) ListUtil.createLinkedList().add(QMenuEntity.menuEntity.clientId).get()
-                ,QMenuEntity.menuEntity)
-                .getQueryResults(request, HashMapUtil.createHashMap().put("url@LIKE", "").get(),null);
-        return Result.ok.data(queryResults);
+                ,QMenuEntity.menuEntity);
+        QueryResults queryResults = queryDslUtil.getQueryFetchResults(request, HashMapUtil.createHashMap().put("url@LIKE", "").get(),null);
+        return Result.ok().data(queryResults);
     }
 }

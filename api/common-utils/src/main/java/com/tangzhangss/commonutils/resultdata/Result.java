@@ -27,7 +27,9 @@ public class Result<T> implements Serializable {
         //...
     }
 
-    public static Result ok = new Result(HttpStatus.OK,null);
+    public static Result ok(){
+        return new Result(HttpStatus.OK,null);
+    }
 
     public Result data(T data){
         this.data=data;

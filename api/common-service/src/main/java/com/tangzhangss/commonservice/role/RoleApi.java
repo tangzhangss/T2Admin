@@ -17,6 +17,6 @@ public class RoleApi extends SysBaseApi<RoleEntity, RoleService> {
 
     @GetMapping("/get_all")
     public Result getAll() {
-        return Result.ok.data(myService.get(null, new HashMap<>()));
+        return Result.ok().data(myService.get(null, new HashMap<>()));
     }
 }
