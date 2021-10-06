@@ -48,7 +48,7 @@ public class WeiXinApi {
      * orderNo:"订单号"
      * 金额 money double
      * "openid","o4s6w1JJf0H9zGzrLzUr6W4xzziM"
-     * 附加信息 "attach","12233" //选择
+     * 备注 "remark","12233" //选择
      * callbackApi:"支付成功回调地址"
      */
     @PostMapping("/unifiedOrder_jsapi")
@@ -67,11 +67,11 @@ public class WeiXinApi {
      * orderNo:"订单号" 外部系统保证唯一
      * 金额 money double
      * "productId","产品id"
-     * 附加信息 "attach","12233" //选择
+     * 备注 "remark","12233" //选择
      * callbackApi:"支付成功回调地址" post请求
      * mchid "支付商户ID" //如果有多个商户需要选择 如果不传则随机选择一个
      */
-    @PostMapping("/unifiedOrder_native")
+    @PostMapping("/unifiedOrder_native/no_auth")
     @Transactional(rollbackFor = Exception.class)
     public Result unifiedOrderNative(@RequestBody JSONObject payData) throws Exception {
 
@@ -82,6 +82,11 @@ public class WeiXinApi {
        return unifiedOrder(payData,WeiXinService.TraderType.NATIVE,otherInfo);
     }
 
+    /**
+     * 一个订单号未支付的话
+     * 可以下多个订单（如，修改金额之后重新下单）
+     * 外部系统自己控制
+     */
     private Result unifiedOrder(JSONObject payData,WeiXinService.TraderType traderType,HashMap<String,String> otherInfo) throws Exception {
 
         String mchid=payData.getStr("mchid");
@@ -96,33 +101,35 @@ public class WeiXinApi {
         String outTraderNo= SysContext.getClientId()+payData.getStr("orderNo");
 
         String money= payData.getStr("money");
-        otherInfo.put("attach",payData.getStr("attach"));
 
         //判断订单是否已支付
-        OrderInfoEntity order = orderInfoService.getOneWithMapString("orderNo@EQ=" + outTraderNo);
-        //没有支付成功的订单和没有支付的订单 会先设置成不可用 再新建 --后面可以拉取这个订单的支付记录
-        if(order!=null){
+        List<OrderInfoEntity> orderInfoEntityList = orderInfoService.getWithMapString("orderNo@EQ=" + orderNo);
+        orderInfoEntityList.forEach(order->{
             if(order.getStatus()==1) ExceptionUtil.throwException("订单号#{0}已支付，请检查",orderNo);
-            order.setUsable(false);
-            orderInfoService.save(order);
-        }
+        });
+        //每次未支付或支付失败的订单都需要保留---
+        if(orderInfoEntityList.size()!=0)outTraderNo += "_"+orderInfoEntityList.size();
         //创建订单
         OrderInfoEntity orderInfo = new OrderInfoEntity();
         orderInfo.setCallbackApi(payData.getStr("callbackApi"));
         orderInfo.setMoney(money);
-        orderInfo.setOrderNo(outTraderNo);
-        orderInfo.setOriginOrderNo(orderNo);
+        orderInfo.setOutTraderNo(outTraderNo);
+        orderInfo.setOrderNo(orderNo);
         orderInfo.setPayType(PayType.WeiXin.type);
         orderInfo.setTraderType(traderType.type);
-        orderInfo.setRemark(payData.getStr("attach"));
+        orderInfo.setRemark(payData.getStr("remark"));
         orderInfoService.save(orderInfo);
-
+        //将id加入附加信息 回调的时候拉取订单信息
+        otherInfo.put("attach",orderInfo.getId().toString());
 
         Map<String, String> map = weiXinService.unifiedOrder(traderType,weiXinMerchant,outTraderNo,money, otherInfo);
 
         if(!map.get("return_code").equals("SUCCESS")|| !map.get("result_code").equals("SUCCESS")){
-            return new Result(ResultCode.BUSINESS_PROCESSING_FAILED,map.get("err_code_des"));
+            ExceptionUtil.throwException(map.get("err_code_des"));
         }
+        orderInfo.setPayCode(map.get("code_url"));//支付二维码
+        //重新保存一次
+        orderInfoService.save(orderInfo);
 
         return Result.ok().data(map);
     }
@@ -144,8 +151,9 @@ public class WeiXinApi {
             // 更新订单状态
             if ("SUCCESS".equals(callBackMap.get("return_code"))) {
                 String outTradeNo = callBackMap.get("out_trade_no"); // 订单
+                String attach = callBackMap.get("attach"); // 附加信息这里是ID
                 //不需要token查询
-                OrderInfoEntity orderInfoEntity = orderInfoService.getOneCustomWithMapString("usable@EQ=true&orderNo@EQ="+outTradeNo);
+                OrderInfoEntity orderInfoEntity = orderInfoService.get(Long.parseLong(attach));
                 if(orderInfoEntity==null)orderInfoEntity=new OrderInfoEntity();//如果找不到就重新建一个
 
                 //支付成功
@@ -154,6 +162,7 @@ public class WeiXinApi {
                 orderInfoEntity.setPayTime(Convert.toLocalDateTime(callBackMap.get("time_end")));// 支付时间
                 orderInfoEntity.setPayMoney(String.valueOf(totalFee));
                 orderInfoEntity.setTransactionId(payNo);
+                orderInfoEntity.setOutTraderNo(outTradeNo);//重新设置一遍 如果没有拉取到订单记录还知道交易订单号
                 orderInfoEntity.setBankType(callBackMap.get("bank_type"));
 
                 if("SUCCESS".equals(callBackMap.get("result_code"))){

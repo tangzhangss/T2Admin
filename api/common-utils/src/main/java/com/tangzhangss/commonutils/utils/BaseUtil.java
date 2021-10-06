@@ -1,11 +1,19 @@
 package com.tangzhangss.commonutils.utils;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.tangzhangss.commonutils.base.SysBaseEntity;
 import com.tangzhangss.commonutils.config.Attribute;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -18,6 +26,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BaseUtil {
+    /**
+     * 获取日志对象，构造函数传入当前类，查找日志方便定位
+     */
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     /**
      * 获取本机的IPV4地址
      *
@@ -170,15 +183,11 @@ public class BaseUtil {
     }
 
 
-    public static void log(String ...args){
-        for (int i = 0; i < args.length; i++) {
-            System.out.print(args[i]);
-        }
-        System.out.println();
+    public static String string(String ...args){
+        return StringUtils.join(args,"");
     }
     public static void main(String[] args) {
-        BaseUtil.log("x","as","asas","sss");
-        BaseUtil.log("11x","11as","asas","sss");
+
     }
 
     /**
@@ -196,6 +205,21 @@ public class BaseUtil {
             }
         }while (clazz != null);
         return null;
+    }
+
+    /**
+     * 获取当前类所有的字段 含父类
+     */
+    public static List<Field> getAllField(Class clazz){
+        List fieldList = new ArrayList();
+        do{
+            // 遍历所有父类字节码对象
+            Field[] declaredField = clazz.getDeclaredFields();  // 获取字节码对象的属性对象数组
+            fieldList.addAll(ListUtil.of(declaredField));
+            clazz = clazz.getSuperclass();  // 获得父类的字节码对象
+        }while (clazz != null);
+
+        return fieldList;
     }
     /**
      * 转换值为对象中属性的类型
@@ -258,4 +282,68 @@ public class BaseUtil {
         }
         return value;
     }
+
+    /**
+     * sql插入的后字符串等需要加''
+     * 这里处理
+     */
+    public static String sqlHandle(Object value, String fieldType){
+        String vStr = String.valueOf(value);
+        switch (fieldType){
+            case "class java.lang.String":
+            case "class java.time.LocalDate":
+            case "class java.time.LocalDateTime":
+            case "class java.util.Date":
+                vStr = "'"+vStr+"'";
+                break;
+        }
+        return vStr;
+    }
+
+    /**
+     * 获取实体的值 转map
+     * value只能转成String，用于处理sql(其他类型的请使用JSON对象转换)
+     * @Param isUnderlineCase 是否转下划线命名
+     */
+    public static List<Map<String,String>> getSqlEntityValue(List dataList,boolean isUnderlineCase){
+        List<Map<String,String>> paramsList = new ArrayList<>();
+        if(dataList.size()==0)return paramsList;
+        Object data = dataList.get(0);
+        //获取实体所有的字段
+        List<Field> fieldList = BaseUtil.getAllField(data.getClass());
+
+        for (Object item : dataList) {
+            //子类有的就不管父类的
+            Map<String,String> params= new HashMap<>();
+
+            for (Field field : fieldList) {
+                if(field.isAnnotationPresent(Transient.class)){
+                    //存在 Transient注解不需要保存数据库
+                    continue;
+                }
+                Object v = null;
+                try {
+                    v = BaseUtil.readAttributeValue(item,field.getName());
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                    ExceptionUtil.throwException("getEntityValue=>error:",e.getMessage());
+                }
+                String key = field.getName();
+                //将驼峰转成下划线
+                if(isUnderlineCase){
+                    key = StrUtil.toUnderlineCase(key);
+                }
+                if(v!=null){
+                    String vStr = BaseUtil.sqlHandle(v,field.getGenericType().toString());
+                    params.putIfAbsent(key,vStr);
+                }else{
+                    params.putIfAbsent(key, null);//key null
+                }
+            }
+            paramsList.add(params);
+        }
+
+        return paramsList;
+    }
+
 }

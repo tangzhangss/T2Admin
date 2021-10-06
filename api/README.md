@@ -25,16 +25,16 @@
 		 -----------------------------------------------
 	安装redis
 		 docker pull tangzhang/redis_4:custom
-		 docker run --name 'redis_4' -p 6379:6379 -d tangzhang/redis_4:custom redis-server /usr/local/redis/redis.conf(default-password:tangzhangss,可使用--requirepass=xxx覆盖) 
+		 docker run --restart=always --name 'redis_4' -p 6379:6379 -d tangzhang/redis_4:custom redis-server /usr/local/redis/redis.conf(default-password:tangzhangss,可使用--requirepass=xxx覆盖) 
 			
 	安装mysql8.0
 		docker pull tangzhang/mysql:8.0
-		docker run --name 'mysql_8.0'  -p 3306:3306 -e MYSQL_ROOT_PASSWORD=tangzhangss -v /usr/local/docker/mysql/data:/var/lib/mysql -v /usr/local/docker/mysql/log:/var/log/mysql -d tangzhang/mysql:8.0 --default-authentication-plugin=mysql_native_password
+		docker run --restart=always --name 'mysql_8.0'  -p 3306:3306 -e MYSQL_ROOT_PASSWORD=tangzhangss -v /usr/local/docker/mysql/data:/var/lib/mysql -v /usr/local/docker/mysql/log:/var/log/mysql -d tangzhang/mysql:8.0 --default-authentication-plugin=mysql_native_password
 
 	安装openjdk11容器	
 		
 		docker pull tangzhang/openjdk:11
-		docker run -d -p 10082:10082 --name=***** tangzhang/openjdk:11 java -jar /app.jar
+		docker run --restart=always -d -p 10082:10082 --name=***** tangzhang/openjdk:11 java -jar /app.jar
 		docker login -u tangzhang -p aa.188632
 		
 ### Gitlab配置
@@ -65,7 +65,7 @@
     -spring.cloud.nacos.discovery.server-addr=${NACOS-SERVER-ADDR:127.0.0.1:8848}
     -spring.cloud.nacos.discovery.ip=${SPRING-APPLICATION-IP:127.0.0.1}
     -------------------------------------------------- 
-如果需要注册服务需要配置属性
+如果需要注册服务需要配置属性(如果不需要就不用写)
 
     -spring.application.name=""    
 		  

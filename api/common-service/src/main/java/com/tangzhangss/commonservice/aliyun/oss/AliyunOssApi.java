@@ -42,29 +42,7 @@ public class AliyunOssApi extends SysBaseApi<AliyunOssEntity, AliyunOssService> 
         return new Result(HttpStatus.OK,url);
     }
 
-    /**
-     * excel解析
-     * @param file 非必需
-     * @param fileUrl 非必需（如果有，以这个为主）
-     */
-    @PostMapping("/analysis_excel")
-    public Result analysisExcel(@RequestParam(name = "file",required = false)MultipartFile file,@RequestParam(name = "url",required = false)String fileUrl) throws Exception {
-        File excelFile=null;
-        if(fileUrl!=null){
-            excelFile=FileUtil.urlPathTransferToFile(fileUrl);
-        }else{
-            excelFile= FileUtil.multipartFileTransferToFile(file);
 
-        }
-        if (excelFile == null || !FileUtil.validateExcel(excelFile.getName()))ExceptionUtil.throwException("请选择Excel文件");
-        List<List<Object>> excelData = FileUtil.analysisExcel(excelFile);
-        JSONObject data=FileUtil.getExcelHeaderData(excelData);
-        List<Map<Object, Object>> resData = FileUtil.getJsonObject(excelData);
-        JSONObject json = new JSONObject();
-        json.set("header",data);
-        json.set("body",resData);
-        return new Result(HttpStatus.OK,json);
-    }
 
     /*
     可删除的图片（需要保证一个图片都不能被引用两次以上，唯一）

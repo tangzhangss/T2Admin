@@ -1,12 +1,17 @@
 package com.tangzhangss.commonutils.base;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.tangzhangss.commonutils.config.Attribute;
 import com.tangzhangss.commonutils.exception.ServiceException;
 import com.tangzhangss.commonutils.resultdata.Result;
+import com.tangzhangss.commonutils.service.DBService;
 import com.tangzhangss.commonutils.uidgenerator.UidGeneratorService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.ExceptionUtil;
+import net.bytebuddy.description.annotation.AnnotationDescription;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.slf4j.Logger;
@@ -23,19 +28,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.Tuple;
-import javax.persistence.TupleElement;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.nio.Buffer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @PropertySource({"classpath:application.properties"})
 public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseDao>{
@@ -56,6 +61,9 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
     @Autowired
     protected UidGeneratorService uidGeneratorService;
+
+    @Autowired
+    protected DBService dbService;
 
     // 是否查全部-默认false
     protected ThreadLocal<Boolean> isQueryAll= ThreadLocal.withInitial(() -> false);
@@ -392,7 +400,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                     break;
                 case "IN":{
                     CriteriaBuilder.In<Object> in = builder.in(expression);
-                    String[] inArr = value.toString().split(",");
+                    String[] inArr = value.toString().split(",",-1);
                     for (int i = 0; i < inArr.length; i++) {
                         Object s = inArr[i];
                         //每一个单独转换
@@ -480,7 +488,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
    中途需要 中断或其他操作 直接通过抛出异常的方式来通知
     */
     @Transactional(rollbackFor = Exception.class)
-    public Result put(List<T> datas) throws Exception {
+    public Result put(List<T> datas){
         for(T data : datas){
             //生成Id
             save(data);
@@ -489,18 +497,20 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public T save(T data) throws Exception {
-        checkIsSystemCreate(data);
-        this.beforeSaveData(data);
-        if(null==data.getId()){
-            data.setId(uidGeneratorService.getuid());
-        }else{
-            data.setUpdateTime(LocalDateTime.now());
+    public T save(T data){
+        try{
+            checkIsSystemCreate(data);
+            this.beforeSaveData(data);
+            this.checkAndSetByIsNew(data);
+            //检查字段是否重复
+            this.checkUnionField(data);
+            myDao.save(data);
+            this.afterSaveData(data);
+
+        }catch (Exception e){
+            ExceptionUtil.throwException(e.getMessage());
         }
-        //检查字段是否重复
-        this.checkUnionField(data);
-        myDao.save(data);
-        this.afterSaveData(data);
+
         return data;
     }
 
@@ -538,9 +548,9 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     protected void afterClean(List<T> data){};
 
     // 保存前需要做的事请
-    protected void beforeSaveData(T data) throws Exception{}
+    protected void beforeSaveData(T data){}
     //保存之后要做的事情
-    protected void afterSaveData(T data) throws Exception{}
+    protected void afterSaveData(T data){}
 
     /*
      校验不能重复的字段
@@ -559,9 +569,8 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     /**
      * 检测字段的唯一新
      * @param data 新插入|修改的数据
-     * @throws Exception
      */
-    protected void checkUnionField(T data) throws Exception{
+    protected void checkUnionField(T data) throws Exception {
         Map<String, String> ckItem = this.getCheckFields();
         if (ckItem == null || ckItem.isEmpty()) return;
         Class<?> aClass = data.getClass();
@@ -593,7 +602,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             System.out.println(sb.toString());
             // 如果有，则说明重复了
             if (!myDao.findAll(this.getCommonSpecification(null, flMap)).isEmpty()) {
-                throw new ServiceException(sb.toString());
+                ExceptionUtil.throwException(sb.toString());
             }
         }
     }
@@ -934,5 +943,123 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         if(items.size()>0){return  items.get(0);}
         return null;
     }
+
+    /**
+     * 检查并设置实体 by 新建的还是更新
+     * @param data
+     */
+    public void checkAndSetByIsNew(T data){
+        if(null==data.getId()){
+            data.setId(uidGeneratorService.getuid());
+            data.setCreateTime(LocalDateTime.now());
+        }else{
+            data.setUpdateTime(LocalDateTime.now());
+        }
+    }
+    /**
+     * insert语句
+     *
+     * data需要是完整的实体
+     */
+    public void insert(T ...dataArr){
+        insert(ListUtil.toList(dataArr));
+    }
+    public void insert(List<T> dataList){
+        if(dataList.size()==0)return;//没有元素不更新
+        T data = dataList.get(0);
+        String tableName = getSqlEntityTableName(data);
+
+        List<Map<String,String>> paramsList = BaseUtil.getSqlEntityValue(dataList,true);
+
+        //拼接sql
+        StringBuffer sql = new StringBuffer();
+
+        //insert into table () values ...
+        sql.append("insert into ").append( tableName+"(").append(paramsList.get(0).keySet().stream().collect(Collectors.joining(",")))
+                .append(") values");
+
+        List<String> valuesList=new ArrayList<>(paramsList.size());
+        for (Map<String, String> params : paramsList) {
+            valuesList.add("("+params.values().stream().collect(Collectors.joining(","))+")");
+        }
+        //拼接sql
+        sql.append(valuesList.stream().collect(Collectors.joining(","))).append(";");
+
+        String sqlStr = sql.toString();
+        dbService.executeSql(sqlStr);
+    }
+    /**
+     * 获取实体表的名字
+     */
+    private String getSqlEntityTableName(T data){
+        //获取当前操作的实体class
+        Class<T> clazz = (Class<T>) data.getClass();
+        if(!clazz.isAnnotationPresent(Table.class)){
+            ExceptionUtil.throwException("实体#{0}未正确映射到数据库，无Table注解,请检查",clazz.toString());
+        }
+        //获取类上的注解 表的名字
+        Table annotations = clazz.getAnnotation(Table.class);
+        String tableName=annotations.name();
+        return tableName;
+    }
+    /**
+     * update语句
+     *
+     * data需要是完整的实体
+     */
+    public void update(T ...dataArr){
+        update(ListUtil.toList(dataArr));
+    }
+    public void update(List<T> dataList){
+        if(dataList.size()==0)return;//没有元素不更新
+        T data = dataList.get(0);
+        String tableName = getSqlEntityTableName(data);
+
+        List<Map<String,String>> paramsList = BaseUtil.getSqlEntityValue(dataList,true);
+
+        for (Map<String, String> params : paramsList) {
+            params.remove("id");//移除id-update不需要id属性
+            //拼接sql
+            StringBuffer sql = new StringBuffer();
+            sql.append("update ").append( tableName+" set ");
+
+            List<String> setList = new ArrayList<>();
+            params.forEach((key,value)->{
+                setList.add(key+"="+value);
+            });
+            sql.append(StringUtils.join(setList,","))
+                    .append(" where id=")
+                    .append(data.getId())
+                    .append(";")
+            ;
+            String sqlStr = sql.toString();
+            dbService.executeSql(sqlStr);
+        }
+    }
+
+    /**
+     * delete删除
+     * 批量删除
+     */
+    public void delete(T ...dataArr){
+       delete(ListUtil.toList(dataArr));
+    }
+    public void delete(List<T> dataList){
+        if(dataList.size()==0)return;//没有元素不更新
+        T data = dataList.get(0);
+        String tableName = getSqlEntityTableName(data);
+
+
+        //拼接sql
+        StringBuffer sql = new StringBuffer();
+        String ids = dataList.stream().map(d->String.valueOf(d.getId())).collect(Collectors.joining(","));
+        //insert into table () values ...
+        sql.append("delete from ").append(tableName).append(" where id in(")
+                .append(ids)
+                .append(");");
+
+        dbService.executeSql(sql.toString());
+    }
+
 }
 

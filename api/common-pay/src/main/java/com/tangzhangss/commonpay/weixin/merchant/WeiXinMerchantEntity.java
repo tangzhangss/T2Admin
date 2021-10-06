@@ -24,9 +24,9 @@ public class WeiXinMerchantEntity extends SysBaseEntity {
     public static WeiXinMerchantEntity defaultConfig = new WeiXinMerchantEntity();
 
     static {
-        defaultConfig.mchid = "---";
-        defaultConfig.appid = "---";
-        defaultConfig.mchkey = "---";
+        defaultConfig.mchid = "1494443872";
+        defaultConfig.appid = "wx620f4ca3b809bd2d";
+        defaultConfig.mchkey = "szI4oFBnKXHFChLNJJPbNJWE38ROGkhd";
         defaultConfig.tradeType = "NATIVE";
         defaultConfig.body = "TangZhangss";
     }

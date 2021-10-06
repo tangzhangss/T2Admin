@@ -53,7 +53,13 @@
             <artifactId>core-renderer</artifactId>
             <version>R8</version>
         </dependency>
-        <!--html转pdf-->
+        <!--html转image这个效果很好，价格比较贵-->
+<!--        <dependency>-->
+<!--            <groupId>com.pdfcrowd</groupId>-->
+<!--            <artifactId>pdfcrowd</artifactId>-->
+<!--            <version>5.1.1</version>-->
+<!--        </dependency>-->
+        <!--html转pdf 这个不能商业 需要开源-->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -69,12 +75,11 @@
             <artifactId>itext-asian</artifactId>
             <version>5.2.0</version>
         </dependency>
-
         <!-- poi-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.14</version>
+            <version>5.0.0</version>
         </dependency>
     </dependencies>
 

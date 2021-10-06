@@ -26,6 +26,7 @@
         <module>common-service</module>
         <module>common-data</module>
         <module>common-pay</module>
+        <module>common-flowable</module>
     </modules>
 
 

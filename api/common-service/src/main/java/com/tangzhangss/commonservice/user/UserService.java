@@ -67,14 +67,13 @@ public class UserService extends SysBaseService<UserEntity, UserDao> {
      * 对用户密码进行判断，没有密码默认123456
      */
     @Override
-    protected void beforeSaveData(UserEntity user) throws Exception {
+    protected void beforeSaveData(UserEntity user){
+        super.beforeSaveData(user);
 
         //用户登录账户不能重复--全局判断
         UserEntity oldUser = userDao.findFirstByUsername(user.getUsername());
         if (oldUser != null && !oldUser.getId().equals(user.getId()))
             ExceptionUtil.throwException("登录账户被占用，请修改（推荐使用手机号码）");
-
-        super.beforeSaveData(user);
 
         //密码操作
         if (StringUtils.isBlank(user.getPassword()))

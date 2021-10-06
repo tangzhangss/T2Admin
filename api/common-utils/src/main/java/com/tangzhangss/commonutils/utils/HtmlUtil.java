@@ -3,6 +3,9 @@ package com.tangzhangss.commonutils.utils;
 import cn.hutool.core.codec.Base64Decoder;
 import cn.hutool.core.codec.Base64Encoder;
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.codec.Base64;
@@ -19,6 +22,7 @@ import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
 import com.itextpdf.tool.xml.pipeline.end.PdfWriterPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
+import com.tangzhangss.commonutils.utils.kdn.KdnUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;;
@@ -34,10 +38,14 @@ import org.xhtmlrenderer.swing.ImageReplacedElement;
 import org.xhtmlrenderer.swing.Java2DRenderer;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.MemoryImageSource;
+import java.awt.image.PixelGrabber;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -72,28 +80,42 @@ public class HtmlUtil {
             this.width = width;
         }
     }
-    private static String htmlStr="<!DOCTYPE html>\n" +
-            "<html>\n" +
-            "<head>\n" +
-            "\t<title>PdfT</title>\n" +
-            "</head>\n" +
-            "<body>\n" +
-            "<p style=\"color: red;text-align: center;\">Hello World! 你好，世界</p>\n" +
-            "<img style=\"width:100px;height:100px\" src=\"http://my1admin.oss-cn-beijing.aliyuncs.com/picture/15520449931/1565834257592_logo.jpg\"/>\n" +
-            "<img src=\"data:image/png;base64,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\n" +
-            "\"/>\n" +
-            "</body>\n" +
-            "</html>";
-    public static void main(String[] args) throws Exception {
-        System.out.println(htmlToImage(new ImageConfig(htmlStr,"jpg",500,500),"/static/test.jpg"));
 
-        String newFilePath="/static/test.pdf";
+    public static void main(String[] args) throws Exception {
+        String htmlStr = BaseUtil.readFileContent("/static/pdfTest.html");
+
+//        Pdfcrowd.HtmlToImageClient client =
+//                new Pdfcrowd.HtmlToImageClient("tangzhangss", "031e5f005bf5b9950404e886c18f84c6");
+//
+//        // configure the conversion
+//        client.setOutputFormat("jpg");
+//
+//        client.convertStringToFile(htmlStr,"D:\\static\\test2.jpg");
+
+        String newFilePath="D:\\static\\test.pdf";
         File file = new File(newFilePath);
         if(!file.getParentFile().exists()){
             file.mkdirs();
         }
         file.createNewFile();
-        writeHtmlToPDF(htmlStr,file);
+              /*
+            去除\r\n
+         */
+        htmlStr = htmlStr.replaceAll("\r|\n*","");
+        /*
+        特殊字符转换
+         */
+        htmlStr = htmlStr.replaceAll("&nbsp;","&#160;");
+        /*
+           快递返回的html 自关闭标签没有结束符号 java2DRenderer解析不了
+        */
+        htmlStr = KdnUtil.addElementCloseTag(htmlStr).toString();
+
+        htmlStr = KdnUtil.handlePositionAttrAtTdTag(htmlStr).toString();
+
+
+        System.out.println(htmlToImage(new ImageConfig(htmlStr,"jpg",377,547),"d:\\static\\test.jpg"));
+        writeHtmlToPDF(htmlStr,file,new Rectangle(377,547));
     }
 
     /**
@@ -115,7 +137,6 @@ public class HtmlUtil {
         renderer.getSharedContext().setReplacedElementFactory(new Base64ImgReplacedElementFactory());
         renderer.getSharedContext().getTextRenderer().setSmoothingThreshold(1);
         BufferedImage image = renderer.getImage();
-
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();){
             ImageIO.write(image, imageConfig.suffix, outputStream);
             //传入了文件地址写入
@@ -128,6 +149,7 @@ public class HtmlUtil {
             return null;
         }
     }
+
     /**
      * 同上文件绝对地址
      * @param newFilePath
@@ -143,6 +165,7 @@ public class HtmlUtil {
         }
         return htmlToImage(imageConfig,file);
     }
+
     public static String htmlToImage(ImageConfig imageConfig) throws Exception {
         return htmlToImage(imageConfig,(File)null);
     }
@@ -201,9 +224,6 @@ public class HtmlUtil {
         public void setFormSubmissionListener(FormSubmissionListener formSubmissionListener) { }
     }
 
-
-
-
     /**
      * Html转Pdf
      * @param html html字符串
@@ -216,7 +236,6 @@ public class HtmlUtil {
             com.itextpdf.text.Document document = new com.itextpdf.text.Document();
             document.setPageSize(rectangle);
             PdfWriter pdfWriter = PdfWriter.getInstance(document,fileOutputStream);
-
             final TagProcessorFactory tagProcessorFactory = Tags.getHtmlTagProcessorFactory();
             tagProcessorFactory.removeProcessor(HTML.Tag.IMG);
             tagProcessorFactory.addProcessor(new ImageTagProcessor(), HTML.Tag.IMG);
@@ -234,6 +253,9 @@ public class HtmlUtil {
             final XMLParser xmlParser = new XMLParser(true, worker, charset);
 
             xmlParser.parse(byteArrayInputStream,charset);
+//
+//            XMLWorkerHelper.getInstance().parseXHtml(pdfWriter, document,
+//                    byteArrayInputStream, charset);
 
             document.close();
         }catch (Exception e){
@@ -242,9 +264,11 @@ public class HtmlUtil {
         }
 
     }
+
     public static void writeHtmlToPDF(String html, File file){
         writeHtmlToPDF(html,file,PageSize.A4);
     }
+
     /**
      * 用于中文显示的Provider
      */
@@ -293,4 +317,5 @@ public class HtmlUtil {
             return elements;
         }
     }
+
 }

@@ -1,13 +1,23 @@
 package com.tangzhangss.commonutils.test;
 
 import com.tangzhangss.commonutils.base.SysBaseService;
+import com.tangzhangss.commonutils.service.DBService;
+import com.tangzhangss.commonutils.utils.PlaceholderStr;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class TestService extends SysBaseService<TestEntity,TestDao>{
+    @Autowired
+    DBService dbService;
+    public void saveAll(List<TestEntity>  list){
+        myDao.saveAll(list);
+    }
+
     public void test(){
         System.out.println(myDao.toString());
     }

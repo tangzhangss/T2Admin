@@ -14,6 +14,7 @@ import com.tangzhangss.commonutils.utils.ListUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -123,5 +124,27 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
         Map<String,String> whereMao=new HashMap<>();
 
         return Result.ok().data(myService.queryByGroup(whereMao,groupKey,groupMap,request));
+    }
+
+    @PutMapping("/update/no_auth")
+    @Transactional
+    public Result update(@RequestBody List<TestEntity> testEntityList){
+        testEntityList.forEach(testEntity -> myService.update(testEntity));
+        return Result.ok();
+    }
+
+    @PutMapping("/insert/no_auth")
+    @Transactional
+    public Result insert(@RequestBody List<TestEntity> testEntityList){
+        myService.insert(testEntityList);
+//        testEntityList.forEach(testEntity -> myService.insert(testEntity));
+        return Result.ok();
+    }
+    @PutMapping("/delete/no_auth")
+    @Transactional
+    public Result delete(@RequestBody List<TestEntity> testEntityList){
+        myService.delete(testEntityList);
+//        testEntityList.forEach(testEntity -> myService.insert(testEntity));
+        return Result.ok();
     }
 }

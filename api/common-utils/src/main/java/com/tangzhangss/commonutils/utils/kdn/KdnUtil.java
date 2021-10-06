@@ -183,6 +183,7 @@ public class KdnUtil {
     }
     /**
      * 给html的自闭合标签添加结束标签
+     * 需要在之前去掉\r\n
      */
     public static StringBuffer addElementCloseTag(String htmlTemplate){
         StringBuffer htmlStr = new StringBuffer();

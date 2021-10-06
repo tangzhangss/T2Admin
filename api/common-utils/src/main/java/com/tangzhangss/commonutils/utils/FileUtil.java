@@ -1,16 +1,15 @@
 package com.tangzhangss.commonutils.utils;
 
+import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.json.JSONObject;
 import lombok.val;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -115,6 +114,13 @@ public class FileUtil {
 
     /**
      * 解析Excel文件
+     * 检验解析文件的结果
+     * 第一行字段名必须以 i s n d t b开头 表示字段类型
+     * 第二行字段名字 后面 * 表示必填
+     * 后面的是数据行
+     * sId  sName
+     * 主键*  名字
+     * 表示字段都是String类型的。主键必填
      */
     public static List<List<Object>> analysisExcel(File excelFile) throws Exception {
         try(FileInputStream fileInputStream = new FileInputStream(excelFile)){
@@ -154,49 +160,12 @@ public class FileUtil {
                         }
                         continue;
                     }
-                    switch (cell.getCellType()) {
-                        case XSSFCell.CELL_TYPE_STRING:
-                            //if当前列不是string类型的出现警告信息
-                            if(i>1) checkCellFormat("String",sheet,j,iStatus,sMessage);
-
-                            value = cell.getStringCellValue();
-                            break;
-                        case XSSFCell.CELL_TYPE_NUMERIC:
-                            //日期数据返回LONG类型的时间戳
-                            if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                                if("DateTime".equals(getSheetCellType(sheet,j))){
-                                    if(i>1) checkCellFormat("DateTime",sheet,j,iStatus,sMessage);
-                                    value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cell.getDateCellValue());
-                                }else{
-                                    if(i>1) checkCellFormat("Date",sheet,j,iStatus,sMessage);
-                                    value = new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
-                                }
-                            } else {
-                                //数值类型返回double类型的数字
-                                if(i>1) checkCellFormat("Number",sheet,j,iStatus,sMessage);
-                                if("i".equals(getColumnTypePrefix(sheet,j))){
-                                    value = (int)cell.getNumericCellValue();
-                                }else{
-                                    value = cell.getNumericCellValue();
-                                }
-                            }
-                            break;
-                        case XSSFCell.CELL_TYPE_BOOLEAN:
-                            //布尔类型
-                            if(i>1) checkCellFormat("Boolean",sheet,j,iStatus,sMessage);
-                            value = cell.getBooleanCellValue();
-                            break;
-                        case XSSFCell.CELL_TYPE_BLANK:
-                            //空单元格
-                            if(sheet.getRow(1).getCell(j).getStringCellValue().endsWith("*")){
-                                iStatus[0] = 10;
-                                sMessage.append(sheet.getRow(1).getCell(j)+"不能为空;");
-                            }
-                            value=null;
-                            break;
-                        default:
-                            value = cell.toString();
+                    CellType cellType = cell.getCellType();
+                    //如果是函数的话 就会走这里把计算结果算出来
+                    if (cell.getCellType() == CellType.FORMULA) {
+                        cellType = cell.getCachedFormulaResultType();
                     }
+                    value = getCellValue(cell,cellType,sheet,i,j,iStatus,sMessage);
 
                     linked.add(value);
                 }
@@ -222,7 +191,71 @@ public class FileUtil {
         }
 
     }
+    /**
+     * 计算单元格的值
+     * @param cell 单元格
+     * @param cellType 单元格类型
+     * @param sheet
+     * @param i 行
+     * @param j 列
+     * @param iStatus 状态 0 没问题 5 警告 10错误（如必填的没有填，*号）
+     * @param sMessage 提示信息
+     * @return
+     */
+    private static Object getCellValue(Cell cell,CellType cellType,Sheet sheet,int i,int j,Integer[] iStatus, StringBuffer sMessage){
+        Object value = null;
+        switch (cellType) {
+            case STRING:
+                //if当前列不是string类型的出现警告信息
+                if(i>1) checkCellFormat("String",sheet,j,iStatus,sMessage);
 
+                value = cell.getStringCellValue();
+                break;
+            case NUMERIC:
+                //日期数据返回LONG类型的时间戳
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    if("DateTime".equals(getSheetCellType(sheet,j))){
+                        if(i>1) checkCellFormat("DateTime",sheet,j,iStatus,sMessage);
+                        value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cell.getDateCellValue());
+                    }else{
+                        if(i>1) checkCellFormat("Date",sheet,j,iStatus,sMessage);
+                        value = new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
+                    }
+                } else {
+                    //数值类型返回double类型的数字
+                    if(i>1) checkCellFormat("Number",sheet,j,iStatus,sMessage);
+                    if("i".equals(getColumnTypePrefix(sheet,j))){
+                        value = (int)cell.getNumericCellValue();
+                    }else{
+                        //默认double类型
+                        value = cell.getNumericCellValue();
+                    }
+
+                    //如果value是xx.00这种格式的
+                    //能转成int的就转成int
+                    int vInt = (int)cell.getNumericCellValue();
+                    if(CompareUtil.compare(Double.valueOf(vInt),value,false)==0)value=vInt;
+
+                }
+                break;
+            case BOOLEAN:
+                //布尔类型
+                if(i>1) checkCellFormat("Boolean",sheet,j,iStatus,sMessage);
+                value = cell.getBooleanCellValue();
+                break;
+            case BLANK:
+                //空单元格
+                if(sheet.getRow(1).getCell(j).getStringCellValue().endsWith("*")){
+                    iStatus[0] = 10;
+                    sMessage.append(sheet.getRow(1).getCell(j)+"不能为空;");
+                }
+                value=null;
+                break;
+            default:
+                value = cell.toString();
+        }
+        return value;
+    }
     /**
      * multipartFile 对象转 file对象
      */
@@ -264,6 +297,11 @@ public class FileUtil {
     private static void checkCellFormat(String cType, Sheet sheet, int j, Integer[] iStatus, StringBuffer sMessage){
         //需要的格式
         String sctype = getSheetCellType(sheet,j);
+        //如果单元格需要int类型excel解析式是String
+        if(sctype.equals("Number")&&cType.equals("String")){
+            return;
+        }
+
         //String类型的都可以填
         if(!sctype.equals("String")&&!cType.equals(sctype)){
             iStatus[0] = iStatus[0]>5?iStatus[0]:5;
@@ -289,7 +327,7 @@ public class FileUtil {
             case 'n':return "Number";
             case 'b':return "Boolean";
         }
-        return null;
+        return "String";
     }
 
     /*
@@ -320,6 +358,26 @@ public class FileUtil {
             data.set(String.valueOf(list.get(0).get(j)),list.get(1).get(j));
         }
         return data;
+    }
+
+    /**
+     * 创建文件
+     * @param filePath 文件路经
+     * @return
+     * @throws IOException
+     */
+    public File createFile(String filePath) throws IOException {
+        File newFile = new File(filePath);
+        if(newFile.exists()){
+            newFile.delete();
+        }
+        //创建目录
+        File fileParent = newFile.getParentFile();
+        if(!fileParent.exists()){
+            fileParent.mkdirs();
+        }
+        newFile.createNewFile();
+        return newFile;
     }
 
 }

@@ -17,7 +17,7 @@ public class SysBaseEntity {
     protected Long id;
 
     @Column(nullable = false)
-    protected LocalDateTime createTime = LocalDateTime.now();
+    protected LocalDateTime createTime;
 
     @Column(nullable = false)
     protected Long creatorId=SysContext.getUserId();//创建用户Id

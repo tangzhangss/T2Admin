@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 之前用的springboot的 需要自己注册，换成spring cloud的就不用了
  */
-//@Component
 public class NacosProvider implements CommandLineRunner {
     @NacosInjected
     private NamingService namingService;

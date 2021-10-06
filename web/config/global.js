@@ -9,6 +9,7 @@ window.superAdminClientId="tzcc_ren";//超级管理员客户ID
 
 window.addEventListener('message',function(event){
     if(self==top)return false;//顶层不需要
+    console.log("接收message：",event);
     //此处执行事件
     let data = event.data;
     if(data.key=="USER_INFO"){
