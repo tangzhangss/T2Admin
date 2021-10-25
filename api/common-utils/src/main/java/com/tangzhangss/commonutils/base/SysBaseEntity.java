@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Data
-@SysDynamic
+//@SysDynamic
 public class SysBaseEntity {
     @Id
     @Column(nullable = false)

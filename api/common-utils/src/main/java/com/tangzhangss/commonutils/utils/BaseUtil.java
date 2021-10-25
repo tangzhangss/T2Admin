@@ -150,7 +150,7 @@ public class BaseUtil {
     }
 
     /**
-     * 反射获取属性值得到属性值
+     * 反射获取属性值得到属性值 浅 fieldName 一级
      * @param obj
      */
     public static Object readAttributeValue(Object obj, String fieldName) throws  IllegalAccessException {
@@ -164,7 +164,27 @@ public class BaseUtil {
         field.setAccessible(true);
         return field.get(obj);
     }
-
+    /**
+     * 反射获取属性值得到属性值 深度 fieldName 多级: A.B.C
+     * @param obj
+     */
+    public static Object readAttributeValueDeep(Object obj, String fieldName) throws IllegalAccessException {
+        String [] fileNameArr = fieldName.split("\\.");
+        Object o = obj;
+        Field field;
+        for (int i = 0; i < fileNameArr.length; i++) {
+            field = getField(fileNameArr[i],o.getClass());
+            //打开私有访问
+            field.setAccessible(true);
+            if(field.getName().equals(fileNameArr[i])) {
+                if (i == fileNameArr.length - 1) {
+                    return field.get(o);
+                }
+                o = field.get(o);
+            }
+        }
+        return null;
+    }
 
     /**
      * 反射更新属性值
@@ -191,7 +211,7 @@ public class BaseUtil {
     }
 
     /**
-     * 获取类中的字段Field对象(含继承)
+     * 获取类中的字段Field对象(不含继承)
      * @param fieldName 字段属性名
      * @param clazz 类
      */

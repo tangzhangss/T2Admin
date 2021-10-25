@@ -2,12 +2,14 @@ package com.tangzhangss.commonutils.syscode;
 
 import com.tangzhangss.commonutils.base.SysBaseEntity;
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Data
 @Entity
+@DynamicUpdate
 @Table(name = "tbl_common_utils_sys_code")
 public class SysCodeEntity extends SysBaseEntity{
     private String noName; // 编码名称

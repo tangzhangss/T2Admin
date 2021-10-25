@@ -32,7 +32,7 @@ public class AliyunOssApi extends SysBaseApi<AliyunOssEntity, AliyunOssService> 
 
 
     /**
-     * 上传文件
+     * 上传excel
      * @param file
      */
     @PostMapping("/upload_excel")
@@ -41,8 +41,24 @@ public class AliyunOssApi extends SysBaseApi<AliyunOssEntity, AliyunOssService> 
         String url = myService.uploadFile(file,"excel");
         return new Result(HttpStatus.OK,url);
     }
-
-
+    /**
+     * 上传文件
+     * @param file
+     */
+    @PostMapping("/upload_file")
+    public Result uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+        String url = myService.uploadFile(file,"other");
+        return new Result(HttpStatus.OK,url);
+    }
+    /**
+     * 上传文件
+     * @param file
+     */
+    @PostMapping("/upload_file/no_auth")
+    public Result uploadFileNoAuth(@RequestParam("file") MultipartFile file) throws Exception {
+        String url = myService.uploadFile(file,"other");
+        return new Result(HttpStatus.OK,url);
+    }
 
     /*
     可删除的图片（需要保证一个图片都不能被引用两次以上，唯一）

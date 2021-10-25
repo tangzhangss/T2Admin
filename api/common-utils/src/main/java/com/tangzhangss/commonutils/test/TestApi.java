@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,12 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
     public Result getNoAuth() throws NacosException {
         SysContext.setUser(new JSONObject().set("clientId",10000));
         return Result.ok().data(myService.get(request,null));
+    }
+    @PutMapping("/no_auth")
+    public Result saveNoAuth(@RequestBody TestEntity testEntity) throws NacosException {
+        Annotation[] annotations1 = this.getClass().getAnnotations();
+        Annotation[] annotations = testEntity.getClass().getAnnotations();
+        return Result.ok().data(myService.save(testEntity));
     }
     @NacosInjected
     private NamingService namingService;
