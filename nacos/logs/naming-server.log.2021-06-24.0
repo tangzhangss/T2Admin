@@ -1,0 +1,92 @@
+2021-06-24 14:25:51,608 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2021-06-24 14:25:51,610 INFO listen for service meta change
+
+2021-06-24 14:26:38,274 INFO open empty service auto clean job, initialDelay : 50000 ms, period : 30000 ms
+
+2021-06-24 14:26:38,275 INFO listen for service meta change
+
+2021-06-24 14:26:55,953 INFO Client connection 127.0.0.1:10082#true connect
+
+2021-06-24 14:26:55,955 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=0}, 127.0.0.1:10082#true
+
+2021-06-24 14:30:22,110 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=1}, 127.0.0.1:10082#true
+
+2021-06-24 14:30:35,986 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=2}, 127.0.0.1:10082#true
+
+2021-06-24 14:31:36,380 INFO [AUTO-DELETE-IP] service: Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=3}, ip: {"ip":"127.0.0.1","port":10082,"healthy":false,"cluster":"DEFAULT","extendDatum":{"preserved.register.source":"SPRING_CLOUD","customInstanceId":"127.0.0.1#10082#DEFAULT#DEFAULT_GROUP@@COMMON-SERVICE"},"lastHeartBeatTime":1624516266044,"metadataId":"127.0.0.1:10082:DEFAULT"}
+
+2021-06-24 14:31:36,380 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=3}, 127.0.0.1:10082#true
+
+2021-06-24 14:31:39,131 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=4}, 127.0.0.1:10082#true
+
+2021-06-24 14:33:06,621 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=5}, 127.0.0.1:10082#true
+
+2021-06-24 14:33:21,837 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=6}, 127.0.0.1:10082#true
+
+2021-06-24 14:38:31,216 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=7}, 127.0.0.1:10082#true
+
+2021-06-24 14:38:45,148 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=8}, 127.0.0.1:10082#true
+
+2021-06-24 14:43:03,403 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=9}, 127.0.0.1:10082#true
+
+2021-06-24 14:43:16,542 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=10}, 127.0.0.1:10082#true
+
+2021-06-24 14:44:37,602 INFO [AUTO-DELETE-IP] service: Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=11}, ip: {"ip":"127.0.0.1","port":10082,"healthy":false,"cluster":"DEFAULT","extendDatum":{"preserved.register.source":"SPRING_CLOUD","customInstanceId":"127.0.0.1#10082#DEFAULT#DEFAULT_GROUP@@COMMON-SERVICE"},"lastHeartBeatTime":1624517045912,"metadataId":"127.0.0.1:10082:DEFAULT"}
+
+2021-06-24 14:44:37,602 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=11}, 127.0.0.1:10082#true
+
+2021-06-24 14:44:41,875 INFO Client connection 127.0.0.1:10082#true disconnect, remove instances and subscribers
+
+2021-06-24 14:44:42,457 INFO Client connection 127.0.0.1:10082#true connect
+
+2021-06-24 14:44:42,457 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=12}, 127.0.0.1:10082#true
+
+2021-06-24 14:45:12,518 INFO [AUTO-DELETE-IP] service: Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=13}, ip: {"ip":"127.0.0.1","port":10082,"healthy":false,"cluster":"DEFAULT","extendDatum":{"preserved.register.source":"SPRING_CLOUD"},"lastHeartBeatTime":1624517082458,"metadataId":"127.0.0.1:10082:DEFAULT"}
+
+2021-06-24 14:45:12,518 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=13}, 127.0.0.1:10082#true
+
+2021-06-24 14:45:16,935 INFO Client connection 127.0.0.1:10082#true disconnect, remove instances and subscribers
+
+2021-06-24 14:45:42,430 INFO Client connection 127.0.0.1:10082#true connect
+
+2021-06-24 14:45:42,431 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=14}, 127.0.0.1:10082#true
+
+2021-06-24 14:49:26,932 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=15}, 127.0.0.1:10082#true
+
+2021-06-24 14:49:40,325 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=16}, 127.0.0.1:10082#true
+
+2021-06-24 15:00:28,855 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=17}, 127.0.0.1:10082#true
+
+2021-06-24 15:00:42,432 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=18}, 127.0.0.1:10082#true
+
+2021-06-24 15:02:03,162 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=19}, 127.0.0.1:10082#true
+
+2021-06-24 15:02:15,817 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=20}, 127.0.0.1:10082#true
+
+2021-06-24 15:06:41,583 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=21}, 127.0.0.1:10082#true
+
+2021-06-24 15:06:55,698 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=22}, 127.0.0.1:10082#true
+
+2021-06-24 15:07:17,800 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=23}, 127.0.0.1:10082#true
+
+2021-06-24 15:07:49,081 INFO Client connection 127.0.0.1:10082#true disconnect, remove instances and subscribers
+
+2021-06-24 15:07:51,746 INFO Client connection 127.0.0.1:10082#true connect
+
+2021-06-24 15:07:51,746 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=24}, 127.0.0.1:10082#true
+
+2021-06-24 15:14:50,521 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=25}, 127.0.0.1:10082#true
+
+2021-06-24 15:15:03,911 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=26}, 127.0.0.1:10082#true
+
+2021-06-24 15:18:25,457 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=27}, 127.0.0.1:10082#true
+
+2021-06-24 15:18:38,067 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=28}, 127.0.0.1:10082#true
+
+2021-06-24 15:28:44,166 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=29}, 127.0.0.1:10082#true
+
+2021-06-24 15:28:59,154 INFO Client change for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=30}, 127.0.0.1:10082#true
+
+2021-06-24 15:47:28,247 INFO Client remove for service Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=31}, 127.0.0.1:10082#true
+

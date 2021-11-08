@@ -1,0 +1,7 @@
+D:\Windows\open-jdk-11/bin/java  -server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/d/开源/nacos/nacos/logs/java_heapdump.hprof -XX:-UseLargePages -Dnacos.member.list= -Xlog:gc*:file=/d/开源/nacos/nacos/logs/nacos_gc.log:time,tags:filecount=10,filesize=102400 -Dloader.path=/d/开源/nacos/nacos/plugins/health,/d/开源/nacos/nacos/plugins/cmdb -Dnacos.home=/d/开源/nacos/nacos -jar /d/开源/nacos/nacos/target/nacos-server.jar  --spring.config.additional-location=file:/d/开源/nacos/nacos/conf/ --logging.config=/d/开源/nacos/nacos/conf/nacos-logback.xml --server.max-http-header-size=524288
+nohup: ignoring input
+[0.003s][error][logging] Error opening log file '/d/��Դ/nacos/nacos/logs/nacos_gc.log': No such file or directory
+[0.003s][error][logging] Initialization of output 'file=/d/��Դ/nacos/nacos/logs/nacos_gc.log' using options 'filecount=10,filesize=102400' failed.
+Invalid -Xlog option '-Xlog:gc*:file=/d/��Դ/nacos/nacos/logs/nacos_gc.log:time,tags:filecount=10,filesize=102400', see error log for details.
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.

@@ -10,7 +10,7 @@ public class BaseTest {
        打断点
        要走set 方法
      */
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         JSONObject obj = new JSONObject();
         obj.set("A","my is A's val");
         BaseEntity baseEntity = JSONUtil.toBean(obj, BaseEntity.class);
@@ -18,4 +18,17 @@ public class BaseTest {
 
         System.out.println(BaseUtil.sqlHandle(null,"ssss"));
     }
+
+    /**
+     * 测试float比较
+     */
+    public static void main(String[] args) {
+        float a=0;
+        double b=0d;
+
+        System.out.println(a==0);
+        System.out.println(b==0d);
+    }
+
+
 }

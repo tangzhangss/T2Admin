@@ -1,0 +1,20 @@
+2021-06-24 14:25:53,696 ERROR [UPDATE-DOMAIN] Exception while taking item from LinkedBlockingDeque.
+
+2021-06-24 14:31:21,355 INFO {POS} {IP-DISABLED} valid: 127.0.0.1:10082@DEFAULT@COMMON-SERVICE, region: unknown, msg: client last beat: 1624516266044
+
+2021-06-24 14:43:02,473 INFO {POS} {IP-DISABLED} valid: 127.0.0.1:10082@DEFAULT@COMMON-SERVICE, region: unknown, msg: client last beat: 1624516965197
+
+2021-06-24 14:43:03,365 INFO service: DEFAULT_GROUP@@COMMON-SERVICE {POS} {IP-ENABLED} valid: 127.0.0.1:10082@DEFAULT, region: unknown, msg: client beat ok
+
+2021-06-24 14:43:32,525 INFO {POS} {IP-DISABLED} valid: 127.0.0.1:10082@DEFAULT@COMMON-SERVICE, region: unknown, msg: client last beat: 1624516996542
+
+2021-06-24 14:43:34,882 INFO service: DEFAULT_GROUP@@COMMON-SERVICE {POS} {IP-ENABLED} valid: 127.0.0.1:10082@DEFAULT, region: unknown, msg: client beat ok
+
+2021-06-24 14:44:22,578 INFO {POS} {IP-DISABLED} valid: 127.0.0.1:10082@DEFAULT@COMMON-SERVICE, region: unknown, msg: client last beat: 1624517045912
+
+2021-06-24 14:44:57,483 INFO {POS} {IP-DISABLED} valid: 127.0.0.1:10082@DEFAULT@COMMON-SERVICE, region: unknown, msg: client last beat: 1624517082458
+
+2021-06-24 14:50:27,921 INFO {POS} {IP-DISABLED} valid: 127.0.0.1:10082@DEFAULT@COMMON-SERVICE, region: unknown, msg: client last beat: 1624517410424
+
+2021-06-24 14:50:30,813 INFO service: DEFAULT_GROUP@@COMMON-SERVICE {POS} {IP-ENABLED} valid: 127.0.0.1:10082@DEFAULT, region: unknown, msg: client beat ok
+

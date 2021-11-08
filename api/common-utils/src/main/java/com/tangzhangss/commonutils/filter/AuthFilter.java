@@ -32,7 +32,7 @@ public class AuthFilter implements Filter {
 
     public static final String AUTH = "X-Token";
     //正则匹配
-    private static List<String> unAuthUrl = ListUtil.list(false,"^/static.*", "^/user/login",".*/no_auth.*");
+    private static List<String> unAuthUrl = ListUtil.list(false,"^/static/.*", "^/user/login",".*/no_auth$");
     //增加不授权的url
     public static void addUnAuthUrl(String urlRegex){
         unAuthUrl.add(urlRegex);

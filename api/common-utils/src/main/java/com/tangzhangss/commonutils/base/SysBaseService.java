@@ -958,7 +958,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     }
     /**
      * insert语句
-     *
+     * 执行insert update delete请确保dataList里面的的实体不能处于托管状态,不然事务结束jpa实体管理器也会自动提交保存（更新）
      * data需要是完整的实体
      */
     public void insert(T ...dataArr){
@@ -1004,7 +1004,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     }
     /**
      * update语句
-     *
+     * 执行insert update delete请确保dataList里面的的实体不能处于托管状态,不然事务结束jpa实体管理器也会自动提交保存（更新）
      * data需要是完整的实体
      */
     public void update(T ...dataArr){
@@ -1040,6 +1040,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     /**
      * delete删除
      * 批量删除
+     * 执行insert update delete请确保dataList里面的的实体不能处于托管状态,不然事务结束jpa实体管理器也会自动提交保存（更新）
      */
     public void delete(T ...dataArr){
        delete(ListUtil.toList(dataArr));

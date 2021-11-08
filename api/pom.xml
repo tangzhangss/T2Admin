@@ -28,6 +28,8 @@
         <module>common-pay</module>
         <module>common-flowable</module>
         <module>common-report</module>
+        <module>common-xxl-job-executor</module>
+        <module>common-mq</module>
     </modules>
 
 
@@ -37,6 +39,12 @@
     <packaging>pom</packaging>
 
     <dependencies>
+        <!--test-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!--feign 远程调用-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -84,12 +92,10 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>${querydsl.version}</version>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
             <scope>provided</scope>
         </dependency>
         <!--配置文件注入-->

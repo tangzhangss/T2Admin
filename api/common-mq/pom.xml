@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>my_admin</artifactId>
+        <groupId>com.tangzhangss</groupId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+    <groupId>com.tangzhangss</groupId>
+    <artifactId>common-mq</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>common-mq</name>
+    <description>消息队列服务</description>
+    <properties>
+        <java.version>11</java.version>
+        <mq.version>4.9.2</mq.version>
+    </properties>
+    <dependencies>
+        <!--common-utils-->
+        <dependency>
+            <groupId>com.tangzhangss</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>${mq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

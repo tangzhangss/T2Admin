@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>my_admin</artifactId>
+        <groupId>com.tangzhangss</groupId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.tangzhangss</groupId>
+    <artifactId>common-xxl-job-executor</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>common-xxl-job-executor</name>
+    <description>xxl-job的执行器项目</description>
+    <properties>
+        <java.version>11</java.version>
+        <job.version>2.3.0</job.version>
+    </properties>
+    <dependencies>
+        <!--common-utils-->
+        <dependency>
+            <groupId>com.tangzhangss</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- xxl-job-core -->
+        <dependency>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+            <version>${job.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

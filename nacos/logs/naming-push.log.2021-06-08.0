@@ -1,0 +1,6 @@
+2021-06-08 12:31:09,059 INFO [PUSH] Task merge for Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=6}
+
+2021-06-08 13:43:21,663 INFO [PUSH] Task merge for Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=8}
+
+2021-06-08 13:43:21,789 INFO [PUSH] Task merge for Service{namespace='public', group='DEFAULT_GROUP', name='COMMON-SERVICE', ephemeral=true, revision=9}
+
