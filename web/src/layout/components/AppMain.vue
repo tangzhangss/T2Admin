@@ -60,7 +60,7 @@ export default {
   overflow: hidden;
 }
 .fixed-header+.app-main {
-  padding-top: 90px;
+  padding-top: 80px;
 }
 </style>
 

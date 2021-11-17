@@ -82,10 +82,11 @@
           {prop:"title", label:"菜单名", required:true,iType:'text',iSpan:12,style:"width:200px"},
           {prop:"name",tip:"路由name需要保证唯一性", label:"name", iType:'text',iSpan:12,style:"width:200px"},
           {prop:"icon", label:"icon",tip:"支持element,svg图标",  iType:'text', iSpan:12,style:"width:200px"},
-          {prop:"path",disabled:this.isExternalService,label:"path",iType:'text',tip:"仅且仅需要一级菜单以/开头", required:true, iSpan:12,style:"width:200px"},
+                //disabled:this.isExternalService,
+          {prop:"path",label:"path",iType:'text',tip:"仅且仅需要一级菜单以/开头，不能以/结尾", required:true, iSpan:12,style:"width:200px"},
           {prop:"redirect",tip:"一级菜单:当设置 noRedirect 的时候该路由在面包屑导航中不可被点击;其他:重定向",label:"redirect",iType:'text',iSpan:12,style:"width:200px"},
           {prop:"domainId",isVisibleFunc:(item)=> item.externalService,label:"服务域名", iType:'select',iSpan:12,style:"width:200px",options:this.domainList,selectKey:"id",selectLabel:"name",selectValue:"id"},
-          {prop:"url",isShow:(!this.isRoot)||this.isExternalService,tip:"一级菜单可不填,以/开头", label:"页面路径", iType:'text',iSpan:12,style:"width:200px"},
+          {prop:"url",isShow:(!this.isRoot)||this.isExternalService,tip:"仅路由页面填写", label:"页面路径", iType:'text',iSpan:12,style:"width:200px"},
           {prop:"orderNo", label:"排序", iType:'number', iSpan:12,style:"width:200px"},
           {prop:"systemic", label:"系统菜单", iType:'switch', iSpan:6,},
           {prop:"usable", label:"是否启用", iType:'switch', iSpan:6},
@@ -120,14 +121,14 @@
           data.externalService=true;
           this.externalServiceInit(data);
         }
-        console.log(data,data.externalService, data.domainId)
-        if(data&&data.externalService){
+        if(data && data.externalService){
           this.isExternalService=true;
         }else{this.isExternalService=false}
       },
       externalServiceInit(data){
-        data.path="iFrame/${id}";
-        data.name=data.name||"IFrame";
+        // data.path="iFrame/${id}";
+        // data.name=data.name||"IFrame";
+        //不给默认值
       },
       externalServiceChange(val,data){
         console.log(val,data);

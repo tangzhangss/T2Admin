@@ -196,8 +196,9 @@ function parseRoute(item,isRoot){
           }
           store.commit('permission/UPDATE_EXTERNAL_SERVICE',
               {key:item.id,value:handleUrl(addr,item.url)});
-          route.path= route.path.replace("${id}",item.id);
-        }else{
+          // route.path= route.path.replace("${id}",item.id);
+          route.path= route.path+"/"+item.id;
+        }else if(item.url&&TZUtils.trim(item.url)!=""){
           route.component=importComponent(item.url);
         }
       }catch (e) {
@@ -209,6 +210,11 @@ function parseRoute(item,isRoot){
           console.log(e);
         }
       }
+  }
+  //多级路由 中间的路由页面
+  if(!route.component){
+    route.component=require('@/views/router.vue').default;
+    route.redirect="noRedirect";
   }
   return route;
 }

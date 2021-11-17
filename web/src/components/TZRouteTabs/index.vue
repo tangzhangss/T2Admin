@@ -71,7 +71,7 @@
         width: 100%;
         display: inline-block;
         font-size: 14px;
-        margin-top: 2px;
+        /*margin-top: 2px;*/
         box-sizing: border-box;
         line-height: 30px;
         height:30px;
