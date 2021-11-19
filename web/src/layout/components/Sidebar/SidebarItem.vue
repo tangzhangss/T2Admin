@@ -3,14 +3,22 @@
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)" :item="onlyOneChild">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+<!--          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title"/>-->
+          <el-icon>
+            <svg-icon :icon-class='onlyOneChild.meta.icon||(item.meta&&item.meta.icon)'/>
+          </el-icon>
+          <template #title>{{item.meta.title}}</template>
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <el-sub-menu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template #title><!--这里使用#而不是slot-->
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+<!--        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />-->
+        <el-icon>
+          <svg-icon :icon-class='item.meta && item.meta.icon'/>
+        </el-icon>
+        <span>{{item.meta.title}}</span>
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -20,7 +28,7 @@
         :base-path="resolvePath(child.path)"
         class="nest-menu"
       />
-    </el-submenu>
+    </el-sub-menu>
   </div>
 </template>
 
@@ -30,10 +38,11 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
+import {Edit,Delete,WarningFilled} from "@element-plus/icons";
 
 export default {
   name: 'SidebarItem',
-  components: { Item, AppLink },
+  components: { Item, AppLink,Edit,Delete,WarningFilled},
   mixins: [FixiOSBug],
   props: {
     // route object
@@ -60,6 +69,7 @@ export default {
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
+
       const showingChildren = children.filter(item => {
         if (item.hidden) {
           return false

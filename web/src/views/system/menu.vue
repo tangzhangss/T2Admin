@@ -81,7 +81,7 @@
           {prop:"externalService", label:"外部服务", iType:'switch', iSpan:24,onChange:this.externalServiceChange,style:"width:200px"},
           {prop:"title", label:"菜单名", required:true,iType:'text',iSpan:12,style:"width:200px"},
           {prop:"name",tip:"路由name需要保证唯一性", label:"name", iType:'text',iSpan:12,style:"width:200px"},
-          {prop:"icon", label:"icon",tip:"支持element,svg图标",  iType:'text', iSpan:12,style:"width:200px"},
+          {prop:"icon", label:"icon",tip:"仅支持项目icons目录下的svg图标",  iType:'text', iSpan:12,style:"width:200px"},
                 //disabled:this.isExternalService,
           {prop:"path",label:"path",iType:'text',tip:"仅且仅需要一级菜单以/开头，不能以/结尾", required:true, iSpan:12,style:"width:200px"},
           {prop:"redirect",tip:"一级菜单:当设置 noRedirect 的时候该路由在面包屑导航中不可被点击;其他:重定向",label:"redirect",iType:'text',iSpan:12,style:"width:200px"},

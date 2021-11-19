@@ -17,11 +17,7 @@ export default {
     const { icon, title } = context;
     const vnodes = [];
     if (icon) {
-      if (icon.includes('el-icon')) {
-        vnodes.push(<i class={[icon, 'sub-el-icon']} />)
-      } else {
-        vnodes.push(<svg-icon icon-class={icon}/>)
-      }
+        vnodes.push(<el-icon><svg-icon icon-class={icon}/></el-icon>)
     }
     if (title) {
       vnodes.push(<span slot='title'>{(title)}</span>)

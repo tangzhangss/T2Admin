@@ -9,7 +9,7 @@ console.log("---------")
 import ElementPlus from 'element-plus';
 import 'dayjs/locale/zh-cn';
 import locale from 'element-plus/lib/locale/lang/zh-cn';
-import 'element-plus/lib/theme-chalk/index.css';
+import 'element-plus/dist/index.css';
 import './styles/index.scss'; // global css
 import store from './store';
 import {router} from './router';
