@@ -115,7 +115,7 @@ public class FileUtil {
     /**
      * 解析Excel文件
      * 检验解析文件的结果
-     * 第一行字段名必须以 i s n d t b开头 表示字段类型
+     * 第一行字段名必须以 i s n d t b开头 表示字段类型 iPassword=>password表示字段英文名字
      * 第二行字段名字 后面 * 表示必填
      * 后面的是数据行
      * sId  sName
@@ -149,7 +149,9 @@ public class FileUtil {
                 iStatus[0]=0;
                 StringBuffer sMessage= new StringBuffer();//错误信息
 
-                for (int j = 0; j <= row.getLastCellNum()-1; j++) {
+                //row.getLastCellNum()是获取最后一个不为空的列是第几个
+                //直接用第一行的列数作为标准
+                for (int j = 0; j <= sheet.getRow(0).getLastCellNum()-1; j++) {
                     Object value = null;
                     cell = row.getCell(j);
                     if (cell == null) {

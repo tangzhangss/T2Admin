@@ -9,6 +9,7 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.config.Attribute;
+import com.tangzhangss.commonutils.i18n.Translator;
 import com.tangzhangss.commonutils.service.RedisService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class AuthFilter implements Filter {
         }
         String path = req.getServletPath();//获取请求路径
         // 判断如果没登录则报错
-        if (userInfo==null && !allowedPath(path)) return invalidTokenMsgHandle(servletRequest,servletResponse,"长时间没有操作，为了您的数据安全，请重新登录!");
+        if (userInfo==null && !allowedPath(path)) return invalidTokenMsgHandle(servletRequest,servletResponse, Translator.get("unauthorized"));
 
         //设置匿名请求的用户信息
         if(userInfo==null){

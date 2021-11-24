@@ -1,8 +1,10 @@
 package com.tangzhangss.commonutils.utils;
 
 import com.tangzhangss.commonutils.exception.ServiceException;
+import com.tangzhangss.commonutils.i18n.Translator;
 import com.tangzhangss.commonutils.resultdata.ResultCode;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,24 +12,26 @@ import java.util.regex.Pattern;
  * 处理异常工具类
  */
 public class ExceptionUtil {
-    /*
-       //占位符构建#0,#1,#2 对应后面的参数
+
+
+    /**
+     * 抛出异常信息，国际化
      */
     public static void throwException(String str,String ...args){
-        str = PlaceholderStr.parseStr(str,args);
-        throw  new ServiceException(str);
+        throw  new ServiceException(Translator.get(str, args));
     }
     public static void throwException(String str,ResultCode resultCode,String ...args){
-        str = PlaceholderStr.parseStr(str,args);
-        throw  new ServiceException(str,resultCode);
+        throw  new ServiceException(Translator.get(str, args),resultCode);
     }
+
+    /*
+      //占位符构建#0,#1,#2 对应后面的参数,不参与翻译
+    */
     public static void throwException(String str,ResultCode resultCode,PlaceholderStr.Strategy strategy,String ...args){
-        str = PlaceholderStr.parseStr(str,strategy,args);
-        throw  new ServiceException(str,resultCode);
+        throw  new ServiceException(PlaceholderStr.parseStr(str,strategy,args),resultCode);
     }
     public static void throwException(String str,PlaceholderStr.Strategy strategy,String ...args){
-        str = PlaceholderStr.parseStr(str,strategy,args);
-        throw  new ServiceException(str);
+        throw  new ServiceException(PlaceholderStr.parseStr(str,strategy,args));
     }
 
     public static void main(String[] args) {

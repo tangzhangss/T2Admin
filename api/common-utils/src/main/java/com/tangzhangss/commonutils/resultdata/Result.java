@@ -1,5 +1,6 @@
 package com.tangzhangss.commonutils.resultdata;
 
+import com.tangzhangss.commonutils.i18n.Translator;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
@@ -18,8 +19,8 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
     public Result(ResultCode resultCode, T data){
-        this.code = resultCode.code;
-        this.message = resultCode.message;
+        this.code = resultCode.getCode();
+        this.message = resultCode.getTranslatorMessage();
         this.data = data;
     }
 

@@ -1,6 +1,7 @@
 package com.tangzhangss.commonutils.exception;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tangzhangss.commonutils.i18n.Translator;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.resultdata.ResultCode;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ public class GlobalException {
     @ExceptionHandler(value = NoHandlerFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public Result notFoundHandler(HttpServletRequest request, Exception e) {
-        return new Result(HttpStatus.NOT_FOUND,"访问的页面不存在");
+        return new Result(HttpStatus.NOT_FOUND, Translator.get("not_found"));
     }
 
     /**

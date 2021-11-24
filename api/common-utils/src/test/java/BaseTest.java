@@ -1,7 +1,9 @@
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.tangzhangss.commonutils.utils.BaseUtil;
+import org.junit.platform.commons.util.StringUtils;
 
 public class BaseTest {
 
@@ -17,6 +19,7 @@ public class BaseTest {
         BaseEntity baseEntity2 = JSON.parseObject(JSONUtil.toJsonStr(obj), BaseEntity.class);
 
         System.out.println(BaseUtil.sqlHandle(null,"ssss"));
+
     }
 
     /**
@@ -28,6 +31,9 @@ public class BaseTest {
 
         System.out.println(a==0);
         System.out.println(b==0d);
+
+        System.out.println(StrUtil.toUnderlineCase("Unauthorized"));
+
     }
 
 

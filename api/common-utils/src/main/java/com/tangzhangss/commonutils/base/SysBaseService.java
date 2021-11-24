@@ -450,7 +450,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                     continue;
                 }
                 String [] sArr = orderItem.split("@");
-                if (sArr[1].equals("DESC")) {
+                if (sArr[1].toUpperCase().equals("DESC")) {
 //                    orders.add(new Sort.Order(Sort.Direction.DESC, sArr[0]));
                     orders.add(new OrderImpl(getExpression(sArr[0],root),false));
                     continue;
