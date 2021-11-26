@@ -22,13 +22,15 @@ import http from './utils/request';
 //业务工具类
 import service_tool from "./utils/service_tool";
 
-
 //全局工具方法
 myApp.config.globalProperties.$cookie = cookie;
 myApp.config.globalProperties.$http = http;
 myApp.config.globalProperties.TZUtils = webComponent.TZUtils;
 myApp.config.globalProperties.$service_tool = service_tool;
 
+
 //设置vue指令 框架中用到的所有
 webComponent.setAllVueDirective(myApp);
+
 myApp.use(router).use(store).use(webComponent).use(ElementPlus,{locale}).mount('#app')
+

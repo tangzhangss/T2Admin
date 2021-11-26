@@ -3,8 +3,66 @@
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
+      <el-popover
+              :visible="themeColorVisible"
+              placement="bottom"
+              title="更换主题色彩"
+              :width="400"
+              trigger="manual"
+      >
+        <template #reference>
+          <div title="更换主题色彩" @click="themeColorVisible=true" style="display: inline-block;height:100%">
+            <svg-icon icon-class="skin" class="right-menu-item hover-effect"></svg-icon>
+          </div>
+        </template>
+
+        <div class="select-color-box">
+          <div class="menu-text">
+            <span>menu text</span>
+            <el-color-picker v-model="themeColor['--menu-text']" />
+          </div>
+          <div class="menu-active-text">
+            <span>menu active text</span>
+            <el-color-picker v-model="themeColor['--menu-active-text']" />
+          </div>
+          <div class="sub-menu-active-text">
+            <span>sub menu active text</span>
+            <el-color-picker v-model="themeColor['--sub-menu-active-text']" />
+          </div>
+          <div class="menu-bg">
+            <span>menu bg</span>
+            <el-color-picker v-model="themeColor['--menu-bg']" />
+          </div>
+          <div class="menu-hover">
+            <span>menu hover</span>
+            <el-color-picker v-model="themeColor['--menu-hover']" />
+          </div>
+          <div class="sub-menu-bg">
+            <span>submenu bg</span>
+            <el-color-picker v-model="themeColor['--sub-menu-bg']" />
+          </div>
+          <div class="menu-hover">
+            <span>submenu hover</span>
+            <el-color-picker v-model="themeColor['--sub-menu-hover']" />
+          </div>
+          <div>
+            <span>表格Header背景颜色</span>
+            <el-color-picker v-model="themeColor['--tz-table-header-bg']" />
+          </div>
+          <div class="menu-hover">
+            <el-button type="text" @click="themeDefault">恢复默认</el-button>
+          </div>
+          <el-icon title="关闭" size="20" class="pointer" style="position: absolute;right: 5px;top: 5px"  @click="themeColorVisible=false">
+            <Close></Close>
+          </el-icon>
+        </div>
+      </el-popover>
+
+
+
       <div  title="刷新" style="display: inline-block;height:100%">
-         <svg-icon icon-class="refresh" class="right-menu-item hover-effect refresh" @click="refreshCurrentPage"></svg-icon>
+         <svg-icon icon-class="refresh" class="right-menu-item hover-effect" @click="refreshCurrentPage"></svg-icon>
+<!--         <svg class="right-menu-item hover-effect refresh" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-394d1fd8=""><path fill="currentColor" d="M771.776 794.88A384 384 0 0 1 128 512h64a320 320 0 0 0 555.712 216.448H654.72a32 32 0 1 1 0-64h149.056a32 32 0 0 1 32 32v148.928a32 32 0 1 1-64 0v-50.56zM276.288 295.616h92.992a32 32 0 0 1 0 64H220.16a32 32 0 0 1-32-32V178.56a32 32 0 0 1 64 0v50.56A384 384 0 0 1 896.128 512h-64a320 320 0 0 0-555.776-216.384z"></path></svg>-->
       </div>
       <screenfull  class="right-menu-item hover-effect screenfull"/>
 
@@ -62,6 +120,9 @@
   </div>
 
 </template>
+<script setup lang="ts">
+  import { Close} from '@element-plus/icons'
+</script>
 
 <script>
 import { mapGetters } from 'vuex';
@@ -69,13 +130,16 @@ import Breadcrumb from '@/components/Breadcrumb';
 import Hamburger from '@/components/Hamburger';
 import TZUtils from "@/utils/TZUtils";
 import Screenfull from '@/components/Screenfull'
-
+import SvgIcon from "../../components/SvgIcon/index";
+import {Close} from "@element-plus/icons"
 
 export default {
   components: {
+    SvgIcon,
     Breadcrumb,
     Hamburger,
-    Screenfull
+    Screenfull,
+    Close
   },
   data(){
     return {
@@ -90,11 +154,11 @@ export default {
       modifyPwdDialogVisible:false,
       tempValue1: '',
       tempValue2: '',
+      themeColor:this.$store.getters.themeColor,
+      themeColorVisible:false
     }
   },
-  created() {
-
-  },
+  created() {},
   computed: {
     ...mapGetters([
       'sidebar',
@@ -117,6 +181,10 @@ export default {
     }
   },
   methods: {
+    themeDefault(){
+      this.themeColor={};
+      this.$store.commit("settings/CLEAR_THEME_COLOR");
+    },
     refreshCurrentPage(){
       //刷新当前路由组件
       window.APP_MAIN_PAGE.reload();
@@ -173,6 +241,14 @@ export default {
         this.showClientDialog=true;
       }
     }
+  },
+  watch:{
+    themeColor:{
+      handler:function(val){
+        this.$store.commit("settings/UPDATE_THEME_COLOR",val);
+      },
+      deep: true
+    }
   }
 }
 </script>
@@ -215,11 +291,6 @@ export default {
       display: inline-block;
       height: 28px;
     }
-    .refresh{
-      width: 32px;
-      font-size: 18px;
-      padding: 0 4px !important;
-    }
     &:focus {
       outline: none;
     }
@@ -235,7 +306,9 @@ export default {
       &.hover-effect {
         cursor: pointer;
         transition: background .3s;
-
+        width: 32px;
+        font-size: 18px;
+        padding: 0 4px !important;
         &:hover {
           background: rgba(0, 0, 0, .025)
         }
@@ -264,6 +337,25 @@ export default {
         }
       }
     }
+  }
+}
+.select-color-box{
+  display: flex;
+  flex-wrap: wrap;
+  &>div{
+    width: 180px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    align-content: center;
+  }
+  &:deep(.el-color-picker){
+    height: 20px;
+    line-height: 20px;
+  }
+  &:deep(.el-color-picker__trigger){
+    width: 20px;
+    height: 20px;
   }
 }
 </style>

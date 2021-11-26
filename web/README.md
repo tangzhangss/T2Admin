@@ -6,6 +6,10 @@ UI框架:element-plus 1.2.0-beta.3
 
 ##### 前端组件:
 [组件库文档入库](https://www.npmjs.com/package/tangzhangss-web-component)
+
+##### 修改主题颜色请查看variables
+
+
 ##### 示例(部分代码,20201205版)
 ```
 <template>

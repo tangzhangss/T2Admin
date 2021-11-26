@@ -1,6 +1,6 @@
 <template>
   <div style="padding:5px 40px">
-    <p style="font-size: 18px">欢迎使用 TZCC-REN ADMIN SYSTEM（v2.0.0版本）</p>
+    <p style="font-size: 18px">欢迎使用 TZCC-REN ADMIN SYSTEM（v2.x版本）</p>
 <!--    <el-divider class="divider-title" content-position="left">常见问题</el-divider>-->
 <!--    <ul>-->
 <!--      <li>待完善</li>-->
@@ -13,6 +13,7 @@
           <p>vue升级到3.2.0</p>
           <p>element-plus升级到1.2.0-beta.3</p>
           <p>优化菜单配置，支持多级菜单（含外部网页）</p>
+          <p>新增自动换肤功能</p>
           <p>表格支持排序，排序的优先级:第一次进行排序的字段具有最高优先级（不管升序和降序和多次改变都一样，如需改变优先级请先清空排序）</p>
         </div>
       </li>
