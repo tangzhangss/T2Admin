@@ -18,7 +18,7 @@
     "path-to-regexp": "^6.2.0",
     "screenfull": "^5.1.0",
     "svg-sprite-loader": "^6.0.7",
-    "tangzhangss-web-component": "^0.3.106",
+    "tangzhangss-web-component": "^0.3.107",
     "vue": "3.2.0",
     "vue-router": "^4.0.0",
     "vuex": "4.0.0-rc.2"
