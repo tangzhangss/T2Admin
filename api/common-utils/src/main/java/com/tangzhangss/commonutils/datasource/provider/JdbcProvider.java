@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.tangzhangss.commonutils.datasource.constants.DatasourceTypes;
 import com.tangzhangss.commonutils.datasource.dto.*;
+import com.tangzhangss.commonutils.datasource.entity.DatasourceEntity;
 import com.tangzhangss.commonutils.datasource.request.DatasourceRequest;
 import com.tangzhangss.commonutils.exception.ServiceException;
 import com.tangzhangss.commonutils.i18n.Translator;
@@ -13,12 +14,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.beans.PropertyVetoException;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class JdbcProvider extends DatasourceProvider{
 
-    private static Map<Long, ComboPooledDataSource> jdbcConnection = new HashMap<>();
-    private static int initPoolSize = 5;
-    private static int maxConnections = 200;
+    private static ConcurrentHashMap<Long, ComboPooledDataSource> jdbcConnection = new ConcurrentHashMap<>();
 
     /**
      *
@@ -27,7 +27,7 @@ public class JdbcProvider extends DatasourceProvider{
     public TableData getTableData(DatasourceRequest dsr){
         TableData tableData = new TableData();
 
-        try(Connection connection = getConnection(dsr)){
+        try(Connection connection = getConnectionFromPool(dsr.getDatasourceEntity())){
             Statement stat = connection.createStatement();
             ResultSet rs = stat.executeQuery(dsr.getQuery());
             //查出的数据
@@ -79,39 +79,42 @@ public class JdbcProvider extends DatasourceProvider{
     }
 
     @Override
-    public void checkStatus(DatasourceRequest datasourceRequest){
+    public DatasourceEntity checkStatus(DatasourceEntity datasourceEntity){
         try(
-            Connection con = getConnection(datasourceRequest);
+            //线程池操作为检查数据源状态
+            Connection con = getConnection(datasourceEntity);
             Statement statement = con.createStatement()){
-            String queryStr = getTablesSql(datasourceRequest);
+            String queryStr = getTablesSql(datasourceEntity);
             ResultSet resultSet = statement.executeQuery(queryStr);
-
             resultSet.close();
+            datasourceEntity.setStatus(1);
         }catch (Exception e){
-            ExceptionUtil.throwException(e.getMessage());
+            datasourceEntity.setStatus(2);
+            datasourceEntity.setMessage(e.getMessage());
         }
+        return datasourceEntity;
     }
 
-    public void handleDatasource(DatasourceRequest datasourceRequest, String type) throws Exception {
+    public void handleDatasource(DatasourceEntity datasourceEntity, String type) throws Exception {
+        //连接成功的数据源才能被使用
+        if(datasourceEntity.getStatus()!=1)ExceptionUtil.throwException("datasource_cannot_used");
         ComboPooledDataSource dataSource = null;
         switch (type){
             case "add":
-                checkStatus(datasourceRequest);
-                dataSource = jdbcConnection.get(datasourceRequest.getDatasourceEntity().getId());
+                dataSource = jdbcConnection.get(datasourceEntity.getId());
                 if (dataSource == null) {
-                    addToPool(datasourceRequest);
+                    addToPool(datasourceEntity);
                 }
                 break;
             case "edit":
-                dataSource = jdbcConnection.get(datasourceRequest.getDatasourceEntity().getId());
+                dataSource = jdbcConnection.get(datasourceEntity.getId());
                 if (dataSource != null) {
                     dataSource.close();
                 }
-                checkStatus(datasourceRequest);
-                addToPool(datasourceRequest);
+                addToPool(datasourceEntity);
                 break;
             case "delete":
-                dataSource = jdbcConnection.get(datasourceRequest.getDatasourceEntity().getId());
+                dataSource = jdbcConnection.get(datasourceEntity.getId());
                 if (dataSource != null) {
                     dataSource.close();
                 }
@@ -122,11 +125,11 @@ public class JdbcProvider extends DatasourceProvider{
     }
 
     @Override
-    public TableData getSchema(DatasourceRequest datasourceRequest){
+    public TableData getSchema(DatasourceEntity datasourceEntity){
         TableData tableData = new TableData();
         List<String> schemas = new ArrayList<>();
-        String queryStr = getSchemaSql(datasourceRequest);
-        try(Connection con = getConnection(datasourceRequest);
+        String queryStr = getSchemaSql(datasourceEntity);
+        try(Connection con = getConnectionFromPool(datasourceEntity);
              Statement statement = con.createStatement();
              ResultSet resultSet = statement.executeQuery(queryStr)){
                 while (resultSet.next()) {
@@ -140,12 +143,12 @@ public class JdbcProvider extends DatasourceProvider{
     }
 
     @Override
-    public TableData getViews(DatasourceRequest dsr){
+    public TableData getViews(DatasourceEntity datasourceEntity){
         TableData tableData = new TableData();
-        String queryView = getViewSql(dsr);
+        String queryView = getViewSql(datasourceEntity);
         List<String> views = new ArrayList<>();
         if(StringUtils.isBlank(queryView))return null;
-        try(Connection con = getConnection(dsr);
+        try(Connection con = getConnectionFromPool(datasourceEntity);
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(queryView)){
             while (resultSet.next()) {
@@ -159,12 +162,12 @@ public class JdbcProvider extends DatasourceProvider{
         return tableData;
     }
     @Override
-    public TableData getTables(DatasourceRequest dsr) throws ServiceException {
+    public TableData getTables(DatasourceEntity datasourceEntity) throws ServiceException {
         TableData tableData = new TableData();
-        String queryView = getTablesSql(dsr);
+        String queryView = getTablesSql(datasourceEntity);
         List<String> table = new ArrayList<>();
 
-        try(Connection con = getConnection(dsr);
+        try(Connection con = getConnectionFromPool(datasourceEntity);
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(queryView)){
             while (resultSet.next()) {
@@ -177,21 +180,8 @@ public class JdbcProvider extends DatasourceProvider{
         return tableData;
     }
 
-    public Long count(DatasourceRequest datasourceRequest) throws Exception {
-
-        try(Connection con = getConnectionFromPool(datasourceRequest);
-            Statement ps = con.createStatement();
-            ResultSet resultSet = ps.executeQuery(datasourceRequest.getQuery())){
-            while (resultSet.next()) {
-                return resultSet.getLong(1);
-            }
-        }
-
-        return 0L;
-    }
-
-    private String getSchemaSql(DatasourceRequest datasourceRequest) {
-        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceRequest.getDatasourceEntity().getType());
+    private String getSchemaSql(DatasourceEntity datasourceEntity) {
+        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceEntity.getType());
         switch (datasourceType) {
             case oracle:
                 return "select * from all_users";
@@ -204,8 +194,8 @@ public class JdbcProvider extends DatasourceProvider{
         }
     }
 
-    private String getViewSql(DatasourceRequest datasourceRequest){
-        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceRequest.getDatasourceEntity().getType());
+    private String getViewSql(DatasourceEntity datasourceEntity){
+        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceEntity.getType());
         switch (datasourceType) {
             case mysql:
             case mariadb:
@@ -214,7 +204,7 @@ public class JdbcProvider extends DatasourceProvider{
             case ck:
                 return null;
             case sqlServer:
-                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), SqlServerConfiguration.class);
+                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), SqlServerConfiguration.class);
                 if(StringUtils.isEmpty(sqlServerConfiguration.getSchema())){
                     ExceptionUtil.throwException("schema_is_empty");
                 }
@@ -222,13 +212,13 @@ public class JdbcProvider extends DatasourceProvider{
                         .replace("DATABASE", sqlServerConfiguration.getDataBase())
                         .replace("DS_SCHEMA", sqlServerConfiguration.getSchema());
             case oracle:
-                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), OracleConfiguration.class);
+                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), OracleConfiguration.class);
                 if(StringUtils.isEmpty(oracleConfiguration.getSchema())){
                     ExceptionUtil.throwException("schema_is_empty");
                 }
                 return "select VIEW_NAME  from all_views where owner='" + oracleConfiguration.getSchema() + "'";
             case postgresql:
-                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), PgConfiguration.class);
+                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), PgConfiguration.class);
                 if(StringUtils.isEmpty(pgConfiguration.getSchema())){
                     ExceptionUtil.throwException("schema_is_empty");
                 }
@@ -238,8 +228,8 @@ public class JdbcProvider extends DatasourceProvider{
         }
     }
 
-    private String getTablesSql(DatasourceRequest datasourceRequest){
-        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceRequest.getDatasourceEntity().getType());
+    private String getTablesSql(DatasourceEntity datasourceEntity){
+        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceEntity.getType());
         switch (datasourceType) {
             case mysql:
             case mariadb:
@@ -247,7 +237,7 @@ public class JdbcProvider extends DatasourceProvider{
             case ds_doris:
                 return "show tables;";
             case sqlServer:
-                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), SqlServerConfiguration.class);
+                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), SqlServerConfiguration.class);
                 if(StringUtils.isEmpty(sqlServerConfiguration.getSchema())){
                     ExceptionUtil.throwException("schema_is_empty");
                 }
@@ -255,29 +245,29 @@ public class JdbcProvider extends DatasourceProvider{
                         .replace("DATABASE", sqlServerConfiguration.getDataBase())
                         .replace("DS_SCHEMA", sqlServerConfiguration.getSchema());
             case oracle:
-                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), OracleConfiguration.class);
+                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), OracleConfiguration.class);
                 if(StringUtils.isEmpty(oracleConfiguration.getSchema())){
                     ExceptionUtil.throwException("schema_is_empty");
                 }
                 return "select table_name, owner from all_tables where owner='" + oracleConfiguration.getSchema() + "'";
             case postgresql:
-                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), PgConfiguration.class);
+                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), PgConfiguration.class);
                 if(StringUtils.isEmpty(pgConfiguration.getSchema())){
                     ExceptionUtil.throwException("schema_is_empty");
                 }
                 return "SELECT tablename FROM  pg_tables WHERE  schemaname='SCHEMA' ;".replace("SCHEMA", pgConfiguration.getSchema());
             case ck:
-                CHConfiguration chConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), CHConfiguration.class);
+                CHConfiguration chConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), CHConfiguration.class);
                 return "SELECT name FROM system.tables where database='DATABASE';".replace("DATABASE", chConfiguration.getDataBase());
             default:
                 return "show tables;";
         }
     }
 
-    private void addToPool(DatasourceRequest datasourceRequest) throws PropertyVetoException {
+    private void addToPool(DatasourceEntity datasourceEntity) throws PropertyVetoException {
         ComboPooledDataSource dataSource;
         dataSource = new ComboPooledDataSource();
-        JdbcConfiguration jdbcConfiguration = setCredential(datasourceRequest, dataSource);
+        JdbcConfiguration jdbcConfiguration = setCredential(datasourceEntity, dataSource);
         dataSource.setMaxIdleTime(jdbcConfiguration.getMaxIdleTime()); // 最大空闲时间
         dataSource.setAcquireIncrement(jdbcConfiguration.getAcquireIncrement());// 增长数
         dataSource.setInitialPoolSize(jdbcConfiguration.getInitialPoolSize());// 初始连接数
@@ -293,18 +283,18 @@ public class JdbcProvider extends DatasourceProvider{
 //        dataSource.setPreferredTestQuery("SELECT 1");
         dataSource.setDebugUnreturnedConnectionStackTraces(true);
         dataSource.setUnreturnedConnectionTimeout(3600);
-        jdbcConnection.put(datasourceRequest.getDatasourceEntity().getId(), dataSource);
+        jdbcConnection.put(datasourceEntity.getId(), dataSource);
     }
 
-    private JdbcConfiguration setCredential(DatasourceRequest datasourceRequest, ComboPooledDataSource dataSource) throws PropertyVetoException {
-        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceRequest.getDatasourceEntity().getType());
+    private JdbcConfiguration setCredential(DatasourceEntity datasourceEntity, ComboPooledDataSource dataSource) throws PropertyVetoException {
+        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceEntity.getType());
         JdbcConfiguration jdbcConfiguration = new JdbcConfiguration();
         switch (datasourceType) {
             case mysql:
             case mariadb:
             case de_doris:
             case ds_doris:
-                MysqlConfiguration mysqlConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), MysqlConfiguration.class);
+                MysqlConfiguration mysqlConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), MysqlConfiguration.class);
                 dataSource.setUser(mysqlConfiguration.getUsername());
                 dataSource.setDriverClass(mysqlConfiguration.getDriver());
                 dataSource.setPassword(mysqlConfiguration.getPassword());
@@ -312,7 +302,7 @@ public class JdbcProvider extends DatasourceProvider{
                 jdbcConfiguration = mysqlConfiguration;
                 break;
             case sqlServer:
-                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), SqlServerConfiguration.class);
+                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), SqlServerConfiguration.class);
                 dataSource.setUser(sqlServerConfiguration.getUsername());
                 dataSource.setDriverClass(sqlServerConfiguration.getDriver());
                 dataSource.setPassword(sqlServerConfiguration.getPassword());
@@ -320,7 +310,7 @@ public class JdbcProvider extends DatasourceProvider{
                 jdbcConfiguration = sqlServerConfiguration;
                 break;
             case oracle:
-                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), OracleConfiguration.class);
+                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), OracleConfiguration.class);
                 dataSource.setUser(oracleConfiguration.getUsername());
                 dataSource.setDriverClass(oracleConfiguration.getDriver());
                 dataSource.setPassword(oracleConfiguration.getPassword());
@@ -328,7 +318,7 @@ public class JdbcProvider extends DatasourceProvider{
                 jdbcConfiguration = oracleConfiguration;
                 break;
             case postgresql:
-                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), PgConfiguration.class);
+                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), PgConfiguration.class);
                 dataSource.setUser(pgConfiguration.getUsername());
                 dataSource.setDriverClass(pgConfiguration.getDriver());
                 dataSource.setPassword(pgConfiguration.getPassword());
@@ -336,7 +326,7 @@ public class JdbcProvider extends DatasourceProvider{
                 jdbcConfiguration = pgConfiguration;
                 break;
             case ck:
-                CHConfiguration chConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), CHConfiguration.class);
+                CHConfiguration chConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), CHConfiguration.class);
                 dataSource.setUser(chConfiguration.getUsername());
                 dataSource.setDriverClass(chConfiguration.getDriver());
                 dataSource.setPassword(chConfiguration.getPassword());
@@ -349,10 +339,15 @@ public class JdbcProvider extends DatasourceProvider{
         return jdbcConfiguration;
     }
 
-    public void exec(DatasourceRequest datasourceRequest) throws Exception {
-        try(Connection connection = getConnectionFromPool(datasourceRequest);Statement stat = connection.createStatement();){
-            Boolean result = stat.execute(datasourceRequest.getQuery());
+    @Override
+    public boolean execute(DatasourceRequest datasourceRequest){
+        boolean res = false;
+        try(Connection connection = getConnectionFromPool(datasourceRequest.getDatasourceEntity());Statement stat = connection.createStatement();){
+             res = stat.execute(datasourceRequest.getQuery());
+        }catch(Exception e){
+            ExceptionUtil.throwException(e.getMessage());
         }
+        return res;
     }
 
     private List<String[]> fetchResult(ResultSet rs) throws Exception {
@@ -379,43 +374,43 @@ public class JdbcProvider extends DatasourceProvider{
         return list;
     }
 
-    private Connection getConnectionFromPool(DatasourceRequest datasourceRequest) throws Exception {
-        ComboPooledDataSource dataSource = jdbcConnection.get(datasourceRequest.getDatasourceEntity().getId());
+    private Connection getConnectionFromPool(DatasourceEntity datasourceEntity) throws Exception {
+        ComboPooledDataSource dataSource = jdbcConnection.get(datasourceEntity.getId());
         if (dataSource == null) {
-            handleDatasource(datasourceRequest, "add");
+            handleDatasource(datasourceEntity, "add");
         }
-        dataSource = jdbcConnection.get(datasourceRequest.getDatasourceEntity().getId());
+        dataSource = jdbcConnection.get(datasourceEntity.getId());
         Connection co = dataSource.getConnection();
         return co;
     }
 
-    private static Connection getConnection(DatasourceRequest datasourceRequest) throws Exception {
+    private static Connection getConnection(DatasourceEntity datasourceEntity) throws Exception {
         String username = null;
         String password = null;
         String driver = null;
         String jdbcurl = null;
-        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceRequest.getDatasourceEntity().getType());
+        DatasourceTypes datasourceType = DatasourceTypes.valueOf(datasourceEntity.getType());
         Properties props = new Properties();
         switch (datasourceType) {
             case mysql:
             case mariadb:
             case de_doris:
             case ds_doris:
-                MysqlConfiguration mysqlConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(),MysqlConfiguration.class);
+                MysqlConfiguration mysqlConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(),MysqlConfiguration.class);
                 username = mysqlConfiguration.getUsername();
                 password = mysqlConfiguration.getPassword();
                 driver = mysqlConfiguration.getDriver();
                 jdbcurl = mysqlConfiguration.getJdbc();
                 break;
             case sqlServer:
-                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), SqlServerConfiguration.class);
+                SqlServerConfiguration sqlServerConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), SqlServerConfiguration.class);
                 username = sqlServerConfiguration.getUsername();
                 password = sqlServerConfiguration.getPassword();
                 driver = sqlServerConfiguration.getDriver();
                 jdbcurl = sqlServerConfiguration.getJdbc();
                 break;
             case oracle:
-                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), OracleConfiguration.class);
+                OracleConfiguration oracleConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), OracleConfiguration.class);
                 username = oracleConfiguration.getUsername();
                 password = oracleConfiguration.getPassword();
                 driver = oracleConfiguration.getDriver();
@@ -424,14 +419,14 @@ public class JdbcProvider extends DatasourceProvider{
 //                props.put( "oracle.jdbc.ReadTimeout" , "5000" ) ;
                 break;
             case postgresql:
-                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), PgConfiguration.class);
+                PgConfiguration pgConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), PgConfiguration.class);
                 username = pgConfiguration.getUsername();
                 password = pgConfiguration.getPassword();
                 driver = pgConfiguration.getDriver();
                 jdbcurl = pgConfiguration.getJdbc();
                 break;
             case ck:
-                CHConfiguration chConfiguration = JSONUtil.toBean(datasourceRequest.getDatasourceEntity().getConfiguration(), CHConfiguration.class);
+                CHConfiguration chConfiguration = JSONUtil.toBean(datasourceEntity.getConfiguration(), CHConfiguration.class);
                 username = chConfiguration.getUsername();
                 password = chConfiguration.getPassword();
                 driver = chConfiguration.getDriver();

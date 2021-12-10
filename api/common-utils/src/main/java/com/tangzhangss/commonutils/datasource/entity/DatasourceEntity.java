@@ -16,7 +16,9 @@ public class DatasourceEntity extends SysBaseEntity implements Serializable {
     private String name;//名称
     private String description;//描述
     private String type;//类型 mysql pg oracle doris...
-    private String status;//状态 success fail
+    //每次修改都回到待测试，只有测试成功才能使用(可以在保存的时候自动链接测试回写连接状态)
+    private Integer status=0;//状态 0 待测试 1 成功 2 失败
+    private String message;//状态 连接失败的message或其他
     @Column(columnDefinition = "TEXT")
     private String configuration;//配置详情
 

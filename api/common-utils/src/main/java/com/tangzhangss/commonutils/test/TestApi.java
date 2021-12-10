@@ -48,10 +48,7 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
 
 
         return Result.ok().data(cn.hutool.core.collection.ListUtil.of(
-                provider.getTableData(datasourceRequest),
-                provider.getTables(datasourceRequest),
-                provider.getSchema(datasourceRequest),
-                provider.getViews(datasourceRequest)
+                provider.checkStatus(datasourceRequest.getDatasourceEntity())
         ));
     }
 

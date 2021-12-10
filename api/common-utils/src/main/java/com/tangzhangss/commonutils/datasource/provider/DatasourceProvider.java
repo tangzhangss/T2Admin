@@ -2,6 +2,7 @@ package com.tangzhangss.commonutils.datasource.provider;
 
 import com.tangzhangss.commonutils.datasource.dto.TableData;
 import com.tangzhangss.commonutils.datasource.dto.TableField;
+import com.tangzhangss.commonutils.datasource.entity.DatasourceEntity;
 import com.tangzhangss.commonutils.datasource.request.DatasourceRequest;
 import com.tangzhangss.commonutils.exception.ServiceException;
 
@@ -14,19 +15,22 @@ import java.util.Map;
 public abstract class DatasourceProvider {
 
     //获取数据 tables信息
-    abstract public TableData getTableData(DatasourceRequest datasourceRequest);
+    public abstract  TableData getTableData(DatasourceRequest datasourceRequest);
 
     //获取schema
-    abstract public TableData getSchema(DatasourceRequest datasourceRequest);
+    public abstract TableData getSchema(DatasourceEntity datasourceEntity);
 
     //获取视图
-    abstract public TableData getViews(DatasourceRequest dsr);
+    public abstract  TableData getViews(DatasourceEntity datasourceEntity);
 
     //获取table
-    abstract public TableData getTables(DatasourceRequest dsr);
+    public abstract  TableData getTables(DatasourceEntity datasourceEntity);
 
 
     //测试连接
-    abstract public void checkStatus(DatasourceRequest datasourceRequest);
+    public abstract DatasourceEntity checkStatus(DatasourceEntity datasourceEntity);
+
+    //执行语句
+    public abstract  boolean execute(DatasourceRequest datasourceRequest);
 }
 
