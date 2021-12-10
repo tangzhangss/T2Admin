@@ -10,6 +10,9 @@ import java.util.*;
 
 public abstract class SysBaseApi<T extends SysBaseEntity,TT extends SysBaseService> {
 
+    /**
+     * service
+     */
     @Autowired
     protected TT myService;
 

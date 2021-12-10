@@ -23,9 +23,12 @@ public class FileTool {
      * excel解析
      * @param file 非必需
      * @param fileUrl 非必需（如果有，以这个为主）
+     * @param isVerifiable 是否需要校验 默认校验 如果需要校验excel格式需要变化，相见具体方法注释
      */
     @PostMapping("/analysis_excel")
-    public Result analysisExcel(@RequestParam(name = "file",required = false) MultipartFile file, @RequestParam(name = "url",required = false)String fileUrl) throws Exception {
+    public Result analysisExcel(@RequestParam(name = "file",required = false) MultipartFile file,
+                                @RequestParam(name = "url",required = false)String fileUrl,
+                                @RequestParam(name = "isVerifiable",required = false,defaultValue = "true")Boolean isVerifiable) throws Exception {
         File excelFile=null;
         if(fileUrl!=null){
             excelFile= FileUtil.urlPathTransferToFile(fileUrl);
@@ -34,14 +37,21 @@ public class FileTool {
 
         }
         if (excelFile == null || !FileUtil.validateExcel(excelFile.getName())) ExceptionUtil.throwException("请选择Excel文件");
-        List<List<Object>> excelData = FileUtil.analysisExcel(excelFile);
-        JSONObject data=FileUtil.getExcelHeaderData(excelData);
-        List<Map<Object, Object>> resData = FileUtil.getJsonObject(excelData);
-        JSONObject json = new JSONObject();
-        json.set("header",data);
-        json.set("body",resData);
-        return new Result(HttpStatus.OK,json);
-    }
+        Object analysisResult;
 
+        if(isVerifiable){
+            List<List<Object>> excelData = FileUtil.analysisExcelVerifiable(excelFile);
+            JSONObject data=FileUtil.getExcelHeaderData(excelData);
+            List<Map<Object, Object>> resData = FileUtil.getJsonObject(excelData);
+            JSONObject json = new JSONObject();
+            json.set("header",data);
+            json.set("body",resData);
+            analysisResult=json;
+        }else{
+            analysisResult=FileUtil.analysisExcel(excelFile);
+        }
+
+        return new Result(HttpStatus.OK,analysisResult);
+    }
 
 }

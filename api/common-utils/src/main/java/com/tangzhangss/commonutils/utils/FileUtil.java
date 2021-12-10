@@ -115,14 +115,14 @@ public class FileUtil {
     /**
      * 解析Excel文件
      * 检验解析文件的结果
-     * 第一行字段名必须以 i s n d t b开头 表示字段类型 iPassword=>password表示字段英文名字
+     * 第一行字段名必须以 i s n d t b开头 表示字段类型 iPassword=password表示字段英文名字
      * 第二行字段名字 后面 * 表示必填
      * 后面的是数据行
      * sId  sName
      * 主键*  名字
      * 表示字段都是String类型的。主键必填
      */
-    public static List<List<Object>> analysisExcel(File excelFile) throws Exception {
+    public static List<List<Object>> analysisExcelVerifiable(File excelFile) throws Exception {
         try(FileInputStream fileInputStream = new FileInputStream(excelFile)){
             Workbook wb = null;
             //        Workbook wb = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(
@@ -140,10 +140,9 @@ public class FileUtil {
             for (int i = 0; i <= (sheet.getPhysicalNumberOfRows() - 1); i++) {
                 row = sheet.getRow(i);
                 if (row == null){
-                    ExceptionUtil.throwException("解析错误，请删除中间的空行");
+                    continue;
                 }
                 List<Object> linked = new LinkedList<Object>();
-
                 //行的解析状态
                 Integer[] iStatus= new Integer[1];//状态0:该行正常5:该行警告信息/10:该行错误校验不通过
                 iStatus[0]=0;
@@ -184,6 +183,62 @@ public class FileUtil {
                         linked.add(iStatus[0]);
                         linked.add(sMessage);
                     }
+                    list.add(linked);
+                }
+            }
+            return list;
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 基本解析excel
+     * @param excelFile 文件
+     * @return 解析之后的list
+     * @throws Exception
+     */
+    public static List<List<Object>> analysisExcel(File excelFile) throws Exception {
+        try(FileInputStream fileInputStream = new FileInputStream(excelFile)){
+            Workbook wb = null;
+            //        Workbook wb = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(
+//                sType)?new XSSFWorkbook(new FileInputStream(tempFile)):new HSSFWorkbook(new FileInputStream(tempFile));
+            if (isExcel2007(excelFile.getName())) {
+                wb = new XSSFWorkbook(fileInputStream);
+            } else {
+                wb = new HSSFWorkbook(fileInputStream);
+            }
+            List<List<Object>> list = new LinkedList<List<Object>>();
+            // 读取第一张表格内容
+            Sheet sheet = wb.getSheetAt(0);
+            Row row = null;
+            Cell cell = null;
+            for (int i = 0; i <= (sheet.getPhysicalNumberOfRows() - 1); i++) {
+                row = sheet.getRow(i);
+                if (row == null) {
+                    continue;
+                }
+                List<Object> linked = new LinkedList<Object>();
+
+                //row.getLastCellNum()是获取最后一个不为空的列是第几个
+                //直接用第一行的列数作为标准
+                for (int j = 0; j <= sheet.getRow(0).getLastCellNum() - 1; j++) {
+                    Object value = null;
+                    cell = row.getCell(j);
+                    if (cell == null) {
+                        linked.add(null);//每一个单元格都一一对应
+                        continue;
+                    }
+                    CellType cellType = cell.getCellType();
+                    //如果是函数的话 就会走这里把计算结果算出来
+                    if (cell.getCellType() == CellType.FORMULA) {
+                        cellType = cell.getCachedFormulaResultType();
+                    }
+                    value = getCellValue(cell, cellType, sheet, i, j);
+
+                    linked.add(value);
+                }
+                if (linked.size()!= 0) {
                     list.add(linked);
                 }
             }
@@ -258,6 +313,54 @@ public class FileUtil {
         }
         return value;
     }
+
+    /**
+     * 计算单元格的值 不带解析校验
+     */
+    private static Object getCellValue(Cell cell,CellType cellType,Sheet sheet,int i,int j){
+        Object value = null;
+        switch (cellType) {
+            case STRING:
+                value = cell.getStringCellValue();
+                break;
+            case NUMERIC:
+                //日期数据返回LONG类型的时间戳
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    if("DateTime".equals(getSheetCellType(sheet,j))){
+                        value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cell.getDateCellValue());
+                    }else{
+                        value = new SimpleDateFormat("yyyy-MM-dd").format(cell.getDateCellValue());
+                    }
+                } else {
+                    //数值类型返回double类型的数字
+                    if("i".equals(getColumnTypePrefix(sheet,j))){
+                        value = (int)cell.getNumericCellValue();
+                    }else{
+                        //默认double类型
+                        value = cell.getNumericCellValue();
+                    }
+                    //如果value是xx.00这种格式的
+                    //能转成int的就转成int
+                    int vInt = (int)cell.getNumericCellValue();
+                    if(CompareUtil.compare(Double.valueOf(vInt),value,false)==0)value=vInt;
+
+                }
+                break;
+            case BOOLEAN:
+                //布尔类型
+                value = cell.getBooleanCellValue();
+                break;
+            case BLANK:
+                //空单元格
+                value=null;
+                break;
+            default:
+                value = cell.toString();
+        }
+        return value;
+    }
+
+
     /**
      * multipartFile 对象转 file对象
      */

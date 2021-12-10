@@ -2,16 +2,14 @@ package com.tangzhangss.commonutils.base;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
 import com.tangzhangss.commonutils.config.Attribute;
 import com.tangzhangss.commonutils.exception.ServiceException;
+import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.service.DBService;
 import com.tangzhangss.commonutils.uidgenerator.UidGeneratorService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.ExceptionUtil;
-import net.bytebuddy.description.annotation.AnnotationDescription;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.slf4j.Logger;
@@ -22,7 +20,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +28,9 @@ import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Annotation;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.nio.Buffer;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -47,7 +42,10 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
     //日志打印
     protected Logger logger = LoggerFactory.getLogger(getClass());
-
+    @Autowired
+    protected HttpServletRequest request;
+    @Autowired
+    protected HttpServletResponse response;
 
     @Value("${spring.datasource.driverClassName:mysql}")
     private String driverClassName;
@@ -58,6 +56,8 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     @Autowired
     protected EntityManager entityManager;
 
+    @Autowired
+    protected QueryDslUtil queryDslUtil;
 
     @Autowired
     protected UidGeneratorService uidGeneratorService;
@@ -161,7 +161,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     /**
      * 根据分组条件查询
      * api调用
-     * 如：&groupBy=id,code
+     * 如：groupBy=id,code
      *
      */
     protected CriteriaQuery queryByGroup(String groupValue,CriteriaBuilder builder,Root<TT> root1,CriteriaQuery cq) {
@@ -317,7 +317,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     /**
      * 构建查询条件
      * @param key 如：Ａ＠ＥＱ Ａ.B@IN A@LIKE  A_EQ,B_LIKE@OR
-     * 多字段OR查询  A_EQ,B_LIKE@OR => (A@EQ=value or B@LIKE=value)
+     * 多字段OR查询  A_EQ,B_LIKE@OR = (A@EQ=value or B@LIKE=value)
      *            也可省略_EQ,_LIKE 默认_EQ
      */
     protected Predicate getPredicate(String key, Object value,CriteriaBuilder builder,Root<T> root){
@@ -1061,6 +1061,5 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
         dbService.executeSql(sql.toString());
     }
-
 }
 

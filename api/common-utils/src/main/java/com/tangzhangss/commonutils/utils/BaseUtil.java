@@ -33,7 +33,7 @@ public class BaseUtil {
 
     /**
      * 获取本机的IPV4地址
-     *
+     * @return ipv4地址
      */
     public static String getIPV4(){
         String ip = "";
@@ -69,8 +69,8 @@ public class BaseUtil {
      * 如：X-Forwarded-For：192.168.1.110, 192.168.1.120, 192.168.1.130,
      * 192.168.1.100
      * 用户真实IP为： 192.168.1.110
-     * @param request
-     * @return
+     * @param request 当前请求
+     * @return 用户真实IP地址
      */
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-forwarded-for");
@@ -94,6 +94,8 @@ public class BaseUtil {
 
     /**
      * 获取本机ip
+     * 
+     * @return 本机ip地址
      */
     public static String getLocalIP() throws SocketException {
         String ip = null;
@@ -139,11 +141,20 @@ public class BaseUtil {
     /**
      * 根据路径获取文件内容
      * @param path 路径 classpath 路径
+     * @param charset 编码
+     * @return 文本内容
+     * @throws IOException
      */
     public static String readFileContent(String path,String charset) throws IOException {
         InputStream inputStream = new ClassPathResource(path).getInputStream();
         return  readInputStream(inputStream,charset);
     }
+    /**
+     * 根据路径获取文件内容
+     * @param path 路径 classpath 路径
+     * @return 文本内容
+     * @throws IOException
+     */
     public static String readFileContent(String path) throws IOException {
         InputStream inputStream = new ClassPathResource(path).getInputStream();
         return  readInputStream(inputStream,null);
@@ -151,7 +162,10 @@ public class BaseUtil {
 
     /**
      * 反射获取属性值得到属性值 浅 fieldName 一级
-     * @param obj
+     * @param obj 对象
+     * @param fieldName 对象值
+     * @return 属性值
+     * @throws IllegalAccessException
      */
     public static Object readAttributeValue(Object obj, String fieldName) throws  IllegalAccessException {
         //得到class
@@ -166,7 +180,7 @@ public class BaseUtil {
     }
     /**
      * 反射获取属性值得到属性值 深度 fieldName 多级: A.B.C
-     * @param obj
+     * @param obj 对象
      */
     public static Object readAttributeValueDeep(Object obj, String fieldName) throws IllegalAccessException {
         String [] fileNameArr = fieldName.split("\\.");
@@ -323,7 +337,7 @@ public class BaseUtil {
     /**
      * 获取实体的值 转map
      * value只能转成String，用于处理sql(其他类型的请使用JSON对象转换)
-     * @Param isUnderlineCase 是否转下划线命名
+     * @param isUnderlineCase 是否转下划线命名
      */
     public static List<Map<String,String>> getSqlEntityValue(List dataList,boolean isUnderlineCase){
         List<Map<String,String>> paramsList = new ArrayList<>();

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -68,6 +69,19 @@ public class GlobalException {
         json.put("class",e.getClass().toString());
         json.put("trace",e.getStackTrace());
         return new Result<JSONObject>(HttpStatus.INTERNAL_SERVER_ERROR,json);
+    }
+
+    /**
+     * 校验失败异常
+     * 注解里面的message请用 Translator.get("xxx")
+     * @param exception 异常类
+     * @return Result
+     */
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public Result handle(MethodArgumentNotValidException exception){
+        Result result = new Result(ResultCode.BAD_REQUEST,exception.getBindingResult().getFieldError().getDefaultMessage());
+        return  result;
     }
 
 }

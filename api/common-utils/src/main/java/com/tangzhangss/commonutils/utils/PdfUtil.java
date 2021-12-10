@@ -24,7 +24,7 @@ public class PdfUtil {
      * @param pdfFile pdf文件
      * @param outputFile 输出的文件
      * @param dpi 越大转换后越清晰，相对转换速度越慢,一般电脑默认96dpi
-     * @return 图片File,有几页就有多少图片
+     * 图片File,有几页就有多少图片
      */
     public static void pdf2ImageExec(File pdfFile, List<File> outputFile, Integer dpi) throws IOException {
         if(dpi==null)dpi=96;

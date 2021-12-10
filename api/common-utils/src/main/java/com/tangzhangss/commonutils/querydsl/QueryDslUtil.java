@@ -53,8 +53,8 @@ public class QueryDslUtil{
      * @param request 前端请求--构建查询条件-格式如：base里面的get()
      * @param paramsMap 后端条件构建
      * @param entityPathMap 后端条件构建
-     *                      A.b@EQ  =>  map.put("A",entityPath)
-     *                      A.B.c@EQ  =>  map.put("A.B",entityPath)
+     *                      A.b@EQ  =  map.put("A",entityPath)
+     *                      A.B.c@EQ  =  map.put("A.B",entityPath)
      * @return
      */
     public QueryResults getQueryFetchResults(HttpServletRequest request, Map<String, String> paramsMap,Map<String,EntityPath> entityPathMap) {

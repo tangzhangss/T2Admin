@@ -4,15 +4,16 @@ import cn.hutool.json.JSONObject;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
+import com.tangzhangss.commonutils.datasource.service.DatasourceService;
+import com.tangzhangss.commonutils.datasource.provider.DatasourceProvider;
+import com.tangzhangss.commonutils.datasource.provider.ProviderFactory;
+import com.tangzhangss.commonutils.datasource.request.DatasourceRequest;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.syscode.SysCodeService;
 import com.tangzhangss.commonutils.utils.ListUtil;
-import lombok.SneakyThrows;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,28 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
     HttpServletRequest request;
     @Autowired
     SysCodeService sysCodeService;
+    @Autowired
+    DatasourceService datasourceService;
+
+
+    @PostMapping("/datasource/no_auth")
+    public Result datasource(@RequestBody DatasourceRequest datasourceRequest) throws Exception {
+
+        if(datasourceRequest.getDatasourceEntity()==null){
+            datasourceRequest.setDatasourceEntity(datasourceService.get(datasourceRequest.getDatasourceId()));
+        }
+
+        DatasourceProvider provider = ProviderFactory.getProvider(datasourceRequest.getDatasourceEntity().getType());
+
+
+        return Result.ok().data(cn.hutool.core.collection.ListUtil.of(
+                provider.getTableData(datasourceRequest),
+                provider.getTables(datasourceRequest),
+                provider.getSchema(datasourceRequest),
+                provider.getViews(datasourceRequest)
+        ));
+    }
+
 
     @GetMapping("/___")
     public Result ___(){

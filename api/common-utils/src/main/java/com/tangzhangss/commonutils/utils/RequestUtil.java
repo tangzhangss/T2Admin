@@ -2,6 +2,7 @@ package com.tangzhangss.commonutils.utils;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONObject;
+import com.tangzhangss.commonutils.resultdata.ResultCode;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -16,7 +17,7 @@ public class RequestUtil {
                 paramArr.add(keys[i]);
         }
         if(paramArr.size()!=0){
-            ExceptionUtil.throwException("request_check_param_null", StringUtils.join(paramArr.iterator(),","));
+            ExceptionUtil.throwException("request_check_param_null", ResultCode.BAD_REQUEST, StringUtils.join(paramArr.iterator(),","));
         }
 
     }
