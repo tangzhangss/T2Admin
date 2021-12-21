@@ -226,7 +226,7 @@ public class KdnUtil {
         String result= HttpRequest.post(config.getReqURL()).form(params).execute().body();
         JSONObject jsonObject = JSONUtil.parseObj(result);
         if(jsonObject.getStr("Success").equals("false")){
-            ExceptionUtil.throwException("电子面单获取失败,"+jsonObject.getStr("Reason"));
+            ExceptionUtil.throwException("Failed to obtain electronic face sheet,"+jsonObject.getStr("Reason"));
         }
         //根据公司业务处理返回的信息......
         return jsonObject;

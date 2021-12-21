@@ -40,10 +40,10 @@ public class SysCodeService extends SysBaseService<SysCodeEntity,SysCodeDao> {
         // 获取定义的规则
         SysCodeEntity sysCode = getOneCustomWithMapString("noCode@EQ="+noCode);
         if (sysCode==null) {
-            ExceptionUtil.throwException("未定义编号规则,请联系管理员");
+            ExceptionUtil.throwException("code_formula_no_defined",noCode);
         }
         String sFormula = sysCode.getFormula();
-        if (StringUtils.isBlank(sFormula))ExceptionUtil.throwException("未定义编号规则,请联系管理员");
+        if (StringUtils.isBlank(sFormula))ExceptionUtil.throwException("code_formula_no_defined",noCode);
 
         // 处理定义的规则,格式: PO[YEAR][MONTH][DAY]{4}
         //解析年月日和参数

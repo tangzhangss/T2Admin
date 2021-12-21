@@ -13,11 +13,10 @@ import feign.Logger;
 import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
-import feign.hystrix.FallbackFactory;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+
 
 import java.io.IOException;
 import java.nio.charset.Charset;

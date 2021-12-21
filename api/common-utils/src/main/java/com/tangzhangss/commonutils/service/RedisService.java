@@ -25,9 +25,6 @@ public class RedisService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Value("${custom.debug:false}")
-    private boolean isDebug;
-
     /**
      * 写入缓存
      * @param key

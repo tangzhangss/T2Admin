@@ -4,17 +4,12 @@ import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.tangzhangss.commonutils.base.SysBaseEntity;
 import com.tangzhangss.commonutils.config.Attribute;
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.core.io.ClassPathResource;
 
-import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.lang.reflect.Field;
@@ -26,10 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BaseUtil {
-    /**
-     * 获取日志对象，构造函数传入当前类，查找日志方便定位
-     */
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 获取本机的IPV4地址
@@ -94,7 +85,7 @@ public class BaseUtil {
 
     /**
      * 获取本机ip
-     * 
+     *
      * @return 本机ip地址
      */
     public static String getLocalIP() throws SocketException {
@@ -209,7 +200,7 @@ public class BaseUtil {
         Class cls = obj.getClass();
         Field field = getField(fieldName,cls);
         if(field==null){
-            ExceptionUtil.throwException("属性#{0}不存在，请检查!",fieldName);
+            ExceptionUtil.throwException("variable_does_not_exist",fieldName);
         }
         //打开私有访问
         field.setAccessible(true);

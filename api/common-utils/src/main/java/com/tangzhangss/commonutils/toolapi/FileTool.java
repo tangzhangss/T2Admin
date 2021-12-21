@@ -36,7 +36,7 @@ public class FileTool {
             excelFile= FileUtil.multipartFileTransferToFile(file);
 
         }
-        if (excelFile == null || !FileUtil.validateExcel(excelFile.getName())) ExceptionUtil.throwException("请选择Excel文件");
+        if (excelFile == null || !FileUtil.validateExcel(excelFile.getName())) ExceptionUtil.throwException("invalid_excel");
         Object analysisResult;
 
         if(isVerifiable){

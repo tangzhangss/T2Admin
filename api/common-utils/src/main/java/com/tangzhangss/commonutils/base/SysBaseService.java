@@ -12,8 +12,6 @@ import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.ExceptionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -39,9 +37,6 @@ import java.util.stream.Collectors;
 
 @PropertySource({"classpath:application.properties"})
 public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseDao>{
-
-    //日志打印
-    protected Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     protected HttpServletRequest request;
     @Autowired
@@ -616,7 +611,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             return;
         }
         if (data.isSystemic()){
-            throw new ServiceException("系统创建的记录，不可进行此项操作！");
+            throw new ServiceException("system_data_not_support_operation");
         }
     }
     protected void beforeDeleteData(List<T> data){}
@@ -692,7 +687,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      * 检测和设置编码 多个
      */
     public void checkAndSetCodeFormula(List<TT> datas,String [] codes,String columnName) throws Exception{
-        if (datas.size()!=codes.length) ExceptionUtil.throwException("参数错误,数据记录数与编码数量不一致");
+        if (datas.size()!=codes.length) ExceptionUtil.throwException("code_formula_param_error");
         //查询编码是否存在于数据库
         //20200126
         //给一个偏移量，如果存在相同的编码改为:  编码-偏移量
@@ -995,11 +990,12 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         //获取当前操作的实体class
         Class<T> clazz = (Class<T>) data.getClass();
         if(!clazz.isAnnotationPresent(Table.class)){
-            ExceptionUtil.throwException("实体#{0}未正确映射到数据库，无Table注解,请检查",clazz.toString());
+            ExceptionUtil.throwException("entity_not_correctly_mapped_to_database",clazz.toString());
         }
         //获取类上的注解 表的名字
         Table annotations = clazz.getAnnotation(Table.class);
         String tableName=annotations.name();
+        if(StringUtils.isBlank(tableName))ExceptionUtil.throwException("entity_not_correctly_mapped_to_database",clazz.toString());
         return tableName;
     }
     /**

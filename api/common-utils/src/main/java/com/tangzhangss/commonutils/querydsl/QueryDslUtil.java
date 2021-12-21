@@ -142,12 +142,12 @@ public class QueryDslUtil{
     @SneakyThrows
     public BooleanExpression getQQueryExpression(String key, Object value, EntityPath entityPath) {
         if(StringUtils.isBlank(key)){
-            ExceptionUtil.throwException("key参数错误!");
+            ExceptionUtil.throwException("check_param_null","key");
         }
         if (key.indexOf("@")==-1) return null;
         String [] arr = key.split("@");
         String sType = arr[1];
-        if(arr.length!=2)ExceptionUtil.throwException("key参数错误!");
+        if(arr.length!=2)ExceptionUtil.throwException("check_param_error","key");
         Object o = Optional.ofNullable(entityPath).orElse(fromEntity.get());
 
         SimpleExpression l = (SimpleExpression) BaseUtil.readAttributeValue(o,arr[0]);

@@ -32,7 +32,11 @@ public class PdfUtil {
             PDFRenderer renderer = new PDFRenderer(pdDocument);
             PdfReader reader = new PdfReader(new FileInputStream(pdfFile));
             int pages = reader.getNumberOfPages();// 获取PDF页数
-            if(pages>outputFile.size()) ExceptionUtil.throwException("pdf文件的页数为"+pages+"页，输出文件的数量不足");
+            if(pages>outputFile.size()){
+//                ExceptionUtil.throwException("pdf文件的页数为"+pages+"页，输出文件的数量不足");
+                //如果页数多了交忽略后面的页
+                pages=outputFile.size();
+            }
             for (int i = 0; i < pages; i++) {
                 BufferedImage image = renderer.renderImageWithDPI(i, dpi);
                 ImageIO.write(image, FileUtil.getSuffix(outputFile.get(i)),outputFile.get(i));

@@ -17,7 +17,7 @@ public class RequestUtil {
                 paramArr.add(keys[i]);
         }
         if(paramArr.size()!=0){
-            ExceptionUtil.throwException("request_check_param_null", ResultCode.BAD_REQUEST, StringUtils.join(paramArr.iterator(),","));
+            ExceptionUtil.throwException("check_param_null", ResultCode.BAD_REQUEST, StringUtils.join(paramArr.iterator(),","));
         }
 
     }

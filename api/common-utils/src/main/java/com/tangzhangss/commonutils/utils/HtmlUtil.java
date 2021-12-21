@@ -145,7 +145,7 @@ public class HtmlUtil {
             }
             return Base64Encoder.encode(outputStream.toByteArray());
         }catch (Exception e){
-            ExceptionUtil.throwException("HTML转Image失败:"+e.getMessage());
+            ExceptionUtil.throwException("HTML to Image fail:"+e.getMessage());
             return null;
         }
     }
