@@ -1,7 +1,6 @@
 package com.tangzhangss.commonutils.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.concurrent.TimeUnit;
  * token
  */
 @Service
-@PropertySource({"classpath:application.properties"})
 public class RedisService {
 
     @Autowired

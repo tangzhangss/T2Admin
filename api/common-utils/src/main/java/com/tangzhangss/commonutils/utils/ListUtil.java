@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ListUtil{
 
-    public List list;
+    public List list=new ArrayList();//默认arraylist
 
     public static ListUtil createArrayList(){
         ListUtil listUtil = new ListUtil();

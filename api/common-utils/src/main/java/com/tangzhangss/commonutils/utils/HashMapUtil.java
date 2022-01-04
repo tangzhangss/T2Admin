@@ -4,13 +4,14 @@ import java.util.*;
 
 public class HashMapUtil {
 
-    public HashMap hashMap;
+    public HashMap hashMap=new LinkedHashMap();//默认LinkedHashMap
 
     public static HashMapUtil createHashMap(){
         HashMapUtil listUtil = new HashMapUtil();
         listUtil.hashMap = new HashMap();
         return listUtil;
     }
+
     public static HashMapUtil createLinkedHashMap(){
         HashMapUtil listUtil = new HashMapUtil();
         listUtil.hashMap = new LinkedHashMap();

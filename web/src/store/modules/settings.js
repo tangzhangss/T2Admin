@@ -4,6 +4,7 @@ import cookie from "js-cookie";
 const { showSettings, fixedHeader, sidebarLogo } = defaultSettings
 
 const themeKey = "THEME_COLOR";
+const themeLanguageKey = "THEME_LANGUAGE";
 
 function initThemeColor(){
 
@@ -14,22 +15,30 @@ function initThemeColor(){
   }
   return themeColor;
 }
-
+function initThemeLanguage(){
+  let themeLanguage = cookie.get(themeLanguageKey);
+  themeLanguage=themeLanguage||"zh-CN";
+  return themeLanguage;
+}
 
 const state = {
   showSettings: showSettings,
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
-  themeColor:initThemeColor()
+  themeColor:initThemeColor(),
+  themeLanguage:initThemeLanguage()
 }
 
 
 const mutations = {
   CHANGE_SETTING: (state, { key, value }) => {
-    // eslint-disable-next-line no-prototype-builtins
     if (state.hasOwnProperty(key)) {
       state[key] = value
     }
+  },
+  UPDATE_THEME_LANGUAGE:(state,themeLanguage) =>{
+    cookie.set(themeLanguageKey,themeLanguage);
+    state.themeLanguage=themeLanguage;
   },
   UPDATE_THEME_COLOR:(state,themeColorObj) =>{
     for(let key  in themeColorObj){

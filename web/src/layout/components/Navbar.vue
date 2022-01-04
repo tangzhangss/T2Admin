@@ -3,6 +3,8 @@
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
+
+      <!--换肤-->
       <el-popover
               :visible="themeColorVisible"
               placement="bottom"
@@ -58,13 +60,19 @@
         </div>
       </el-popover>
 
-
-
       <div  title="刷新" style="display: inline-block;height:100%">
          <svg-icon icon-class="refresh" class="right-menu-item hover-effect" @click="refreshCurrentPage"></svg-icon>
 <!--         <svg class="right-menu-item hover-effect refresh" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-394d1fd8=""><path fill="currentColor" d="M771.776 794.88A384 384 0 0 1 128 512h64a320 320 0 0 0 555.712 216.448H654.72a32 32 0 1 1 0-64h149.056a32 32 0 0 1 32 32v148.928a32 32 0 1 1-64 0v-50.56zM276.288 295.616h92.992a32 32 0 0 1 0 64H220.16a32 32 0 0 1-32-32V178.56a32 32 0 0 1 64 0v50.56A384 384 0 0 1 896.128 512h-64a320 320 0 0 0-555.776-216.384z"></path></svg>-->
       </div>
       <screenfull  class="right-menu-item hover-effect screenfull"/>
+
+      <!--中英文-->
+      <div style="display: inline-block;line-height: 100%" class="pointer">
+        <svg @click="this.$store.commit('settings/UPDATE_THEME_LANGUAGE','zh-CN')" v-if="this.$store.getters.themeLanguage=='en-US'" t="1641276328769" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2244" width="32" height="32"><path d="M229.248 704V337.504h271.744v61.984h-197.76v81.28h184v61.76h-184v99.712h204.768V704h-278.72z m550.496 0h-70.24v-135.488c0-28.672-1.504-47.232-4.48-55.648a39.04 39.04 0 0 0-14.656-19.616 41.792 41.792 0 0 0-24.384-7.008c-12.16 0-23.04 3.328-32.736 10.016-9.664 6.656-16.32 15.488-19.872 26.496-3.584 11.008-5.376 31.36-5.376 60.992V704h-70.24v-265.504h65.248v39.008c23.168-30.016 52.32-44.992 87.488-44.992 15.52 0 29.664 2.784 42.496 8.352 12.832 5.6 22.56 12.704 29.12 21.376 6.592 8.672 11.2 18.496 13.76 29.504 2.56 11.008 3.872 26.752 3.872 47.264V704z" p-id="2245" fill="#1296db"></path><path d="M160 144a32 32 0 0 0-32 32V864a32 32 0 0 0 32 32h688a32 32 0 0 0 32-32V176a32 32 0 0 0-32-32H160z m0-64h688a96 96 0 0 1 96 96V864a96 96 0 0 1-96 96H160a96 96 0 0 1-96-96V176a96 96 0 0 1 96-96z" p-id="2246" fill="#1296db"></path></svg>
+        <svg @click="this.$store.commit('settings/UPDATE_THEME_LANGUAGE','en-US')" v-if="this.$store.getters.themeLanguage=='zh-CN'" t="1641276943230" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3077" width="32" height="32"><path d="M160 144a32 32 0 0 0-32 32V864a32 32 0 0 0 32 32h688a32 32 0 0 0 32-32V176a32 32 0 0 0-32-32H160z m0-64h688a96 96 0 0 1 96 96V864a96 96 0 0 1-96 96H160a96 96 0 0 1-96-96V176a96 96 0 0 1 96-96z" p-id="3078" fill="#1afa29"></path><path d="M482.176 262.272h59.616v94.4h196v239.072h-196v184.416h-59.616v-184.416H286.72v-239.04h195.456V262.24z m-137.504 277.152h137.504v-126.4H344.64v126.4z m197.12 0h138.048v-126.4H541.76v126.4z" p-id="3079" fill="#1afa29"></path></svg>
+      </div>
+
+      <div style="margin-right: 10px;"></div>
 
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -287,7 +295,6 @@ export default {
     align-items: center;
     justify-content: center;
     .screenfull{
-      margin-right: 10px;
       display: inline-block;
       height: 28px;
     }

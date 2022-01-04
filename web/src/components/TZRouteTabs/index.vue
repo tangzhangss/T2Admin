@@ -39,7 +39,7 @@
                 this.$store.commit("permission/DELETE_ROUTE_TAB",targetName);
                 if(this.$store.getters.routeTabs.length==0)this.$router.push("/");//跳转首页没有标签了
                 else if (targetName==this.tabsValue){
-                    //被删除的路径等于当前的路径,返回上一页
+                    //被删除的路径等于当前的路径,返回上一页--如果上一页被删除了会再出来
                     this.$router.go(-1);
                 }
             },

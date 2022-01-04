@@ -12,8 +12,13 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    //设置token
     let userInfo = store.getters.userInfo;
     config.headers['X-Token'] = userInfo && userInfo.token;
+
+    //设置语言
+    config.headers['accept-language']=store.getters.themeLanguage;
+
     return config
   },
   error => {

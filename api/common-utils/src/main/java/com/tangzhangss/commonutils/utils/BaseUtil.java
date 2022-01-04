@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 
 public class BaseUtil {
 
+    private BaseUtil(){}
+
     /**
      * 获取本机的IPV4地址
      * @return ipv4地址
@@ -210,9 +212,6 @@ public class BaseUtil {
 
     public static String string(String ...args){
         return StringUtils.join(args,"");
-    }
-    public static void main(String[] args) {
-
     }
 
     /**

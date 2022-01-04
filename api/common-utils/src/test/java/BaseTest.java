@@ -1,9 +1,15 @@
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.hutool.script.JavaScriptEngine;
+import cn.hutool.script.ScriptUtil;
 import com.alibaba.fastjson.JSON;
 import com.tangzhangss.commonutils.utils.BaseUtil;
+import io.lettuce.core.internal.HostAndPort;
 import org.junit.platform.commons.util.StringUtils;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 
 public class BaseTest {
 
@@ -25,15 +31,24 @@ public class BaseTest {
     /**
      * 测试float比较
      */
-    public static void main(String[] args) {
-        float a=0;
-        double b=0d;
+    public static void main(String[] args) throws ScriptException {
+        String str = "  var msg='hello';          "
+                + "  var number = 123;         "
+                + "  var array=['A','B','C'];  "
+                + "  var json={                "
+                + "      'name':'pd',          "
+                + "      'subjson':{           "
+                + "           'subname':'spd'  "
+                + "           ,'id':123        "
+                + "           }                "
+                + "      };                    ";
+        ScriptEngine jsEngine = ScriptUtil.createJsEngine();
+        jsEngine.eval(str);
+        Object number = jsEngine.get("number");
+        Object json = jsEngine.get("json");
+        Object array = jsEngine.get("array");
 
-        System.out.println(a==0);
-        System.out.println(b==0d);
-
-        System.out.println(StrUtil.toUnderlineCase("Unauthorized"));
-
+        System.out.println(number);
     }
 
 

@@ -7,5 +7,6 @@ export const getters = {
   routeTabs: state => state.permission.routeTabs, //用户路由数组
   externalServiceMap: state => state.permission.externalServiceMap, //外部服务的菜单id->url键值对
   // hasAuth: state => state.permission.hasAuth,//用户是否具备token__不仅用token还需要有菜单
-  themeColor:state=>state.settings.themeColor
+  themeColor:state=>state.settings.themeColor,//主题颜色
+  themeLanguage:state=>state.settings.themeLanguage,//主题语言
 }
