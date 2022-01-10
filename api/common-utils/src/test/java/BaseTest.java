@@ -5,6 +5,7 @@ import cn.hutool.script.JavaScriptEngine;
 import cn.hutool.script.ScriptUtil;
 import com.alibaba.fastjson.JSON;
 import com.tangzhangss.commonutils.utils.BaseUtil;
+import com.tangzhangss.commonutils.utils.JPAUtil;
 import io.lettuce.core.internal.HostAndPort;
 import org.junit.platform.commons.util.StringUtils;
 
@@ -24,7 +25,7 @@ public class BaseTest {
         BaseEntity baseEntity = JSONUtil.toBean(obj, BaseEntity.class);
         BaseEntity baseEntity2 = JSON.parseObject(JSONUtil.toJsonStr(obj), BaseEntity.class);
 
-        System.out.println(BaseUtil.sqlHandle(null,"ssss"));
+        System.out.println(JPAUtil.sqlHandle(null,"ssss"));
 
     }
 

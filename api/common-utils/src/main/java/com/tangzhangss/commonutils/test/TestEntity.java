@@ -15,9 +15,11 @@ import java.time.LocalDateTime;
 @Data
 @DynamicUpdate
 public class TestEntity extends SysBaseEntity {
+    @Column(name = "local_date")
     private LocalDate localDate;
     private LocalDateTime localDateTime;
     private Integer i;
+
     private Long id;
     @Transient
     private String sss;

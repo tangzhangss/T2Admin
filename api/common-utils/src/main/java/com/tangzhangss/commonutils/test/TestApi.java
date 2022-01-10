@@ -1,5 +1,6 @@
 package com.tangzhangss.commonutils.test;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,11 +161,25 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
         testEntityList.forEach(testEntity -> myService.update(testEntity));
         return Result.ok();
     }
+    @PutMapping("/update")
+    @Transactional
+    public Result updateCustom(@RequestBody List<TestEntity> testEntityList){
+        testEntityList.forEach(testEntity -> myService.updateCustom(testEntity));
+        return Result.ok();
+    }
 
     @PutMapping("/insert/no_auth")
     @Transactional
     public Result insert(@RequestBody List<TestEntity> testEntityList){
-        myService.insert(testEntityList);
+        List<TestEntity> withMap = myService.getWithMap(null);
+        List<TestEntity> saveAll = new ArrayList<>();
+        withMap.forEach(one->{
+            TestEntity e = BeanUtil.copyProperties(one,TestEntity.class);
+            e.setId(one.getId()*2);
+
+            saveAll.add(e);
+        });
+        myService.insert(saveAll);
 //        testEntityList.forEach(testEntity -> myService.insert(testEntity));
         return Result.ok();
     }

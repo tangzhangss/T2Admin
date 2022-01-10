@@ -2,14 +2,18 @@ package com.tangzhangss.commonutils.base;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import com.tangzhangss.commonutils.config.Attribute;
+import com.tangzhangss.commonutils.datasource.builder.UpdateBuilder;
 import com.tangzhangss.commonutils.exception.ServiceException;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.service.DBService;
+import com.tangzhangss.commonutils.test.TestEntity;
 import com.tangzhangss.commonutils.uidgenerator.UidGeneratorService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.ExceptionUtil;
+import com.tangzhangss.commonutils.utils.JPAUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -962,9 +966,9 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     public void insert(List<T> dataList){
         if(dataList.size()==0)return;//没有元素不更新
         T data = dataList.get(0);
-        String tableName = getSqlEntityTableName(data);
+        String tableName = JPAUtil.getSqlEntityTableName(data.getClass());
 
-        List<Map<String,String>> paramsList = BaseUtil.getSqlEntityValue(dataList,true);
+        List<Map<String,String>> paramsList = JPAUtil.getSqlEntityValue(dataList,true);
 
         //拼接sql
         StringBuffer sql = new StringBuffer();
@@ -983,21 +987,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         String sqlStr = sql.toString();
         dbService.executeSql(sqlStr);
     }
-    /**
-     * 获取实体表的名字
-     */
-    private String getSqlEntityTableName(T data){
-        //获取当前操作的实体class
-        Class<T> clazz = (Class<T>) data.getClass();
-        if(!clazz.isAnnotationPresent(Table.class)){
-            ExceptionUtil.throwException("entity_not_correctly_mapped_to_database",clazz.toString());
-        }
-        //获取类上的注解 表的名字
-        Table annotations = clazz.getAnnotation(Table.class);
-        String tableName=annotations.name();
-        if(StringUtils.isBlank(tableName))ExceptionUtil.throwException("entity_not_correctly_mapped_to_database",clazz.toString());
-        return tableName;
-    }
+
     /**
      * update语句
      * 执行insert update delete请确保dataList里面的的实体不能处于托管状态,不然事务结束jpa实体管理器也会自动提交保存（更新）
@@ -1009,9 +999,9 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     public void update(List<T> dataList){
         if(dataList.size()==0)return;//没有元素不更新
         T data = dataList.get(0);
-        String tableName = getSqlEntityTableName(data);
+        String tableName = JPAUtil.getSqlEntityTableName(data.getClass());
 
-        List<Map<String,String>> paramsList = BaseUtil.getSqlEntityValue(dataList,true);
+        List<Map<String,String>> paramsList = JPAUtil.getSqlEntityValue(dataList,true);
 
         for (Map<String, String> params : paramsList) {
             params.remove("id");//移除id-update不需要id属性
@@ -1034,6 +1024,60 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     }
 
     /**
+     * 用于执行update 更新
+     * 主要用于改变记录状态等少量字段更新以及id=id等精确更新提示执行效率
+     *
+     *  new Update().with(TestEntity.class)
+     *                 .set("i",100).set("localDate", LocalDate.now()).where("id",2).execute();
+     *
+     *  key使用实体类的属性名（不需要转成数据库字段名）
+     *
+     */
+    public class Update extends UpdateBuilder{
+
+        private Class entityClass;
+
+        public UpdateBuilder with(Class clazz) {
+            this.entityClass=clazz;
+            return this;
+        }
+
+        @Override
+        public String toSqlStr() {
+            if(this.entityClass==null) ExceptionUtil.throwException("this entity is null,please check");
+
+            String tableName = JPAUtil.getSqlEntityTableName(entityClass);
+            StringBuffer buffer = new StringBuffer();
+
+            List<String> setList = new ArrayList<>();
+            setMap.forEach((key,value)->{
+                String valueStr = JPAUtil.sqlHandle(value,BaseUtil.getField(key,entityClass).getGenericType().toString());
+                String colName=JPAUtil.getSqlEntityColumnName(entityClass,key);
+                key = Optional.ofNullable(colName).orElse(StrUtil.toUnderlineCase(key));
+                setList.add(key+"="+ valueStr);
+            });
+            List<String> whereList = new ArrayList<>();
+            whereMap.forEach((key,value)->{
+                String valueStr = JPAUtil.sqlHandle(value,BaseUtil.getField(key,entityClass).getGenericType().toString());
+                String colName=JPAUtil.getSqlEntityColumnName(entityClass,key);
+                key = Optional.ofNullable(colName).orElse(StrUtil.toUnderlineCase(key));
+                whereList.add(key+"="+ valueStr);
+            });
+
+            buffer.append("update ").append(tableName).append(" set ").append(StringUtils.join(setList,","))
+                    .append(" where ").append(StringUtils.join(whereList," and "))
+                    .append(";");
+
+
+            return buffer.toString();
+
+        }
+
+        public void execute(){
+            dbService.executeSql(toSqlStr());
+        }
+    }
+    /**
      * delete删除
      * 批量删除
      * 执行insert update delete请确保dataList里面的的实体不能处于托管状态,不然事务结束jpa实体管理器也会自动提交保存（更新）
@@ -1044,7 +1088,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     public void delete(List<T> dataList){
         if(dataList.size()==0)return;//没有元素不更新
         T data = dataList.get(0);
-        String tableName = getSqlEntityTableName(data);
+        String tableName = JPAUtil.getSqlEntityTableName(data.getClass());
 
 
         //拼接sql

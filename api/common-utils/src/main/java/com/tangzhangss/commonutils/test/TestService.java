@@ -1,11 +1,13 @@
 package com.tangzhangss.commonutils.test;
 
 import com.tangzhangss.commonutils.base.SysBaseService;
+import com.tangzhangss.commonutils.datasource.builder.UpdateBuilder;
 import com.tangzhangss.commonutils.service.DBService;
 import com.tangzhangss.commonutils.utils.PlaceholderStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,4 +39,11 @@ public class TestService extends SysBaseService<TestEntity,TestDao>{
         }
 
     }
+
+
+    public void updateCustom(TestEntity testEntity) {
+        new Update().with(TestEntity.class)
+                .set("i",100).set("localDate", LocalDate.now()).where("id",2).execute();
+    }
+
 }
