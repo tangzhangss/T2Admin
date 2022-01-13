@@ -65,11 +65,10 @@ public class SysLogService extends SysBaseService<SysLogEntity, SysLogDao> {
         //设置IP地址
         sysLogEntity.setIp(BaseUtil.getIpAddress(request));
         sysLogEntity.setTime(time);
-        sysLogEntity.setId(uidGeneratorService.getuid());
         //设置返回结果
         sysLogEntity.setResult(result);
 
         //保存系统日志
-        myDao.save(sysLogEntity);
+        save(sysLogEntity);
     }
 }

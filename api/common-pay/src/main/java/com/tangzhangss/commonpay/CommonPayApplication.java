@@ -1,5 +1,6 @@
 package com.tangzhangss.commonpay;
 
+import com.tangzhangss.commonpay.alipay.AliPayConfig;
 import com.tangzhangss.commonpay.weixin.WeiXinURL;
 import com.tangzhangss.commonutils.filter.AuthFilter;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,7 @@ public class CommonPayApplication {
 
     public static void main(String[] args) {
         AuthFilter.addUnAuthUrl(WeiXinURL.PAY_NOTIFY.url);
+        AuthFilter.addUnAuthUrl(AliPayConfig.NOTIFY_URL);
         SpringApplication.run(CommonPayApplication.class, args);
     }
 

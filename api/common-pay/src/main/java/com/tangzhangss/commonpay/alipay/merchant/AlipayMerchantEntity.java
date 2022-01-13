@@ -1,0 +1,37 @@
+package com.tangzhangss.commonpay.alipay.merchant;
+
+import com.tangzhangss.commonpay.weixin.merchant.WeiXinMerchantEntity;
+import com.tangzhangss.commonutils.base.SysBaseEntity;
+import lombok.Data;
+
+import javax.annotation.Nullable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Data
+@Entity
+@Table(name = "tbl_common_pay_alipay_merchant")
+public class AlipayMerchantEntity extends SysBaseEntity{
+
+    @Column(nullable = false)
+    private String appid; //应用appid
+
+    @Column(columnDefinition = "TEXT")
+    private String merchantPrivateKey;  //商户私钥，您的PKCS8格式RSA2私钥
+
+    @Column(nullable = false)
+    private String alipayPublicKey;  //支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
+
+
+    @Transient
+    public static AlipayMerchantEntity defaultConfig = new AlipayMerchantEntity();
+
+    static {
+        defaultConfig.appid = "2021000118695444";
+        defaultConfig.merchantPrivateKey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCxjLTLODgsZJ5w5u+4TjoEBpu2zQMHNV0fWkjZeLT9xIG9r+k6+jG9UWFfUNQxFkTSnol8wRBBjFu6glzoQYxUS23xCg8SgAekfRaPH++8Dk+/SF/ZSh3x1Kg0nHll/n2inJ8CcqkKoQMIzcnMjHDYk4P8BlWGNeeJ46Hntve6jS37pUBLlLPKRrKsKeuGbQH51YYaePtzJ0wPGbGX7i4BQH5HfTBMytaWo8VfA+d5M45tAj5VCgBwHX8zts8x6ieS6zQy3yPVvFKDPHHgS+ViOqtUETl1Ts4M09xivmZdiqayUdanXe9DajDyyoda78aB970Dip4eUcNet4qM7lNhAgMBAAECggEABmpPHgip/vCjyPCPONmavwp+FdzSfzAubTOV7kWuRH0VMwVoJ/liUrTeD9Ob1yo20mVoElnnfHbV2adcNAgqSeFv14XFhaWaoRbj+cftoZ3iw8aZsAA9lL9aVIxS1pybbYS7OhtqgDfRJEBLSljIuwqZekHAVVkdRJ40+2phCRyBW83OAi2Gz8vAqMbsW1yTEbtM1sXI7nTGub/ltC3Ux35luq7lSKXoqOP7KoJh0mSENeR0w6ejA7LyuF3ya6Hei7+vgGVnshFnWYY19Dbp7mWWx8iDJjaprEnx5Te8GODIzQ263/bAzbITNH66YojwWbgPeZYyjuLH+IyM4ppAAQKBgQDkAgSQM8MOkLVjDh20tD3wL4auk8eokw7wapOGM7C2vOisiHejrgwcrZ70zO8uKAnYHAZnpu7C479WD6BLpXT8LVTiHKmLdvIRaIURU6tm6izKI9uWKGyVxEnsbVCQvSLS+AxT7l5S6WbY+0zE6IiWwyTRCPuCB/YnzxJUGf4asQKBgQDHWNpwGE02z8biJ5s6CJHVbs7/FfoBHpz8qroe17/09ilqtd9/skqxZDFZYenglaq6YVgXiHEBgxMWntOeMFF5ff6eL5/2spAntO0OH/4Zkg1R56MooJRk7+51PQleNX/cnCj6UsS3i90xM9KjLNrENv7mnIpWWT12Awxos+WPsQKBgFgNQ2/g3XoZfkMDp4sqdCT2ZZ+zqE48hG9p6RDRk3PunjhK91D5nOnSTumg3tlHUw3nPL34pIoU48Y7gJ7WBciBRR+RDBS02aTJZWIcmrvCwYtKr7lcYRqxVA7+5DcRI4qviis7iaehRTuUSMBeQKlgMS6ctmwv4Orct+pMo2nxAoGBALEgijc/4JvrUtRwTMTsCGiU5OhTJqkIAoWfTXFKUw3eDD79C3HzgdrNI+w/zAf59JFXHWcLnR2y0asvxOiyFjLVeQAlYQVa9CvT3y7Fzon59EvqflcDF9f4OPGDImfLMalcOCz0jkZoyEmHuomyuU/Pbf6K6YCAGtRZMRV3g2qBAoGAbUZjd4TGI2EbPZFgbmUvXOi8mUhi7JXSzR20mT/eaBuJ3DqVl4i39KFJ90Grk/O9JktLCd1WbEAvD1wKavStdrMYTwFR9FiMGJyIoYufMjf/mg/fKHJi18zzNQehh2BdbKo2PyGfO0n9E7/NaWXzN9YcVGovW4wwEjjCgp6FHgw=";
+        defaultConfig.alipayPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApf8X43s6alJ8vFK5ci6IBEftFxSiPyJtSMjhvNCzq5ulXJg3YaHj5mQD8UKIOqw/jdTVGXcPB11e1GTzjXasxU2LUXmkkaXbdvOsg6xm+CPSa1/84HatAh/hzxKirWoUj9/3uQh0Qvbw9blsNQ8bkTYV8GYr5mi5nUz10H8MoZD4FcA5D23l2ccpIa9tedWOZUGE8VWQsO81Lfvo/FTlXFF8a+8O+YATinsKqwazNrrDAC3BdCmLVW9AFOUAh1ouERZNv1wf1geWZQ6Xowdr14Lk2Ceh+zmrlvrsugj6HNbQB1NisjuRaJM1hQYpaghu6OZKzY1oY24mUccDbubHnwIDAQAB";
+    }
+
+}
