@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -48,11 +49,11 @@ public class QueryDslUtil{
      * 这个方法带分页  不能多字段分组
      * 默认带clientId,不会携带usable=true,,需要请在request和paramsMap 添加 usable@eq,true or false
      *
-     * 条件构建不支持级联（A.b@EQ --- 20210421支持）
+     * 条件构建不支持级联（A.b@EQ --- 20210421支持）-需要设置entityPathMap
      * 不支持排序分组，如果有排序分组请在调用此方法之前处理query对象
      * @param request 前端请求--构建查询条件-格式如：base里面的get()
      * @param paramsMap 后端条件构建
-     * @param entityPathMap 后端条件构建
+     * @param entityPathMap 后端条件构建 路径  如果存在key为A的条件 查询路径以entityPathMap的路径为主
      *                      A.b@EQ  =  map.put("A",entityPath)
      *                      A.B.c@EQ  =  map.put("A.B",entityPath)
      * @return
@@ -94,13 +95,7 @@ public class QueryDslUtil{
                 String value = request.getParameter(key);
                 //只有包含@的才算作条件构造
                 if (key.contains("@")) {
-                    BooleanExpression b;
-                    if(key.contains(".")){
-                        key = key.substring(0,key.lastIndexOf("."));
-                        b = this.getQQueryExpression(key,value,entityPathMap.get(key));
-                    }else{
-                        b = this.getQQueryExpression(key,value,null);
-                    }
+                    BooleanExpression b = this.getBooleanExpression(key,value,entityPathMap);
                     if (b != null) {
                         query.where(b);
                     }
@@ -112,13 +107,7 @@ public class QueryDslUtil{
             while(it.hasNext()) {
                 Map.Entry<String, String> entry = (Map.Entry)it.next();
                 String key = entry.getKey();
-                BooleanExpression b;
-                if(key.contains(".")){
-                    key = key.substring(0,key.lastIndexOf("."));
-                    b = this.getQQueryExpression(key,entry.getValue(),entityPathMap.get(key));
-                }else{
-                    b = this.getQQueryExpression(key,entry.getValue(),null);
-                }
+                BooleanExpression b = this.getBooleanExpression(key,entry.getValue(),entityPathMap);
                 if (b != null) {
                     query.where(b);
                 }
@@ -132,10 +121,37 @@ public class QueryDslUtil{
             query.where(b);
         }
     }
+    private BooleanExpression getBooleanExpression(String key,Object value,Map<String,EntityPath> entityPathMap){
+        //entityPathMap不为null
+        if(entityPathMap==null)entityPathMap=new HashMap<>();
+        BooleanExpression b = null;
+        String[] arr = key.split("@");
+        if(arr[1].toUpperCase().equals("OR")){
+            String[] sList = arr[0].split(",");
+            for(int i=0;i<sList.length;i++){
+                String[] s = sList[i].split("_");
+                String tKey = s[0];
+                String tC="EQ";
+                if(s.length>1){
+                    tC = s[1];
+                }
+                String keyS = tKey+"@"+tC;
+                if(b==null){
+                    b = this.getQQueryExpression(keyS,value,entityPathMap.get(tKey));
+                }else{
+                    b = b.or(this.getQQueryExpression(keyS,value,entityPathMap.get(tKey)));
+                }
+            }
+        }else{
+            b = this.getQQueryExpression(key,value,entityPathMap.get(arr[0]));
+        }
+        return b;
+    }
     /**
      * 获取qQuery的条件
-     * 不支持级联（A.B@EQ）
-     * @param key sName@EQ
+     * 不支持级联（A.B@EQ）--以entityPath为实体查找属性
+     * 支持SysBaseService的OR--20220118
+     * @param key sName@EQ 如果key含有.多级只取第一个
      * @param value 111
      * @return
      */
@@ -146,7 +162,7 @@ public class QueryDslUtil{
         }
         if (key.indexOf("@")==-1) return null;
         String [] arr = key.split("@");
-        String sType = arr[1];
+        String sType = arr[1].toUpperCase();//转成大写
         if(arr.length!=2)ExceptionUtil.throwException("check_param_error","key");
         Object o = Optional.ofNullable(entityPath).orElse(fromEntity.get());
 
@@ -164,6 +180,7 @@ public class QueryDslUtil{
         } else {
             ll = (LiteralExpression) l;
         }
+
         switch (sType) {
             case "EQ":
                 if (value == null || value.equals("null")) return ll==null?ne.isNull():ll.isNull();

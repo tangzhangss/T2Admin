@@ -123,16 +123,12 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
     public Result getCode2(@PathVariable("code")String code) throws NacosException {
         return Result.ok().data(sysCodeService.getDeclareSerialNo(code,null));
     }
-    @GetMapping("/querydsl/no_auth")
+    @GetMapping("/querydsl")
     public Result querydsl(){
         QTestEntity qTestEntity =QTestEntity.testEntity;
         SysContext.setUser(new JSONObject().set("clientId",10000));
 
-        queryDslUtil.setJPAQuery(ListUtil.createArrayList().add(qTestEntity.i.max().as("i"))
-                .add(qTestEntity.localDate.max().as("localDate"))
-                .add(qTestEntity.id.max().as("id"))
-                .add(qTestEntity.remark.max().as("remark")).get(),qTestEntity)
-                .get().groupBy(qTestEntity.clientId);
+        queryDslUtil.setJPAQuery(new ListUtil().add(qTestEntity).get(),qTestEntity);
 
         Object res = queryDslUtil.getQueryFetchResults(request,null,null);
 

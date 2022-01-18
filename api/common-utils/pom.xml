@@ -10,7 +10,7 @@
 
     <groupId>ren.tzcc</groupId>
     <artifactId>commonutils</artifactId>
-    <version>1.0.11.RELEASE</version>
+    <version>1.0.12.RELEASE</version>
     <name>commonutils</name>
     <description>TZCC-REN-SYSTEM 公共包</description>
 
