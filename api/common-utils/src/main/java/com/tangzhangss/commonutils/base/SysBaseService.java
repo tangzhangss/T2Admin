@@ -2,6 +2,7 @@ package com.tangzhangss.commonutils.base;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.tangzhangss.commonutils.config.Attribute;
 import com.tangzhangss.commonutils.datasource.builder.UpdateBuilder;
@@ -9,7 +10,6 @@ import com.tangzhangss.commonutils.exception.ServiceException;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.service.DBService;
-import com.tangzhangss.commonutils.test.TestEntity;
 import com.tangzhangss.commonutils.uidgenerator.UidGeneratorService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.ExceptionUtil;
@@ -65,16 +65,18 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     protected DBService dbService;
 
     // 是否查全部-默认false
-    protected ThreadLocal<Boolean> isQueryAll= ThreadLocal.withInitial(() -> false);
+    protected ThreadLocal<Boolean> isQueryAll= new ThreadLocal<>();
+
+    // 是否分组-默认false
+    protected ThreadLocal<Boolean> isGroupBy= new ThreadLocal<>();
+
+    //用于存储多级查询路径Path对象，不需要每次都去获取
+    private final ThreadLocal<HashMap<String,From>> fromPathCache=new ThreadLocal<>();
+
     // 是否查询全部，已删除的-后端重写之后以后端的为主
     protected boolean isQueryAll(){
         return isQueryAll.get();
     }
-
-    // 是否分组-默认false
-    protected ThreadLocal<Boolean> isGroupBy= ThreadLocal.withInitial(() -> false);
-
-
 
     @PostConstruct
     public void init(){}
@@ -177,6 +179,15 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         cq.multiselect(selectionList);
         return cq;
     }
+
+    //使用threadlocal对象前请一定调用,不然可能取到上一次请求结束的值!!!
+    //线程对象-threadLocal请求初始化-默认值
+    private void threadLocalInit(){
+        isQueryAll.set(false);
+        isGroupBy.set(false);
+        fromPathCache.set(new HashMap<>());
+    }
+
     /*
      前端请求request
      后端调用paramsMap
@@ -184,6 +195,8 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      如果先要不分页，paramsMap不能为空
      */
     public Page<T>  get(HttpServletRequest request, Map<String, String> paramsMap){
+        threadLocalInit();
+
         int iPgIndex = 1;//默认第一页
         int iPgSize=Integer.MAX_VALUE;//默认不分页
 
@@ -263,6 +276,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      * @return
      */
     private CriteriaQuery getQueryByParams(Root root, CriteriaQuery cq, CriteriaBuilder builder,HttpServletRequest request, Map<String,String> paramMap) {
+
         List<Predicate> predicates = new ArrayList<>();
         // 自定义的排序
         List<Order> orders = new LinkedList<>();
@@ -322,7 +336,6 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     protected Predicate getPredicate(String key, Object value,CriteriaBuilder builder,Root<T> root){
         Predicate predicate = null;
         String [] arr = key.split("@");
-        Path expression = null;
         String sKey = arr[0];
 
         //没有值，如: id@EQ=
@@ -355,23 +368,8 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             if(isParseObject(arr[1])){
                 value = parseObject(sKey,value);
             }
-            // 多表查询，格式 A.name@EQ=zhangsan
-            if (sKey.contains(".")) {
-                String[] names = StringUtils.split(sKey, ".");
-                for (int i = 0; i < names.length; i++) {
-                    String tbName = names[i];
-                    if (expression == null) {
-                        expression = root.get(tbName);
-                    } else {
-                        if (expression.getJavaType() == Map.class) {
-                        } else {
-                            expression = expression.get(tbName);
-                        }
-                    }
-                }
-            }else {
-                expression = root.get(sKey);
-            }
+            // 获取sKey的Path
+            Path expression = getExpression(sKey, root);
 
             switch (arr[1].toUpperCase()){
                 case "EQ":
@@ -464,18 +462,33 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
     private Path getExpression(String sKey,Root root) {
         Path expression = null;
         // 多表查询，格式 A.name@EQ=zhangsan
+        From fromPath=null;
         if (sKey.contains(".")){
             String[] names = StringUtils.split(sKey, ".");
             for (int i = 0; i < names.length; i++) {
                 String tbName = names[i];
-                if (expression == null) {
+                //是否是最后一个
+                boolean bLast = (i == names.length - 1);
+                if (bLast) {
+                    expression = fromPath.get(tbName);
+                } else {
+                    String path = StringUtils.join(ArrayUtil.sub(names,0,i+1),".");
+                    //加上root的hashCode
+                    path = root.hashCode()+"&"+path;
+                    fromPath = fromPathCache.get().get(path);
+                    if(fromPath==null){
+                        fromPath=(i==0?root.join(tbName,JoinType.LEFT):fromPath.join(tbName,JoinType.LEFT));
+                        fromPathCache.get().put(path,fromPath);
+                    }
+                }
+                /*if (expression == null) {
                     expression = root.get(tbName);
                 } else {
                     if (expression.getJavaType() == Map.class) {
                     } else {
                         expression = expression.get(tbName);
                     }
-                }
+                }*/
             }
         }else {
             expression = root.get(sKey);
@@ -749,6 +762,8 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         return queryByGroup(whereMap,groupKey,groupMap,null);
     }
     public List<Map<String,Object>> queryByGroup(Map whereMap, String[] groupKey, Map groupMap,HttpServletRequest request) {
+        threadLocalInit();
+
         //这个值不能为null
         if(whereMap==null)whereMap=new HashMap();
 

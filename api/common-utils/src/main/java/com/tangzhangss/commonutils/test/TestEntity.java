@@ -24,6 +24,13 @@ public class TestEntity extends SysBaseEntity {
     @Transient
     private String sss;
 
+    private Long test2Id;
+
+    @OneToOne
+    @JoinColumn(name = "test2Id",referencedColumnName = "id",insertable = false,updatable = false)
+    private TestEntity2 testEntity2;
+
+
 //    ----
 //    @Version
 //    protected long version=1;
