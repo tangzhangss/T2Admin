@@ -471,7 +471,7 @@ public class FileUtil {
      * @return
      * @throws IOException
      */
-    public File createFile(String filePath) throws IOException {
+    public static File createFile(String filePath) throws IOException {
         File newFile = new File(filePath);
         if(newFile.exists()){
             newFile.delete();
@@ -483,6 +483,19 @@ public class FileUtil {
         }
         newFile.createNewFile();
         return newFile;
+    }
+
+
+    /**
+     * 创建临时文件  程序退出会删除文件
+     * @param suffix 后缀
+     * @return 文件对象
+     * @throws IOException
+     */
+    public static File createTempFile(String suffix) throws IOException {
+        File tempFile = File.createTempFile(UUID.randomUUID().toString(),suffix);
+        tempFile.deleteOnExit();
+        return tempFile;
     }
 
 }

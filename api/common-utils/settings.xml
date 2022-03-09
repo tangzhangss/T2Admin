@@ -56,7 +56,7 @@
             </activation>
             <properties>
                 <gpg.executable>D:/Windows/GnuPG/bin/gpg.exe</gpg.executable>
-                <gpg.passphrase>F92563A7AF3C1E65</gpg.passphrase>
+                <gpg.passphrase>F92563A7AF3C1E65</gpg.passphrase><!--aa.188632-->
             </properties>
         </profile>
     </profiles>

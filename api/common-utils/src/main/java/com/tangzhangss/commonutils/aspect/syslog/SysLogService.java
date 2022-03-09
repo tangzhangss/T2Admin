@@ -2,7 +2,7 @@ package com.tangzhangss.commonutils.aspect.syslog;
 
 import cn.hutool.json.JSONUtil;
 import com.tangzhangss.commonutils.base.SysBaseService;
-import com.tangzhangss.commonutils.utils.BaseUtil;
+import com.tangzhangss.commonutils.utils.IpUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -63,7 +63,7 @@ public class SysLogService extends SysBaseService<SysLogEntity, SysLogDao> {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = (HttpServletRequest) requestAttributes.resolveReference(RequestAttributes.REFERENCE_REQUEST);
         //设置IP地址
-        sysLogEntity.setIp(BaseUtil.getIpAddress(request));
+        sysLogEntity.setIp(IpUtil.getIpAddr(request));
         sysLogEntity.setTime(time);
         //设置返回结果
         sysLogEntity.setResult(result);

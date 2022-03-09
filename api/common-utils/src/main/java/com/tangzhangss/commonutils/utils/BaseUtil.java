@@ -4,6 +4,8 @@ import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.log.StaticLog;
+import com.alibaba.fastjson.JSONObject;
 import com.tangzhangss.commonutils.config.Attribute;
 import org.apache.commons.lang.StringUtils;
 
@@ -11,6 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpUtils;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.*;
@@ -24,90 +27,6 @@ public class BaseUtil {
 
     private BaseUtil(){}
 
-    /**
-     * 获取本机的IPV4地址
-     * @return ipv4地址
-     */
-    public static String getIPV4(){
-        String ip = "";
-        String chinaz = "http://ip.chinaz.com";
-        StringBuilder inputLine = new StringBuilder();
-        String read = "";
-        URL url = null;
-        HttpURLConnection urlConnection=null;
-        try {
-            url = new URL(chinaz);
-            urlConnection = (HttpURLConnection) url.openConnection();
-        } catch (Exception e) { e.printStackTrace(); }
-
-        try (BufferedReader in = new BufferedReader( new InputStreamReader(urlConnection.getInputStream(),"UTF-8"));){
-            while((read=in.readLine())!=null){
-                inputLine.append(read+"\r\n");
-            }
-        } catch (Exception e) { e.printStackTrace();}
-
-        Pattern p = Pattern.compile("\\<dd class\\=\"fz24\">(.*?)\\<\\/dd>");
-        Matcher m = p.matcher(inputLine.toString());
-        if(m.find()){
-            String ipstr = m.group(1);
-            ip = ipstr;
-        }
-        return ip;
-    }
-
-    /**
-     * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址,
-     * 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值，究竟哪个才是真正的用户端的真实IP呢？
-     * 答案是取X-Forwarded-For中第一个非unknown的有效IP字符串。
-     * 如：X-Forwarded-For：192.168.1.110, 192.168.1.120, 192.168.1.130,
-     * 192.168.1.100
-     * 用户真实IP为： 192.168.1.110
-     * @param request 当前请求
-     * @return 用户真实IP地址
-     */
-    public static String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("X-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
-
-    /**
-     * 获取本机ip
-     *
-     * @return 本机ip地址
-     */
-    public static String getLocalIP() throws SocketException {
-        String ip = null;
-        Enumeration allNetInterfaces;
-        allNetInterfaces = NetworkInterface.getNetworkInterfaces();
-        while (allNetInterfaces.hasMoreElements()) {
-            NetworkInterface netInterface = (NetworkInterface) allNetInterfaces
-                    .nextElement();
-            List<InterfaceAddress> InterfaceAddress = netInterface
-                    .getInterfaceAddresses();
-            for (InterfaceAddress add : InterfaceAddress) {
-                InetAddress Ip = add.getAddress();
-                if (Ip != null && Ip instanceof Inet4Address) {
-                    ip = Ip.getHostAddress();
-                }
-            }
-        }
-        return ip;
-    }
     public static String twiceMd5Salt(String str){
         return SecureUtil.md5(SecureUtil.md5(str+ Attribute.MD5_SALT)+StringUtils.reverse(Attribute.MD5_SALT));
     }
@@ -307,4 +226,34 @@ public class BaseUtil {
         return value;
     }
 
+
+    /**
+     * 执行linux command命令
+     * @param command 命令
+     */
+    public static String executeRuntimeCommand(String command) {
+        StringBuffer res = new StringBuffer();
+        String osName = System.getProperty("os.name").toUpperCase();
+        String[]  cmdArr = null;
+        if(osName.contains("LINUX"))cmdArr=new String[]{"/bin/sh", "-c", command};
+        else if(osName.contains("WINDOWS"))cmdArr=new String[]{"cmd", "/c", command};
+        try {
+            StaticLog.info("执行命令 {}",StringUtils.join(cmdArr," "));
+            Process process = Runtime.getRuntime().exec(cmdArr);
+            process.getOutputStream().close();
+
+            String line;
+            BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            //如果是阻塞命令，这里也会阻塞
+            while ((line = stdout.readLine()) != null) {
+                res.append(line).append("\r\n");
+            }
+            stdout.close();
+            process.destroy();
+
+        } catch (Exception e) {
+            ExceptionUtil.throwException(e.getMessage());
+        }
+        return res.toString();
+    }
 }

@@ -1,6 +1,6 @@
 package com.tangzhangss.commonutils.uidgenerator;
 
-import com.tangzhangss.commonutils.utils.BaseUtil;
+import com.tangzhangss.commonutils.utils.IpUtil;
 import com.xfvape.uid.utils.DockerUtils;
 import com.xfvape.uid.utils.NetUtils;
 import com.xfvape.uid.worker.WorkerIdAssigner;
@@ -23,7 +23,7 @@ public class MyDisposableWorkerIdAssigner implements WorkerIdAssigner {
         WorkerNodeEntity workerNodeEntity=null;
 
         //根据外网的Ip地址去查，同一个外面ip地址就一样的worker
-        String ipv4=BaseUtil.getIPV4();
+        String ipv4= IpUtil.getIPV4();
         if(StringUtils.isNotBlank(ipv4)){
             //同样的ip地址workerId可以一样
             workerNodeEntity = workerNodeDao.findFirstByHostName(ipv4);
@@ -44,7 +44,7 @@ public class MyDisposableWorkerIdAssigner implements WorkerIdAssigner {
             workerNodeEntity.setPort(DockerUtils.getDockerPort());
         } else {
             workerNodeEntity.setType(WorkerNodeType.ACTUAL.value());
-            String ipv4 = BaseUtil.getIPV4();
+            String ipv4 = IpUtil.getIPV4();
             String ip = StringUtils.isBlank(ipv4)?NetUtils.getLocalAddress():ipv4;
             workerNodeEntity.setHostName(ip);
             workerNodeEntity.setPort(System.currentTimeMillis() + "-" + RandomUtils.nextInt(100000));

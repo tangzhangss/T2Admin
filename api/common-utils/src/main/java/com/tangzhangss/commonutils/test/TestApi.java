@@ -14,6 +14,7 @@ import com.tangzhangss.commonutils.datasource.request.DatasourceRequest;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.syscode.SysCodeService;
+import com.tangzhangss.commonutils.utils.IpUtil;
 import com.tangzhangss.commonutils.utils.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,10 +58,13 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
 
     @GetMapping("/___")
     public Result ___(){
-        System.out.println(1/0);
-        myService.test();
+        System.out.println(IpUtil.getRealAddressByIP("47.108.118.105"));
+
+
         return Result.ok();
     }
+
+
     @GetMapping("/no_auth")
     public Result getNoAuth() throws NacosException {
         SysContext.setUser(new JSONObject().set("clientId",10000));

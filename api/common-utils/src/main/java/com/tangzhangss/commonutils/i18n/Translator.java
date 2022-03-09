@@ -19,10 +19,10 @@ public class Translator implements MessageSourceAware {
      * 单Key翻译
      */
     public static String get(String key) {
-        return messageSource.getMessage(key, null, key, LocaleContextHolder.getLocale());
+        return messageSource==null?key:messageSource.getMessage(key, null, key, LocaleContextHolder.getLocale());
     }
     public static String get(String key,Object [] args) {
-        return messageSource.getMessage(key, args, key, LocaleContextHolder.getLocale());
+        return messageSource==null?key:messageSource.getMessage(key, args, key, LocaleContextHolder.getLocale());
     }
 
     @Resource

@@ -33,7 +33,7 @@ public class BaseTest {
      * 测试float比较
      */
     public static void main(String[] args) throws ScriptException {
-        String str = "  var msg='hello';          "
+        /*String str = "  var msg='hello';          "
                 + "  var number = 123;         "
                 + "  var array=['A','B','C'];  "
                 + "  var json={                "
@@ -49,7 +49,24 @@ public class BaseTest {
         Object json = jsEngine.get("json");
         Object array = jsEngine.get("array");
 
-        System.out.println(number);
+        System.out.println(number);*/
+
+        int[] arr= new int[]{8,8,8,8,8,8,6,6,6,6};
+        int indexL = 0;
+        int indexM = (arr.length-1)/2;
+        int indexR = arr.length-1;
+        do{
+           int tempV = arr[indexM];
+            if(tempV==8){
+               indexL= indexM;
+           }else{
+               indexR = indexM;
+           }
+           indexM = (indexR+indexL)/2;
+
+        }while(!(indexL==indexM||indexR==indexM));
+
+        System.out.println(indexM);
     }
 
 
