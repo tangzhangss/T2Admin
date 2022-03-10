@@ -60,7 +60,7 @@ public class AnnotationInit implements CommandLineRunner{
             //将注解添加到类上
             classFile.addAttribute(attribute);
         } catch (Exception e) {
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

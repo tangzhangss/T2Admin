@@ -129,7 +129,7 @@ public class BaseUtil {
     }
 
 
-    public static String string(String ...args){
+    public static String string(Object ...args){
         return StringUtils.join(args,"");
     }
 
@@ -231,29 +231,66 @@ public class BaseUtil {
      * 执行linux command命令
      * @param command 命令
      */
-    public static String executeRuntimeCommand(String command) {
+    public static String executeRuntimeCommand(String command) throws IOException, InterruptedException {
         StringBuffer res = new StringBuffer();
         String osName = System.getProperty("os.name").toUpperCase();
         String[]  cmdArr = null;
         if(osName.contains("LINUX"))cmdArr=new String[]{"/bin/sh", "-c", command};
         else if(osName.contains("WINDOWS"))cmdArr=new String[]{"cmd", "/c", command};
-        try {
-            StaticLog.info("执行命令 {}",StringUtils.join(cmdArr," "));
-            Process process = Runtime.getRuntime().exec(cmdArr);
-            process.getOutputStream().close();
 
+        StaticLog.info("执行命令 {}",StringUtils.join(cmdArr," "));
+        Process process = Runtime.getRuntime().exec(cmdArr);
+        process.getOutputStream().close();
+        try(
+                BufferedReader successBuffer = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                BufferedReader errorBuffer = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        ){
+            /**
+             * 正确信息
+             */
             String line;
-            BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
             //如果是阻塞命令，这里也会阻塞
-            while ((line = stdout.readLine()) != null) {
+            while ((line = successBuffer.readLine()) != null) {
                 res.append(line).append("\r\n");
             }
-            stdout.close();
+            /**
+             * 错误信息--先读取inputStream-读取了inputStream才知道是否成功
+             */
+            if(process.waitFor()!=0){
+                String errorLine;
+                StringBuffer errorStr=new StringBuffer();
+                while ((errorLine = errorBuffer.readLine()) != null) {
+                    errorStr.append(errorLine);
+                }
+                String errorMsg = errorStr.toString();
+                if(StringUtils.isNotBlank(errorMsg)){
+                    throw new RuntimeException(errorMsg);
+                }
+            }
+        }finally {
             process.destroy();
-
-        } catch (Exception e) {
-            ExceptionUtil.throwException(e.getMessage());
         }
+
         return res.toString();
+    }
+
+
+    /**
+     * 下载（克隆）inputStream
+
+     */
+    public static InputStream cloneInputStream(InputStream input) {
+        try(ByteArrayOutputStream baos = new ByteArrayOutputStream()){
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = input.read(buffer)) > -1) {
+                baos.write(buffer, 0, len);
+            }
+            baos.flush();
+            return new ByteArrayInputStream(baos.toByteArray());
+        }catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

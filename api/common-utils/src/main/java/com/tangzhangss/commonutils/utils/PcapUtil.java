@@ -1,6 +1,13 @@
 package com.tangzhangss.commonutils.utils;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONConfig;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.pkts.Pcap;
 import io.pkts.packet.IPv4Packet;
 import io.pkts.packet.TCPPacket;
@@ -15,8 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -29,25 +35,55 @@ public class PcapUtil {
     public static String WIRESHARK_BIN_PATH = "";//==/usr/local/wireshark/bin/
     /**
      * pcap转json
-     * @param pcapFile
-     * @return
      */
-    public static String pcapToJson(File pcapFile) {
-        String jsonStr = null;
-        if (pcapFile.exists()) {
-            try{
-                File tempFie = FileUtil.createTempFile(".json");
-                String pcapToJsonCmd = WIRESHARK_BIN_PATH+"tshark -r $pcap -T json > $tempFile";
-                String cmd = pcapToJsonCmd.replace("$pcap", pcapFile.getPath()).replace("$tempFile", tempFie.getAbsolutePath());
-                BaseUtil.executeRuntimeCommand(cmd);
-                jsonStr =  BaseUtil.readInputStream(new FileInputStream(tempFie),"utf-8");
-            }catch (Exception e){
-                ExceptionUtil.throwException(e.getMessage());
-            }
+    public static String pcapToJson(File pcapFile) throws IOException, InterruptedException {
+        return pcapToJson(WIRESHARK_BIN_PATH,pcapFile);
+    }
+    public static String pcapToJson(String wireSharkBinPath,File pcapFile) throws IOException, InterruptedException {
+        if(!(wireSharkBinPath.endsWith("/")||wireSharkBinPath.endsWith("\\"))){
+            wireSharkBinPath+="/";
         }
-        return jsonStr;
+        if (pcapFile.exists()) {
+            String pcapToJsonCmd = wireSharkBinPath+"tshark1 -r $pcap -T json";
+            String cmd = pcapToJsonCmd.replace("$pcap", pcapFile.getPath());
+            return BaseUtil.executeRuntimeCommand(cmd);
+        }
+        return null;
     }
 
+    /**
+     * 获取pcapToJson返回的JSON数据里面的layersjson数据
+     *
+     * @return 有序的JSONObject对象
+     */
+    public static JSONObject getPcapLayersJsonObj(String pcapJson) throws JsonProcessingException {
+        JSONConfig config = new JSONConfig();
+        config.setOrder(true);
+        ArrayList arrayList = JacksonUtil.toBean(pcapJson, ArrayList.class);
+        JSONObject content = JSONUtil.parseObj(arrayList.get(0));
+        return content.getJSONObject("_source").getJSONObject("layers");
+    }
+
+    /**
+     *
+     * @param layersObj pcap包layersObj（getPcapLayersJsonObj方法缓存）
+     * @return 解析之后的数据
+     */
+    public static JSONObject  parsePcapLayersData(JSONObject layersObj){
+        JSONObject parseData= new JSONObject();
+
+        String protocol="";
+        for (Map.Entry<String, Object> entry : layersObj.entrySet()){
+
+            if(!entry.getKey().equals("data")) {
+                protocol = entry.getKey();
+            }
+        }
+        //最上层协议--取pcap解析json layers的最后一个对象(非DATA)
+        parseData.set("protocol",protocol);
+
+        return parseData;
+    }
     /**
      * 获取pcap包中packet数量
      */
@@ -61,7 +97,7 @@ public class PcapUtil {
                 return true;
             });
         } catch (IOException e) {
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return packetNum.get();
@@ -136,7 +172,7 @@ public class PcapUtil {
                 index++;
             }
         } catch (Exception e) {
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return allHex.toString();

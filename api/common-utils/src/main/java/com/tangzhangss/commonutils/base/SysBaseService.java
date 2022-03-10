@@ -520,7 +520,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             this.afterSaveData(data);
 
         }catch (Exception e){
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return data;

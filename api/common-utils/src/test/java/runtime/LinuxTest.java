@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class LinuxTest {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException, InterruptedException {
         String s = BaseUtil.executeRuntimeCommand("ls -l");
         System.out.println("运行结果:"+s);
     }

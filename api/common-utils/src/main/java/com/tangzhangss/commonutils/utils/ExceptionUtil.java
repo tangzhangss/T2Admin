@@ -15,7 +15,7 @@ public class ExceptionUtil {
 
 
     /**
-     * 抛出异常信息，国际化
+     * 抛出业务异常信息，国际化
      */
     public static void throwException(String str,String ...args){
         throw  new ServiceException(Translator.get(str, args));

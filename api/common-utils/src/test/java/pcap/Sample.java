@@ -31,7 +31,6 @@ public class Sample {
         pcap.loop((packet)->{
             packetDataSum.getAndAdd(packet.getPayload().getReadableBytes());
             packetNum.getAndIncrement();
-
             if(packet.hasProtocol(Protocol.ARP)){
                 System.out.println(".......ARP......");
             }

@@ -52,7 +52,7 @@ public class JdbcProvider extends DatasourceProvider{
             rs.close();
             stat.close();
         }catch(Exception e){
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
         return tableData;
     }
@@ -137,7 +137,7 @@ public class JdbcProvider extends DatasourceProvider{
                 }
             tableData.setSchemas(schemas);
         }catch (Exception e){
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
         return tableData;
     }
@@ -156,7 +156,7 @@ public class JdbcProvider extends DatasourceProvider{
             }
             tableData.setViews(views);
         }catch (Exception e){
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return tableData;
@@ -175,7 +175,7 @@ public class JdbcProvider extends DatasourceProvider{
             }
             tableData.setTables(table);
         }catch(Exception e){
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
         return tableData;
     }
@@ -345,7 +345,7 @@ public class JdbcProvider extends DatasourceProvider{
         try(Connection connection = getConnectionFromPool(datasourceRequest.getDatasourceEntity());Statement stat = connection.createStatement();){
              res = stat.execute(datasourceRequest.getQuery());
         }catch(Exception e){
-            ExceptionUtil.throwException(e.getMessage());
+            throw new RuntimeException(e);
         }
         return res;
     }

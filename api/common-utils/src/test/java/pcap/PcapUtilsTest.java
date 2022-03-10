@@ -1,26 +1,29 @@
 package pcap;
 
-import com.tangzhangss.commonutils.utils.BaseUtil;
-import com.tangzhangss.commonutils.utils.FileUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.json.JSONObject;
 import com.tangzhangss.commonutils.utils.PcapUtil;
-import compare.Base;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.UUID;
 
 public class PcapUtilsTest {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         String filePath="C:\\Users\\it_ta\\Desktop\\test.pcap";
         File file = new File(filePath);
+        int packetNum = PcapUtil.getPacketNum(file);
 
-        System.out.println(PcapUtil.pcapToJson(file));
+        for (int i = 0; i < packetNum; i++) {
+            String hexS = PcapUtil.readToHex(file,i);
+            byte[] bytes = PcapUtil.hexToPcap(hexS);
+            String path = "C:\\Users\\it_ta\\Desktop\\test"+i+".pcap";
+            FileUtil.writeBytes(bytes,path);
+            String res = PcapUtil.pcapToJson("D:\\DEVEVN\\Wireshark\\", new File(path));
+            JSONObject pcapLayersObj = PcapUtil.getPcapLayersJsonObj(res);
 
-
-        /*String hexS = PcapUtil.readToHex(file);
-        byte[] bytes = PcapUtil.hexToPcap(hexS);
-        FileUtil.writeBytes(bytes,"C:\\Users\\it_ta\\Desktop\\test1.pcap");
+            System.out.println(PcapUtil.parsePcapLayersData(pcapLayersObj));
+        }
+        /*
 
         String hexS2 = PcapUtil.readToHex(file,0,2);
         byte[] bytes2 = PcapUtil.hexToPcap(hexS2);

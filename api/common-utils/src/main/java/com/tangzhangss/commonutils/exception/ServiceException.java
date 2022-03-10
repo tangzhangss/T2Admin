@@ -3,8 +3,7 @@ package com.tangzhangss.commonutils.exception;
 import com.tangzhangss.commonutils.resultdata.ResultCode;
 import lombok.Data;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 @Data
 public class ServiceException extends  RuntimeException{
