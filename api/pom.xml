@@ -12,6 +12,7 @@
         <hutool-all>5.4.6</hutool-all>
         <lombok.version>1.18.0</lombok.version>
         <nacos.version>2.1.1.RELEASE</nacos.version>
+        <commonutils.version>1.0.19.RELEASE</commonutils.version>
     </properties>
 
     <parent>
@@ -22,7 +23,7 @@
     </parent>
 
     <modules>
-        <module>common-utils</module>
+<!--        <module>common-utils</module>-->
         <module>common-service</module>
         <module>common-data</module>
         <module>common-pay</module>
@@ -39,6 +40,23 @@
     <packaging>pom</packaging>
 
     <dependencies>
+        <!--java参数校验-->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.1.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.4.1.Final</version>
+        </dependency>
+        <!--common-utils-->
+        <dependency>
+            <groupId>ren.tzcc</groupId>
+            <artifactId>commonutils</artifactId>
+            <version>${commonutils.version}</version>
+        </dependency>
         <!--test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

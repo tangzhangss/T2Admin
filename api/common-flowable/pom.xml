@@ -17,23 +17,6 @@
         <flowwable.version>6.6.0</flowwable.version>
     </properties>
     <dependencies>
-        <!--swagger2的依赖-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-        <!--common-utils-->
-        <dependency>
-            <groupId>com.tangzhangss</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter</artifactId>

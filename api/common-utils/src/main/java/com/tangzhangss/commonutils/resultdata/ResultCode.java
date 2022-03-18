@@ -9,7 +9,7 @@ public enum ResultCode {
     
     //业务处理失败600-699
     BUSINESS_PROCESSING_FAILED(601,"processing_fail"),
-    BUSINESS_REMOTE_CALL_FAILED(602,"远程调用失败"),
+    BUSINESS_REMOTE_CALL_FAILED(602,"remote_call_failure"),
 
     //用户输入出错1000-1999
     USER_LOGIN_FAILED(1001, "login_fail"),

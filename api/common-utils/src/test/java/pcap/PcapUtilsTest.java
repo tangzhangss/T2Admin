@@ -8,18 +8,19 @@ import java.io.File;
 import java.io.IOException;
 
 public class PcapUtilsTest {
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         String filePath="C:\\Users\\it_ta\\Desktop\\test.pcap";
         File file = new File(filePath);
+
         int packetNum = PcapUtil.getPacketNum(file);
 
-        for (int i = 0; i < packetNum; i++) {
+        for (int i = 5; i < 8; i++) {
             String hexS = PcapUtil.readToHex(file,i);
             byte[] bytes = PcapUtil.hexToPcap(hexS);
             String path = "C:\\Users\\it_ta\\Desktop\\test"+i+".pcap";
             FileUtil.writeBytes(bytes,path);
             String res = PcapUtil.pcapToJson("D:\\DEVEVN\\Wireshark\\", new File(path));
-            JSONObject pcapLayersObj = PcapUtil.getPcapLayersJsonObj(res);
+            JSONObject pcapLayersObj = PcapUtil.getPcapLayersJsonObj(res).getJSONObject(0);
 
             System.out.println(PcapUtil.parsePcapLayersData(pcapLayersObj));
         }

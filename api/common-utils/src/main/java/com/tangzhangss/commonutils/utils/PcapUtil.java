@@ -14,6 +14,8 @@ import io.pkts.packet.TCPPacket;
 import io.pkts.packet.impl.MACPacketImpl;
 import io.pkts.protocol.Protocol;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -44,9 +48,9 @@ public class PcapUtil {
             wireSharkBinPath+="/";
         }
         if (pcapFile.exists()) {
-            String pcapToJsonCmd = wireSharkBinPath+"tshark1 -r $pcap -T json";
-            String cmd = pcapToJsonCmd.replace("$pcap", pcapFile.getPath());
-            return BaseUtil.executeRuntimeCommand(cmd);
+            String pcapToJsonCmd = wireSharkBinPath+"tshark -r $pcap -T json";
+            String cmd = pcapToJsonCmd.replace("$pcap", pcapFile.getAbsolutePath());
+            return RuntimeUtil.executeRuntimeCommand(cmd);
         }
         return null;
     }
@@ -54,14 +58,22 @@ public class PcapUtil {
     /**
      * 获取pcapToJson返回的JSON数据里面的layersjson数据
      *
-     * @return 有序的JSONObject对象
+     /**
+     * 获取pcapToJson返回的JSON数据里面的layersjson数据
+     *
+     * @return 有序的JSONObject对象 数组
      */
-    public static JSONObject getPcapLayersJsonObj(String pcapJson) throws JsonProcessingException {
+    public static JSONArray getPcapLayersJsonObj(String pcapJson) throws JsonProcessingException {
         JSONConfig config = new JSONConfig();
         config.setOrder(true);
+
         ArrayList arrayList = JacksonUtil.toBean(pcapJson, ArrayList.class);
-        JSONObject content = JSONUtil.parseObj(arrayList.get(0));
-        return content.getJSONObject("_source").getJSONObject("layers");
+
+        JSONArray arr = new JSONArray(config);
+
+        arrayList.forEach(one-> arr.add(JSONUtil.parseObj(one,config).getJSONObject("_source").getJSONObject("layers")));
+
+        return arr;
     }
 
     /**
@@ -69,13 +81,45 @@ public class PcapUtil {
      * @param layersObj pcap包layersObj（getPcapLayersJsonObj方法缓存）
      * @return 解析之后的数据
      */
-    public static JSONObject  parsePcapLayersData(JSONObject layersObj){
-        JSONObject parseData= new JSONObject();
+    public static JSONObject  parsePcapLayersData(JSONObject layersObj) throws ParseException {
+        JSONObject parseData= new JSONObject(new JSONConfig().setOrder(true));
 
         String protocol="";
         for (Map.Entry<String, Object> entry : layersObj.entrySet()){
+            String key = entry.getKey();
+            if(key.equals("frame")){
+                JSONObject frameObj = layersObj.getJSONObject("frame");
+                String time = frameObj.getStr("frame.time_epoch").replace(".","");
+                //包时间微妙值
+                parseData.set("time_ms", Long.parseLong(time)/1000);
+                Long time_ms = parseData.getLong("time_ms");
+                Long time_ms_e = time_ms%1000;
+                parseData.set("time_str", DateFormatUtils.format(new Date(time_ms/1000),"yyyy-MM-dd HH:mm:ss.SSS"));
+                parseData.set("time_ms_str", DateFormatUtils.format(new Date(time_ms/1000),"yyyy-MM-dd HH:mm:ss.SSS")+"."+time_ms_e);
+                //长度
+                parseData.set("length",frameObj.getStr("frame.len"));
+                //所有协议
+                parseData.set("protocols",frameObj.getStr("frame.protocols"));
+            }
+            //数据链路层
+            if(key.equals("eth")){
+                JSONObject ethObj = layersObj.getJSONObject("eth");
 
-            if(!entry.getKey().equals("data")) {
+                //源mac地址
+                parseData.set("src_mac",ethObj.getStr("eth.src"));
+                //目的mac地址
+                parseData.set("dst_mac",ethObj.getStr("eth.dst"));
+            }
+            //网络层
+            if(key.equals("ip")){
+                JSONObject ipObj = layersObj.getJSONObject("ip");
+
+                //源Ip地址
+                parseData.set("src_ip",ipObj.getStr("ip.src"));
+                //目的Ip地址
+                parseData.set("dst_ip",ipObj.getStr("ip.dst"));
+            }
+            if(!key.equals("data")) {
                 protocol = entry.getKey();
             }
         }
@@ -192,6 +236,15 @@ public class PcapUtil {
         byte[] bytes = hex2Bytes(sb.toString());
 
         return bytes;
+    }
+
+    /**
+     * 拆分pcap包
+     * @param pcapFile 文件
+     * @param indexArr 索引--从小到大排序
+     */
+    public static byte[] splitPcap(File pcapFile, Integer...indexArr){
+        return hexToPcap(readToHex(pcapFile,indexArr));
     }
 
     private static String bytesToHex(byte[] byteArray) {

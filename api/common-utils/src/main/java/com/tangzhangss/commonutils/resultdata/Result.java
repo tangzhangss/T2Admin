@@ -1,6 +1,9 @@
 package com.tangzhangss.commonutils.resultdata;
 
 import com.tangzhangss.commonutils.i18n.Translator;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
@@ -8,9 +11,15 @@ import java.io.Serializable;
 /**
  * author:tangzhangss
  */
+@ApiModel(description = "通用结果返回实体")
 public class Result<T> implements Serializable {
+    @ApiModelProperty("状态码，200表示成功,4XX请求错误，5XX服务器端错误，6XX业务异常，1XXX用户端错误")
     private  Integer code;
+
+    @ApiModelProperty("调用结果提示信息，如: OK")
     private String message;
+
+    @ApiModelProperty("返回的数据")
     private T data;
 
     public Result(HttpStatus httpStatus, T data){

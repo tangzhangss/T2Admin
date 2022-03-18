@@ -15,12 +15,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Sample {
 
     public static void main(String[] args) throws IOException {
-        String filePath="C:\\Users\\it_ta\\Desktop\\test.pcap";
+        String filePath="C:\\Users\\it_ta\\Desktop\\ipv4frags.pcap";
 
         File file = new File(filePath);
         System.out.println("pcap文件大小:"+file.length());
@@ -29,6 +32,9 @@ public class Sample {
         AtomicInteger packetNum = new AtomicInteger();//packet数量
         AtomicInteger packetDataSum = new AtomicInteger();//pcap包大小
         pcap.loop((packet)->{
+            printLog("-----------------------------------------------------");
+            printLog("包到达时间:", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(packet.getArrivalTime()/1000));
+            printLog("包长度:",packet.getPayload().getReadableBytes());
             packetDataSum.getAndAdd(packet.getPayload().getReadableBytes());
             packetNum.getAndIncrement();
             if(packet.hasProtocol(Protocol.ARP)){

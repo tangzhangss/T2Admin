@@ -24,10 +24,11 @@ public class IpUtil {
     public static void main(String[] args) {
         System.out.println(getRealAddressByIP("182.61.200.6"));
         System.out.println(getRealAddressByIP("127.0.0.1"));
+        System.out.println(getIPV4());
     }
 
     /**
-     * 获取本机的IPV4地址
+     * 获取本机正在使用的IPV4地址 （不包含虚拟机）
      * @return ipv4地址
      */
     public static String getIPV4(){
@@ -35,12 +36,19 @@ public class IpUtil {
             Enumeration<NetworkInterface> allNetInterfaces = NetworkInterface.getNetworkInterfaces();
             while (allNetInterfaces.hasMoreElements()){
                 NetworkInterface netInterface = allNetInterfaces.nextElement();
+                //非回送接口 非虚拟的 正在使用的
+                if(netInterface.isLoopback()||netInterface.isVirtual()||!netInterface.isUp()){
+                    continue;
+                }
+                //排除虚拟机 上面的virtual貌似没用
+                if(netInterface.getDisplayName().toUpperCase().contains("Virtual".toUpperCase())){
+                    continue;
+                }
                 Enumeration<InetAddress> addresses = netInterface.getInetAddresses();
                 while (addresses.hasMoreElements()){
                     InetAddress ip = addresses.nextElement();
                     if (ip != null
                             && ip instanceof Inet4Address
-                            && !ip.isLoopbackAddress()
                             && ip.getHostAddress().indexOf(":")==-1){
                         return ip.getHostAddress();
                     }

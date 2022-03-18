@@ -2,6 +2,7 @@ package runtime;
 
 
 import com.tangzhangss.commonutils.utils.BaseUtil;
+import com.tangzhangss.commonutils.utils.RuntimeUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.io.InputStream;
 
 public class LinuxTest {
     public static void main(String[] args) throws IOException, InterruptedException {
-        String s = BaseUtil.executeRuntimeCommand("ls -l");
+        String s = RuntimeUtil.executeRuntimeCommand("ls -l");
         System.out.println("运行结果:"+s);
     }
 

@@ -34,7 +34,7 @@ public class ProcessEngineConfig {
                 .setJdbcUrl(url)
                 .setJdbcPassword(password)
                 .setJdbcUsername(username)
-                //初始化基础表
+                //初始化基础表--需要时改为true
                 .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE)
                 //邮箱设置
                 .setMailServerHost("smtp.163.com")
