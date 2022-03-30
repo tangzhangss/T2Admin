@@ -9,10 +9,19 @@ import java.io.IOException;
 
 public class ServerStatus {
     public static void main(String[] args) throws IOException, InterruptedException {
-        String s = "root       48761  0.0  0.0 113416  1620 ?        S    1月06   0:00 /bin/sh /usr/local/mysql/bin/mysqld_safe --datadir=/data/mysqldata --pid-file=/data/mysqldata/localhost.localdomain.pid\r\n" +
-                "mysql      49025  0.5  0.4 2633832 581640 ?      Sl   1月06 527:05 /usr/local/mysql/bin/mysqld --basedir=/usr/local/mysql --datadir=/data/mysqldata --plugin-dir=/usr/local/mysql/lib/plugin --user=mysql --log-error=localhost.localdomain.err --pid-file=/data/mysqldata/localhost.localdomain.pid --socket=/tmp/mysql.sock --port=3306";
+        String s = "tcp        0      0 192.168.1.172:22        192.168.1.81:49638      ESTABLISHED\r\n" +
+                "tcp        0      0 192.168.1.172:22        192.168.1.81:42692      ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:55972     192.168.1.195:3306      ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:55976     192.168.1.195:3306      ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:58398     192.168.1.195:3306      ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:48882     192.168.1.195:3306      ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:58396     192.168.1.195:3306      ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:58318     192.168.1.195:3306      ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:59992     192.168.1.115:11526     ESTABLISHED\r\n" +
+                "tcp6       0      0 192.168.1.172:9092      192.168.1.115:36314     ESTABLISHED";
 
-        RuntimeUtil.parsePsAuxCmdRes(s);
+        System.out.println(RuntimeUtil.parseNetstatCmdRes(s));
+
 
 
     }

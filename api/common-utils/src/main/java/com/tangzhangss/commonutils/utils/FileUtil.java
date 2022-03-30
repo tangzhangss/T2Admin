@@ -498,4 +498,17 @@ public class FileUtil {
         return tempFile;
     }
 
+    /**
+     * 合并文件路径
+     */
+    public static String mergePath(String ...path){
+        StringBuffer filePath = new StringBuffer();
+        for (int i = 0; i < path.length; i++) {
+            if(i!=0)filePath.append(File.separator);
+            filePath.append(path[i]);
+        }
+        return filePath.toString();
+    }
+
+
 }

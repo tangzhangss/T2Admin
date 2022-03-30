@@ -75,7 +75,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
     // 是否查询全部，已删除的-后端重写之后以后端的为主
     protected boolean isQueryAll(){
-        return isQueryAll.get();
+        return Optional.ofNullable(isQueryAll.get()).orElseGet(()->false);
     }
 
     @PostConstruct
@@ -294,7 +294,8 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
         //即：仅前端调用需要按照时间排序
         //分组查询参数只是为了获取分页数据以及前端查询条件-也需要后端重新定义接口配合-所以不需要时间排序
         //如果有排序条件也不需要排序
-        if (!this.isGroupBy.get()||orders.size()==0){
+        Boolean isGroupBy = Optional.ofNullable(this.isGroupBy.get()).orElseGet(()->false);
+        if (!isGroupBy||orders.size()==0){
             // 默认按创建时间排序
             orders.add(new OrderImpl(getExpression("createTime",root),false));
         }
@@ -510,19 +511,13 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
     @Transactional(rollbackFor = Exception.class)
     public T save(T data){
-        try{
-            checkIsSystemCreate(data);
-            this.beforeSaveData(data);
-            this.checkAndSetByIsNew(data);
-            //检查字段是否重复
-            this.checkUnionField(data);
-            myDao.save(data);
-            this.afterSaveData(data);
-
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
-
+        checkIsSystemCreate(data);
+        this.beforeSaveData(data);
+        this.checkAndSetByIsNew(data);
+        //检查字段是否重复
+        this.checkUnionField(data);
+        myDao.save(data);
+        this.afterSaveData(data);
         return data;
     }
 
@@ -582,7 +577,7 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
      * 检测字段的唯一新
      * @param data 新插入|修改的数据
      */
-    protected void checkUnionField(T data) throws Exception {
+    protected void checkUnionField(T data){
         Map<String, String> ckItem = this.getCheckFields();
         if (ckItem == null || ckItem.isEmpty()) return;
         Class<?> aClass = data.getClass();
@@ -603,7 +598,12 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                 //打开私有访问
                 field.setAccessible(true);
                 //获取属性值
-                String value = String.valueOf(field.get(data));
+                String value = null;
+                try {
+                    value = String.valueOf(field.get(data));
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
                 flMap.put(key + "@EQ", value);
                 if(sb.length()==0)sb.append(ckItem.get(mKey)).append(":").append(value).append(",");
             }
@@ -611,7 +611,6 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
             flMap.put("id@NEQ", data.getId().toString());
 //            isQueryAll=true;//需要查询全部的包括usable(被禁用的)
             sb.append("被占用,请修改");
-            System.out.println(sb.toString());
             // 如果有，则说明重复了
             if (!myDao.findAll(this.getCommonSpecification(null, flMap)).isEmpty()) {
                 ExceptionUtil.throwException(sb.toString());

@@ -5,6 +5,7 @@ import com.tangzhangss.commonservice.common.BaseConfig;
 import com.tangzhangss.commonutils.base.SysBaseService;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.config.Attribute;
+import com.tangzhangss.commonutils.i18n.Translator;
 import com.tangzhangss.commonutils.resultdata.ResultCode;
 import com.tangzhangss.commonutils.service.RedisService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
@@ -104,10 +105,10 @@ public class UserService extends SysBaseService<UserEntity, UserDao> {
         //没有登录不能使用SysBaseService里面的方法-大多数方法都会用到当前用户信息
 //        UserEntity realUser = getOneWithMapString("username@EQ="+user.getUsername());
         UserEntity realUser = myDao.findFirstByUsername(user.getUsername());
-        if (realUser == null) ExceptionUtil.throwException("用户名不存在", ResultCode.USER_LOGIN_FAILED);
+        if (realUser == null) ExceptionUtil.throwException(Translator.get("user_name_not_exist"), ResultCode.USER_LOGIN_FAILED);
         //验证密码
         if (!realUser.getPassword().equals(BaseUtil.twiceMd5Salt(user.getPassword())))
-            ExceptionUtil.throwException("密码错误,请重新检查密码", ResultCode.USER_LOGIN_FAILED);
+            ExceptionUtil.throwException(Translator.get("password_incorrect"), ResultCode.USER_LOGIN_FAILED);
         //验证账号是否被禁用
         if (!realUser.isUsable()) ExceptionUtil.throwException("当前账号已被禁用，不可登录", ResultCode.USER_LOGIN_FAILED);
 

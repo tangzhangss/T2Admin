@@ -1,5 +1,6 @@
 package com.tangzhangss.commonservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tangzhangss.commonutils.base.SysBaseEntity;
 import lombok.Data;
 

@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpUtils;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -245,5 +247,23 @@ public class BaseUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    /**
+     * 提供精确的小数位四舍五入处理。
+     *
+     * @param v     需要四舍五入的数字
+     * @param scale 小数点后保留几位
+     * @return 四舍五入后的结果
+     */
+    public static double round(double v, int scale) {
+        if (scale < 0) {
+            throw new IllegalArgumentException(
+                    "The scale must be a positive integer or zero");
+        }
+        BigDecimal b = new BigDecimal(Double.toString(v));
+        BigDecimal one = BigDecimal.ONE;
+        return b.divide(one, scale, RoundingMode.HALF_UP).doubleValue();
     }
 }

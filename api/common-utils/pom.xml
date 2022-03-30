@@ -10,7 +10,7 @@
 
     <groupId>ren.tzcc</groupId>
     <artifactId>commonutils</artifactId>
-    <version>1.0.19.RELEASE</version>
+    <version>1.0.20.SNAPSHOT</version>
     <name>commonutils</name>
     <description>TZCC-REN-SYSTEM 公共包</description>
 
@@ -26,6 +26,9 @@
         <hutool-all>5.4.6</hutool-all>
         <lombok.version>1.18.0</lombok.version>
         <nacos.version>2.1.1.RELEASE</nacos.version>
+        <oshi.version>5.8.0</oshi.version>
+        <jna.version>5.8.0</jna.version>
+
     </properties>
 
     <licenses>
@@ -62,6 +65,23 @@
     </distributionManagement>
 
     <dependencies>
+        <!-- 获取系统信息 -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>${oshi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
         <!--swagger的依赖-->
         <!--美化-->
         <dependency>

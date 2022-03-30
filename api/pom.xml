@@ -12,7 +12,7 @@
         <hutool-all>5.4.6</hutool-all>
         <lombok.version>1.18.0</lombok.version>
         <nacos.version>2.1.1.RELEASE</nacos.version>
-        <commonutils.version>1.0.19.RELEASE</commonutils.version>
+        <commonutils.version>1.0.20.SNAPSHOT</commonutils.version>
     </properties>
 
     <parent>

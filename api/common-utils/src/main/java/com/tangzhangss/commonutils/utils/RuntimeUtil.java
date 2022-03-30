@@ -49,6 +49,37 @@ public class RuntimeUtil {
         return array;
     }
 
+    /**
+     * 获取 netstat 命令结果
+     */
+    public static JSONArray parseNetstatCmdRes(String res){
+        JSONArray array = new JSONArray();
+        JSONConfig config = new JSONConfig();
+        config.setOrder(true);
+        if(org.apache.commons.lang3.StringUtils.isBlank(res))return array;
+        String[] lines = res.split("\r\n");
+        for (int i = 0; i < lines.length; i++) {
+            String[] resArr = lines[i].split("\\s+");
+            if(resArr.length<6)throw new RuntimeException("Parsing failed. Format error");
+            String[] local = resArr[3].split(":");
+            String[] foreign = resArr[4].split(":");
+            array.add(
+                    new JSONObject(config).set("proto",resArr[0])
+                            .set("recvQ",resArr[1])
+                            .set("sendQ",resArr[2])
+                            .set("localAddr",resArr[3])
+                            .set("localIp",local[0])
+                            .set("localPort",local[1])
+                            .set("foreignAddr",resArr[4])
+                            .set("foreignIp",foreign[0])
+                            .set("foreignPort",foreign[1])
+                            .set("state",resArr[5])
+            );
+        }
+
+        return array;
+    }
+
 
     /**
      * 执行linux command命令
@@ -96,5 +127,8 @@ public class RuntimeUtil {
 
         return res.toString();
     }
+
+
+
 
 }

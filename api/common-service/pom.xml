@@ -16,20 +16,17 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!--common-utils-->
-        <dependency>
-            <groupId>com.tangzhangss</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
         <!--阿里云oss-->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>2.8.3</version>
         </dependency>
-
+        <!--flyway-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,9 +1,12 @@
 package com.tangzhangss.commonservice.menu;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tangzhangss.commonservice.domain.DomainEntity;
 import com.tangzhangss.commonutils.base.SysBaseEntity;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
