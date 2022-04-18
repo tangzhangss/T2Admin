@@ -2,7 +2,7 @@ package com.tangzhangss.commonservice.user;
 
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.tangzhangss.commonutils.aspect.syslog.SysLog;
+import com.tangzhangss.commonutils.annotation.SysLog;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.resultdata.Result;

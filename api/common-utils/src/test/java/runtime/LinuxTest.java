@@ -1,17 +1,29 @@
 package runtime;
 
 
+import com.tangzhangss.commonutils.server.Sys;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.RuntimeUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.LinkedList;
 
 public class LinuxTest {
     public static void main(String[] args) throws IOException, InterruptedException {
-        String s = RuntimeUtil.executeRuntimeCommand("ls -l");
-        System.out.println("运行结果:"+s);
+        LinkedList<String> resBuffer = new LinkedList();
+        RuntimeUtil.executeRuntimeCommand("java -jar D:\\DEVWORK\\nsmap_ccplatform\\nsmap_cyplatform_admin\\target\\nsmap_cyplatform_admin.jar"
+                ,resBuffer);
+        while(true){
+            if(resBuffer.size()==0){
+                Thread.sleep(100);
+                continue;
+            }
+            String pop = resBuffer.pop();
+            if(pop.equals("EOF")){
+                break;
+            }
+            System.out.println(pop);
+        }
     }
 
     public static String readInputStream(InputStream inputStream, String charset) throws IOException {

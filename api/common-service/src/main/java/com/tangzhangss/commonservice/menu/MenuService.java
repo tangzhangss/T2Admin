@@ -55,7 +55,7 @@ public class MenuService extends SysBaseService<MenuEntity, MenuDao> {
         } else if (StringUtils.isNotBlank(currentUser.getStr("roleIds"))) {
             //企业员工
             //有角色-查询这些角色拥有的菜单
-            List<RoleEntity> roles = roleService.getWithMapString("name@IN=" + currentUser.getStr("roleIds"));
+            List<RoleEntity> roles = roleService.getWithMapString("name@IN=" + currentUser.getStr("roleNames"));
             Set<String> menuList = new HashSet<>();
             roles.forEach(role -> {
                 menuList.addAll(Arrays.asList(StringUtils.split(role.getMenuIds(), ",")));

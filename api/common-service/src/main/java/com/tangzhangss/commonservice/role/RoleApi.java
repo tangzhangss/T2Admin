@@ -1,5 +1,6 @@
 package com.tangzhangss.commonservice.role;
 
+import com.tangzhangss.commonutils.annotation.PreAuthorize;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.resultdata.Result;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,6 +6,8 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * 用户表
@@ -23,9 +25,11 @@ public class UserEntity extends SysBaseEntity {
     private String username = "";//登录账号
     private String password = "";//登录密码MD5加密
 
-    private String roleIds = "";//用户角色id集合用,分割
+    private String roleNames = "";//用户角色name集合用,分割
 
     @Transient
     private String token;
 
+    @Transient
+    private HashSet<String> authorizeSet;//用户权限集合
 }

@@ -1,6 +1,9 @@
 package com.tangzhangss.commonservice.user;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
+import com.tangzhangss.commonservice.aspect.preauthorize.PreAuthorizeEntity;
+import com.tangzhangss.commonservice.aspect.preauthorize.PreAuthorizeService;
 import com.tangzhangss.commonservice.common.BaseConfig;
 import com.tangzhangss.commonutils.base.SysBaseService;
 import com.tangzhangss.commonutils.base.SysContext;
@@ -10,13 +13,13 @@ import com.tangzhangss.commonutils.resultdata.ResultCode;
 import com.tangzhangss.commonutils.service.RedisService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.ExceptionUtil;
+import com.tangzhangss.commonutils.utils.HashMapUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService extends SysBaseService<UserEntity, UserDao> {
@@ -27,6 +30,9 @@ public class UserService extends SysBaseService<UserEntity, UserDao> {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    PreAuthorizeService preAuthorizeService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -50,17 +56,6 @@ public class UserService extends SysBaseService<UserEntity, UserDao> {
             }
         });
     }
-
-//全局都不能一样，不能在这里判断
-//    @Override
-//    protected List<Map<String, String>> getCheckFields(){
-//        List<Map<String, String>> list=new LinkedList<>();
-//
-//        HashMap<String,String> map=new HashMap<>();
-//        map.put("username","登录账号");
-//        list.add(map);
-//        return list;
-//    }
 
     /**
      * 删除之前操作
@@ -114,7 +109,22 @@ public class UserService extends SysBaseService<UserEntity, UserDao> {
 
         //登录之后生成和返回Token
         String token = UUID.randomUUID() + "&" + realUser.getId();
-        redisService.set(token, JSON.toJSONString(realUser), 54000l);
+        SysContext.setUser(JSONUtil.parseObj(realUser));
+        //根据用户角色查询用户权限
+        String roleNames = realUser.getRoleNames();
+        HashSet<String> authorizeSet = new HashSet<>();
+        realUser.setAuthorizeSet(authorizeSet);
+        if(StringUtils.isNotBlank(roleNames)){
+            List<PreAuthorizeEntity> preAuthorizeEntityList = preAuthorizeService.getWithMap(new HashMapUtil().put("roleName@IN", roleNames).get());
+            preAuthorizeEntityList.forEach(preAuthorizeEntity -> {
+                String tag = preAuthorizeEntity.getTag();
+                if(StringUtils.isNotBlank(tag)){
+                    authorizeSet.addAll(Arrays.asList(tag.split(",")));
+                }
+            });
+            //再存一次更新权限
+            redisService.set(token, JSON.toJSONString(realUser), 54000l);
+        }
 
         realUser.setToken(token);//token只在登录的时候返回——其他时候不返回
 

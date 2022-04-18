@@ -3,6 +3,9 @@ package com.tangzhangss.commonutils.utils;
 import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.json.JSONObject;
 import lombok.val;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -10,8 +13,11 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.relational.core.sql.In;
+import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
@@ -376,6 +382,27 @@ public class FileUtil {
         file.deleteOnExit();
         return file;
     }
+    /**
+     * inputStream 转换 MultipartFile
+     * @param inputStream inputStream
+     * @param fileName 文件名
+     */
+    public static MultipartFile toMultipartFile(InputStream inputStream,String fileName) {
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        FileItem item = factory.createItem(null, MediaType.APPLICATION_OCTET_STREAM_VALUE, false, fileName);
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        //使用输出流输出输入流的字节
+        try(OutputStream os = item.getOutputStream();){
+            while ((bytesRead = inputStream.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        return new CommonsMultipartFile(item);
+    }
 
     /**
      * url路径 生成 转file对象
@@ -511,4 +538,26 @@ public class FileUtil {
     }
 
 
+    /**
+     * 下载文件
+     */
+    public static void downLoad(File file, HttpServletResponse response){
+        try(
+                FileInputStream in = new FileInputStream(file);
+                OutputStream out = response.getOutputStream();
+        ){
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            response.setHeader("Content-disposition","attachment; filename="+file.getName());
+            response.setCharacterEncoding("utf-8");
+            //读取文件流
+            int len = 0;
+            byte[] buffer = new byte[1024 * 10];
+            while ((len = in.read(buffer)) != -1){
+                out.write(buffer,0,len);
+            }
+            out.flush();
+        } catch (Exception e) {
+            throw new RuntimeException("download failed,"+e.getMessage());
+        }
+    }
 }
