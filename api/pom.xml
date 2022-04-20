@@ -13,6 +13,7 @@
         <lombok.version>1.18.0</lombok.version>
         <nacos.version>2.1.1.RELEASE</nacos.version>
         <commonutils.version>1.0.20.SNAPSHOT</commonutils.version>
+        <jna.version>5.8.0</jna.version>
     </properties>
 
     <parent>

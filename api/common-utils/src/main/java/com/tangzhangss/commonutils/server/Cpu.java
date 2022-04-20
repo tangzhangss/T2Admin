@@ -1,8 +1,12 @@
 package com.tangzhangss.commonutils.server;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ReUtil;
 import com.tangzhangss.commonutils.utils.BaseUtil;
+import com.tangzhangss.commonutils.utils.runtime.OSInfo;
+import com.tangzhangss.commonutils.utils.runtime.RuntimeUtil;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
@@ -10,10 +14,17 @@ import java.math.BigDecimal;
  */
 public class Cpu {
     /**
-     * 核心数
+     * 逻辑processor数
+     */
+    private int cpuProcessorNum;
+    /**
+     * cpu线程数
+     */
+    private int cpuCoreNum;
+    /**
+     * cpu的数量
      */
     private int cpuNum;
-
     /**
      * CPU总的使用率
      */
@@ -39,12 +50,51 @@ public class Cpu {
      */
     private double free;
 
-    public int getCpuNum() {
+    /**
+     * CPU最大频率 单位Hz
+     */
+    private long maxFrequency;
+    private long[] currentFrequency;
+
+    public long getMaxFrequency() {
+        return maxFrequency;
+    }
+
+    public void setMaxFrequency(long maxFrequency) {
+        this.maxFrequency = maxFrequency;
+    }
+
+    public long[] getCurrentFrequency() {
+        return currentFrequency;
+    }
+
+    public void setCurrentFrequency(long[] currentFrequency) {
+        this.currentFrequency = currentFrequency;
+    }
+
+    public int getCpuNum(){
         return cpuNum;
     }
 
+
     public void setCpuNum(int cpuNum) {
         this.cpuNum = cpuNum;
+    }
+
+    public int getCpuProcessorNum() {
+        return cpuProcessorNum;
+    }
+
+    public void setCpuProcessorNum(int cpuProcessorNum) {
+        this.cpuProcessorNum = cpuProcessorNum;
+    }
+
+    public int getCpuCoreNum() {
+        return cpuCoreNum;
+    }
+
+    public void setCpuCoreNum(int cpuCoreNum) {
+        this.cpuCoreNum = cpuCoreNum;
     }
 
     public double getTotal() {

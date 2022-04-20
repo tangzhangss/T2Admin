@@ -60,10 +60,12 @@ public class Jvm {
         this.free = free;
     }
 
+    //JVM被使用内容
     public double getUsed() {
         return NumberUtil.div(total - free, (1024 * 1024), 2);
     }
 
+    //JVM内存使用率
     public double getUsage() {
         return NumberUtil.mul(NumberUtil.div(total - free, total, 4), 100);
     }

@@ -1,9 +1,7 @@
 package runtime;
 
 
-import com.tangzhangss.commonutils.server.Sys;
-import com.tangzhangss.commonutils.utils.BaseUtil;
-import com.tangzhangss.commonutils.utils.RuntimeUtil;
+import com.tangzhangss.commonutils.utils.runtime.RuntimeUtil;
 
 import java.io.*;
 import java.util.LinkedList;

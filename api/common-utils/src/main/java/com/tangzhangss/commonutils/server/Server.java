@@ -2,6 +2,7 @@ package com.tangzhangss.commonutils.server;
 
 
 import cn.hutool.core.util.NumberUtil;
+import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.IpUtil;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
@@ -120,7 +121,11 @@ public class Server {
         long iowait = ticks[TickType.IOWAIT.getIndex()] - prevTicks[TickType.IOWAIT.getIndex()];
         long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
         long totalCpu = user + nice + cSys + idle + iowait + irq + softirq + steal;
-        cpu.setCpuNum(processor.getLogicalProcessorCount());
+        cpu.setCpuProcessorNum(processor.getLogicalProcessorCount());
+        cpu.setCpuCoreNum(processor.getPhysicalProcessorCount());
+        cpu.setCpuNum(processor.getPhysicalPackageCount());
+        cpu.setMaxFrequency(processor.getMaxFreq());
+        cpu.setCurrentFrequency(processor.getCurrentFreq());
         cpu.setTotal(totalCpu);
         cpu.setSys(cSys);
         cpu.setUsed(user);

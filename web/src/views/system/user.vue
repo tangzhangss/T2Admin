@@ -2,7 +2,7 @@
   <div>
     <tz-table ref="tzTable"
               :action-others='[
-                {title:"角色管理",icon:"el-icon-s-custom",onClick:updateUserRole},
+                {title:"角色管理",icon:"icon_role",onClick:updateUserRole},
                 {title:"修改密码",icon:"el-icon-key",onClick:modifyUserPwd},
               ]'
               :api-url="api"
@@ -21,7 +21,7 @@
           <el-checkbox v-for="item in roleList" :label="item.name"></el-checkbox>
         </el-checkbox-group>
         <div style="text-align: right">
-          <el-button type="primary" class="tz-btn" @click="updateRoleIds">保存</el-button>
+          <el-button type="primary" class="tz-btn" @click="updateRoleNames">保存</el-button>
         </div>
       </div>
       <div v-else style="color: gray">[暂无定义角色]</div>
@@ -118,11 +118,11 @@
       }
     },
     methods:{
-      updateRoleIds(){
+      updateRoleNames(){
         let loading = TZUtils.fullLoading(this,"处理中");
         let user = this.currentUser;
         let checkRoleList = this.checkRoleList;
-        user.roleIds=checkRoleList.join(",");
+        user.roleNames=checkRoleList.join(",");
         this.$http.post("/service_api/user",user).then((res)=>{
           this.roleDrawerShow=false;
           this.$message.success("保存成功");
@@ -132,7 +132,7 @@
       },
       updateUserRole(data){
         this.currentUser=data;
-        this.checkRoleList = data.roleIds?data.roleIds.split(","):[];
+        this.checkRoleList = data.roleNames?data.roleNames.split(","):[];
         this.roleDrawerShow=true;
       },
       checkRoleChange(val){

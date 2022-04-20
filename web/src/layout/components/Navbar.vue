@@ -128,9 +128,6 @@
   </div>
 
 </template>
-<script setup lang="ts">
-  import { Close} from '@element-plus/icons'
-</script>
 
 <script>
 import { mapGetters } from 'vuex';

@@ -50,8 +50,8 @@
     <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.5.1" level="project" />
     <orderEntry type="library" name="Maven: ren.tzcc:commonutils:1.0.20.SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.github.oshi:oshi-core:5.8.0" level="project" />
-    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.5.2" level="project" />
-    <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.5.2" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:5.8.0" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:5.8.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.xiaoymin:knife4j-spring-boot-starter:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.github.xiaoymin:knife4j-spring-boot-autoconfigure:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.github.xiaoymin:knife4j-spring:3.0.3" level="project" />

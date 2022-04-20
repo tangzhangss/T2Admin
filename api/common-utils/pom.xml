@@ -28,7 +28,6 @@
         <nacos.version>2.1.1.RELEASE</nacos.version>
         <oshi.version>5.8.0</oshi.version>
         <jna.version>5.8.0</jna.version>
-
     </properties>
 
     <licenses>
@@ -76,7 +75,6 @@
             <artifactId>jna</artifactId>
             <version>${jna.version}</version>
         </dependency>
-
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna-platform</artifactId>

@@ -11,14 +11,10 @@
 </template>
 
 <script>
-  // import TZTable from "@/components/TZTable/index";
-  import {arrayToTree} from "@/utils/treeUtils";
-  import TZUtils from "@/utils/TZUtils";
 
   export default {
     name: 'Domain',
     components: {
-      // "tz-table":TZTable,
     },
     data:function(){
       return {

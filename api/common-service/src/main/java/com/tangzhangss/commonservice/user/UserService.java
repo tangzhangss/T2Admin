@@ -122,9 +122,9 @@ public class UserService extends SysBaseService<UserEntity, UserDao> {
                     authorizeSet.addAll(Arrays.asList(tag.split(",")));
                 }
             });
-            //再存一次更新权限
-            redisService.set(token, JSON.toJSONString(realUser), 54000l);
         }
+        //再存一次更新权限
+        redisService.set(token, JSON.toJSONString(realUser), 54000l);
 
         realUser.setToken(token);//token只在登录的时候返回——其他时候不返回
 

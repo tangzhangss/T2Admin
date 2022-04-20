@@ -1,9 +1,6 @@
 package runtime;
 
-import cn.hutool.core.util.RandomUtil;
-import com.tangzhangss.commonutils.utils.BaseUtil;
-import com.tangzhangss.commonutils.utils.RuntimeUtil;
-import org.junit.platform.commons.util.StringUtils;
+import com.tangzhangss.commonutils.utils.runtime.RuntimeUtil;
 
 import java.io.IOException;
 

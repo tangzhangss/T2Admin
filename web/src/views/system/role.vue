@@ -3,7 +3,7 @@
     <tz-table
               :api-url="api" :action="['delete','edit']"
               :action-others='[
-                {"title":"菜单管理",onClick:updateMenuMethod,icon:"el-icon-menu"}
+                {"title":"菜单管理",onClick:updateMenuMethod,icon:"menu"}
               ]'
               :table-column="tableColumn" showIndex :edit-column="editColumn" >
     </tz-table>
