@@ -1,5 +1,5 @@
 "use strict"
-const serviceApi="http://localhost:10082";
+const serviceApi="https://localhost";
 // const serviceApi="http://47.93.202.202:10082";
 const dataApi="http://localhost:10083";
 const utilApi="http://localhost:10081";

@@ -1,16 +1,30 @@
 package com.tangzhangss.commonutils.utils.runtime;
 
 public class OSInfo {
+
     private static final String OS = System.getProperty("os.name").toLowerCase();
+    private static final String BIT = System.getProperty("os.arch").toLowerCase();
 
     private static OSInfo _instance = new OSInfo();
 
     private EPlatform platform;
 
     private static String LINE_BREAK="\n";//linux换行符
+    private static String SYS_VERSION="";//操作系统版本 window7,10
 
     private OSInfo(){}
 
+    public static String getSysVersion() {
+        return OS;
+    }
+
+    public static String getBIT() {
+        return BIT;
+    }
+
+    public static void setSysVersion(String sysVersion) {
+        SYS_VERSION = sysVersion;
+    }
 
     public static String getLineBreak(){
         if(isWindows()){
@@ -137,7 +151,7 @@ public class OSInfo {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println(OSInfo.getOSname());
+        System.out.println(OSInfo.getBIT());
     }
 
 }

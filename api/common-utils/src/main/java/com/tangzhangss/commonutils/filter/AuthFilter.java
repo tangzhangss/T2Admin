@@ -38,8 +38,6 @@ public class AuthFilter implements Filter {
     public static void addUnAuthUrl(String urlRegex){
         unAuthUrl.add(urlRegex);
     }
-    @Value("${custom.debug:false}")
-    private boolean isDebug;
 
     @Autowired
     RedisService redisService;

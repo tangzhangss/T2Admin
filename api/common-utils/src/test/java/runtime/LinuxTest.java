@@ -8,20 +8,8 @@ import java.util.LinkedList;
 
 public class LinuxTest {
     public static void main(String[] args) throws IOException, InterruptedException {
-        LinkedList<String> resBuffer = new LinkedList();
-        RuntimeUtil.executeRuntimeCommand("java -jar D:\\DEVWORK\\nsmap_ccplatform\\nsmap_cyplatform_admin\\target\\nsmap_cyplatform_admin.jar"
-                ,resBuffer);
-        while(true){
-            if(resBuffer.size()==0){
-                Thread.sleep(100);
-                continue;
-            }
-            String pop = resBuffer.pop();
-            if(pop.equals("EOF")){
-                break;
-            }
-            System.out.println(pop);
-        }
+        String s = RuntimeUtil.executeRuntimeCommand("tasklist /nh");
+        System.out.println(RuntimeUtil.parseTasklistCmdRes(s));
     }
 
     public static String readInputStream(InputStream inputStream, String charset) throws IOException {

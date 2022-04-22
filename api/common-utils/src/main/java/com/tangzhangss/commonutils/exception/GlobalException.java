@@ -20,10 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 @PropertySource("application.properties")
 public class GlobalException {
-    @Value("${custom.debug:false}")
-    private Boolean debug;
-
-
 
     @ExceptionHandler(value = NoHandlerFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
@@ -61,7 +57,7 @@ public class GlobalException {
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public Result exceptionHandler(HttpServletRequest request,Exception e){
-        if (debug) e.printStackTrace();
+
         JSONObject json = new JSONObject();
         json.put("method",request.getMethod());
         json.put("path",request.getServletPath());

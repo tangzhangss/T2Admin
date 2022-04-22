@@ -14,6 +14,11 @@ public class DictService extends SysBaseService<DictEntity,DictDao> {
     }
 
     @Override
+    protected boolean bSureDelete() {
+        return true;
+    }
+
+    @Override
     public Map<String, String> getCheckFields() {
         Map<String, String> map = new HashMap<>();
         map.put("type", "type");

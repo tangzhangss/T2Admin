@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.tangzhangss.commonservice.menu.MenuDao;
 import com.tangzhangss.commonservice.menu.MenuEntity;
 import com.tangzhangss.commonservice.menu.MenuService;
+import com.tangzhangss.commonutils.annotation.SysLog;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.config.FeginConfig;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,10 +50,8 @@ public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestSer
 
 
     @GetMapping("/no_auth")
+    @SysLog(value = "获取测试数据")
     public Result getAll() {
-        JSONObject object = new JSONObject();
-        object.set("clientId","tzcc_ren");
-        SysContext.setUser(object);
         return Result.ok().data(myService.get(request,null));
     }
     @GetMapping("/feign/no_auth")

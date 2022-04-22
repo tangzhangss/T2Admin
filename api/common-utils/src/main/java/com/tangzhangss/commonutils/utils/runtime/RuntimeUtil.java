@@ -17,12 +17,41 @@ import java.util.LinkedList;
 
 /**
  * Runtime工具类
+ *
+ * 处理结果类工具--都不含标题
  */
 public class RuntimeUtil {
     private RuntimeUtil(){};
     private final static String EXCEPTION_STR="Type of an unsupported operating system";
     /**
-     * 获取ps aux 命令结果
+     * 获取tasklist |findstr 命令结果
+     * @param res 行状态 （需要保证这是一行结果）
+     * @return json对象
+     */
+    public static JSONArray parseTasklistCmdRes(String res){
+        if(!OSInfo.isWindows())throw new RuntimeException(EXCEPTION_STR);
+
+        JSONArray array = new JSONArray();
+        JSONConfig config = new JSONConfig();
+        config.setOrder(true);
+        if(StringUtils.isBlank(res))return array;
+        String[] lines = res.split(OSInfo.getLineBreak());
+        for (int i = 0; i < lines.length; i++) {
+            String[] resArr = lines[i].split("\\s+");
+            if(resArr.length<6)throw new RuntimeException("Parsing failed. Format error");
+
+            array.add(
+                    new JSONObject(config).set("name",resArr[0])
+                            //name可能会有空格  占用内存肯定是倒数第二个
+                            .set("ramUse",resArr[resArr.length-2])
+            );
+        }
+
+        return array;
+    }
+
+    /**
+     * 获取ps aux  |grep命令结果
      * @param res 行状态 （需要保证这是一行结果）
      * @return json对象
      */

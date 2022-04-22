@@ -26,4 +26,6 @@ public class SysLogEntity extends SysBaseEntity implements Serializable {
     //返回结果
     @Column(columnDefinition = "TEXT")
     private String result;
+    //结果状态
+    private Boolean success=true;//是否成功
 }

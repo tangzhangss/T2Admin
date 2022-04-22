@@ -16,9 +16,12 @@ import javax.persistence.Table;
 @Data
 @ApiModel("系统字典")
 public class DictEntity extends SysBaseEntity {
+    @ApiModelProperty("字典使用者：开发，用户，运维")
+    private String user;
 
     @ApiModelProperty("字典名")
     private String name;
+
     @ApiModelProperty("字典类型")
     private String type;
 

@@ -86,64 +86,52 @@
         </div>
       </div>
     </div>
-<!--    <el-divider class="divider-title" content-position="left">常见问题</el-divider>-->
-<!--    <ul>-->
-<!--      <li>待完善</li>-->
-<!--    </ul>-->
-    <el-divider class="divider-title" content-position="left">更新日志</el-divider>
-    <ul class="update-log">
-      <li>
-        <p class="bold">v2.0.5(2022-04-20)</p>
-        <div class="text">
-          <p>首页系统概括</p>
+    <el-divider class="divider-title"  content-position="left">
+      服务监视
+      <el-popover width="50%"  placement="bottom-start" :visible="serviceShow">
+        <template #reference>
+          <span style="color:#67c23a;" class="pointer" @click="serviceShow=!serviceShow">[说明]</span>
+        </template>
+        <p>配置【系统设置-系统字典】，新增一个system-service（系统服务）的字典类型即可使用服务监视功能</p>
+        <p>格式说明:</p>
+        <div>
+          <p>[</p>
+          <p style="margin-left: 10px">{</p>
+          <p style="margin-left: 20px">"label":"服务的名称,Mysql",</p>
+          <p style="margin-left: 20px">"value":"服务的进程名,mysql"</p>
+          <p style="margin-left: 10px">}</p>
+          <p>]</p>
         </div>
-      </li>
-      <li>
-        <p class="bold">v2.0.4(2022-03-29)</p>
-        <div class="text">
-          <p>优化系统代码</p>
-          <p>新增后端国际化配置</p>
-          <p>新增系统字典</p>
-        </div>
-      </li>
-      <li>
-        <p class="bold">v2.0.3(2021-11-20)</p>
-        <div class="text">
-          <p>vue升级到3.2.0</p>
-          <p>element-plus升级到1.2.0-beta.3</p>
-          <p>优化菜单配置，支持多级菜单（含外部网页）</p>
-          <p>新增自动换肤功能</p>
-          <p>表格支持排序，排序的优先级:第一次进行排序的字段具有最高优先级（不管升序和降序和多次改变都一样，如需改变优先级请先清空排序）</p>
-        </div>
-      </li>
-      <li>
-        <p class="bold">v2.0.2(2021-04-01)</p>
-        <div class="text">
-          <p>顶部功能优化</p>
-          <p>优化组件样式，新增卡片式路由导航</p>
-          <p>引入tinymce富文本编辑器</p>
-        </div>
-      </li>
-      <li>
-        <p class="bold">v2.0.1(2021-03-05)</p>
-        <div class="text">
-          <p>前端技术框架升级vue3.0</p>
-        </div>
-      </li>
-      <li>
-        <p class="bold">v2.0.0(2021-01-17)</p>
-        <div class="text">
-          <p>Init</p>
-        </div>
-      </li>
-    </ul>
+      </el-popover>
+    </el-divider>
+    <div class="service" v-loading="serviceLoading">
+      <el-table :data="serviceList" style="width: 100%">
+        <el-table-column prop="label" label="服务"  align="center"/>
+        <el-table-column prop="status" label="状态"  align="center">
+          <template #default="scope">
+            <el-tag type="success" v-if="scope.row.status">正常</el-tag>
+            <el-tag type="danger" v-else>异常</el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="ramUse" label="内存占用大小"  align="center"/>
+        <el-table-column prop="ramUseRate" label="内存占用率"  align="center"/>
+        <el-table-column prop="cpuUseRate" label="CPU占用率"  align="center"/>
+      </el-table>
+    </div>
   </div>
 </template>
 
 <script>
 import {Decimal} from 'decimal.js';
+//引入
+import JsonViewer from "vue3-json-viewer"
+
 export default {
   name: 'Home',
+  components:{
+    "json-viewer":JsonViewer
+  },
   data:function(){
     return {
         serverLoading:true,
@@ -156,7 +144,10 @@ export default {
         },
         //jvm使用率
         jvmUsage:0,
-        jvmIntervalId:0
+        jvmIntervalId:0,
+        serviceList:[],
+        serviceShow:false,
+        serviceLoading:true,
     }
   },
   mounted(){
@@ -167,6 +158,11 @@ export default {
          this.startJvmProgress(this.server.jvm.usage);
        }
      })
+    this.$http.get("/service_api/monitor/service").then(res=>{
+        this.serviceList=res.data;
+        if(res.data.length==0)this.serviceShow=true;
+        this.serviceLoading=false;
+    })
   },
   methods:{
     getProgressStatus(val){
@@ -204,6 +200,11 @@ ul{
     padding: 0 5px;
     color: gray;
   }
+}
+.service{
+  border-radius: 10px;
+  border: 5px solid #f7f7f7;
+  box-shadow: 5px 5px 5px #f7f7f7;
 }
 .sys-info{
    display: flex;
