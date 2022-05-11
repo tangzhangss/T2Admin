@@ -1,5 +1,6 @@
 package com.tangzhangss.commonutils.utils;
 
+import cn.hutool.log.StaticLog;
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Field;
@@ -77,7 +78,7 @@ public class PlaceholderStr{
                 field.setAccessible(true);
                 this.func = (BiFunction<String, String, String>) field.get(this);
             } catch (Exception e) {
-                e.printStackTrace();
+                StaticLog.error(e);
                 //如果获取方法不存在或则其他异常---将func设置为simpleCombine
                 this.func = simpleCombine;
             }

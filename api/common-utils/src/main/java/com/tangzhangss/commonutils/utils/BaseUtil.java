@@ -244,8 +244,7 @@ public class BaseUtil {
             baos.flush();
             return new ByteArrayInputStream(baos.toByteArray());
         }catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e.getMessage());
         }
     }
 

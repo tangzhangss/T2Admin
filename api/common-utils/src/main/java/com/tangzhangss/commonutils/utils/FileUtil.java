@@ -2,6 +2,7 @@ package com.tangzhangss.commonutils.utils;
 
 import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.json.JSONObject;
+import cn.hutool.log.StaticLog;
 import lombok.val;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -44,8 +45,7 @@ public class FileUtil {
             baos.flush();
             return new ByteArrayInputStream(baos.toByteArray());
         }catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e.getMessage());
         }
     }
     /**

@@ -2,9 +2,9 @@ package com.tangzhangss.commonservice.user;
 
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
-import com.tangzhangss.commonservice.aspect.preauthorize.PreAuthorizeEntity;
-import com.tangzhangss.commonservice.aspect.preauthorize.PreAuthorizeService;
 import com.tangzhangss.commonservice.common.BaseConfig;
+import com.tangzhangss.commonutils.aspect.preauthorize.PreAuthorizeEntity;
+import com.tangzhangss.commonutils.aspect.preauthorize.PreAuthorizeService;
 import com.tangzhangss.commonutils.base.SysBaseService;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.config.Attribute;

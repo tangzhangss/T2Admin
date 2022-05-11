@@ -3,6 +3,7 @@ package com.tangzhangss.commonutils.config;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.hutool.log.StaticLog;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
@@ -93,7 +94,7 @@ public class FeginConfig {
             if(e instanceof HystrixBadRequestException){
                 result = JSONUtil.toBean(e.getMessage(),Result.class);
             }else{
-                e.printStackTrace();
+                StaticLog.error(e);
                 result = new Result(ResultCode.BUSINESS_REMOTE_CALL_FAILED,e.getMessage());
             }
         }

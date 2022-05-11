@@ -2,6 +2,7 @@ package com.tangzhangss.commonutils.utils;
 
 import cn.hutool.core.codec.Base64Decoder;
 import cn.hutool.core.codec.Base64Encoder;
+import cn.hutool.log.StaticLog;
 import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
@@ -259,7 +260,6 @@ public class HtmlUtil {
 
             document.close();
         }catch (Exception e){
-            e.printStackTrace();
             ExceptionUtil.throwException("HTML转PDF失败:"+e.getMessage());
         }
 

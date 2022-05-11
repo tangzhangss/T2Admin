@@ -1,5 +1,6 @@
 package com.tangzhangss.commonutils.exception;
 
+import cn.hutool.log.StaticLog;
 import com.alibaba.fastjson.JSONObject;
 import com.tangzhangss.commonutils.i18n.Translator;
 import com.tangzhangss.commonutils.resultdata.Result;
@@ -57,7 +58,7 @@ public class GlobalException {
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public Result exceptionHandler(HttpServletRequest request,Exception e){
-
+        StaticLog.error(e);
         JSONObject json = new JSONObject();
         json.put("method",request.getMethod());
         json.put("path",request.getServletPath());

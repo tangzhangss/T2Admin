@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
+import com.tangzhangss.commonutils.annotation.RepeatSubmit;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.datasource.service.DatasourceService;
@@ -56,11 +57,10 @@ public class TestApi extends SysBaseApi<TestEntity,TestService> {
     }
 
 
+//    @RepeatSubmit
     @GetMapping("/___")
-    public Result ___(){
-        System.out.println(IpUtil.getRealAddressByIP("47.108.118.105"));
-
-
+    public Result ___() throws InterruptedException {
+        Thread.sleep(12000);
         return Result.ok();
     }
 

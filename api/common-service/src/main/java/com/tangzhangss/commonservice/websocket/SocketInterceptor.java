@@ -2,6 +2,7 @@ package com.tangzhangss.commonservice.websocket;
 
 import cn.hutool.http.HttpUtil;
 import cn.hutool.log.StaticLog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;

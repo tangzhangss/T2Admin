@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.tangzhangss.commonservice.menu.MenuDao;
 import com.tangzhangss.commonservice.menu.MenuEntity;
 import com.tangzhangss.commonservice.menu.MenuService;
+import com.tangzhangss.commonutils.annotation.RepeatSubmit;
 import com.tangzhangss.commonutils.annotation.SysLog;
 import com.tangzhangss.commonutils.base.SysBaseApi;
 import com.tangzhangss.commonutils.base.SysContext;
@@ -49,9 +50,11 @@ public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestSer
     }
 
 
+    @RepeatSubmit
     @GetMapping("/no_auth")
     @SysLog(value = "获取测试数据")
-    public Result getAll() {
+    public Result getAll() throws InterruptedException {
+        Thread.sleep(10000);
         return Result.ok().data(myService.get(request,null));
     }
     @GetMapping("/feign/no_auth")

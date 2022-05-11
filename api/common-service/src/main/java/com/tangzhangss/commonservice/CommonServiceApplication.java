@@ -22,7 +22,8 @@ public class CommonServiceApplication {
     public static void main(String[] args) {
         AuthFilter.addUnAuthUrl("/service_test/.*");
         //放开websocket的连接
-        AuthFilter.addUnAuthUrl("/websocket/*");
+        AuthFilter.addUnAuthUrl("/websocket/stomp");
+        AuthFilter.addUnAuthUrl("/websocket");
         SpringApplication.run(CommonServiceApplication.class, args);
     }
 

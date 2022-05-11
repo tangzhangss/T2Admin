@@ -1,6 +1,7 @@
 package com.tangzhangss.commonutils.utils;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.log.StaticLog;
 import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.Column;
@@ -67,7 +68,6 @@ public class JPAUtil {
                 try {
                     v = BaseUtil.readAttributeValue(item,field.getName());
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
                     ExceptionUtil.throwException("getEntityValue=>error:",e.getMessage());
                 }
                 String key = field.getName();

@@ -15,6 +15,15 @@ vue3.0
 ![](./资料/qrcode_for_gh_ebb533508d15_258.jpg)
 
 #### 开发日志
+2022-05-11
+
+    （新增）websocket连接，含stomp
+    （新增）表单重复提交注解@RepeatCommit
+    
+2022-04-22
+
+    （新增）首页服务监视，配合系统字典实现
+    （新增）common-service服务https,wss支持
 
 2022-04-19
 

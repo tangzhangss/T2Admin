@@ -3,7 +3,9 @@ package com.tangzhangss.commonutils.aspect.syslog;
 import com.tangzhangss.commonutils.base.SysBaseEntity;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
@@ -24,4 +26,6 @@ public class SysLogEntity extends SysBaseEntity implements Serializable {
     //返回结果
     @Column(columnDefinition = "TEXT")
     private String result;
+    //结果状态
+    private Boolean success=true;//是否成功
 }

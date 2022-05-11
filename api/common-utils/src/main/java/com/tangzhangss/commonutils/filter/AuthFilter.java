@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 
 @Component
 @WebFilter
-@PropertySource({"classpath:application.properties"})
 public class AuthFilter implements Filter {
 
     public static final String AUTH = "X-Token";
