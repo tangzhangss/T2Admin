@@ -19,7 +19,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB;
 REPLACE INTO `tbl_common_service_client` (`id`, `address`, `audit_time`, `phone`, `create_time`, `email`, `logo`, `name`, `remark`, `systemic`, `usable`, `username`, `approved`) VALUES
 ('861136242', '四川成都', '2021-01-14 19:55:11.709222', '15520449931', '2021-01-14 17:57:04.778513', 'it_tangzhang@163.com', 'https://my-admin-v2.oss-cn-chengdu.aliyuncs.com/noAuth/1610618179530_2020LOGO_方形.png_custom', 'tangzhangss(公众号)', '', b'0', b'1', '唐彰', b'1'),
-('tzcc_ren', '四川省龙泉驿区派瑞国际', NULL, '15520449931', '2020-12-29 14:21:55.183332', 'it_tangzhang@163.com', 'https://my-admin-v2.oss-cn-chengdu.aliyuncs.com/noAuth/1610893016281_logo.png_custom', 'TZCC-REN', '哇...', b'0', b'1', '唐彰', b'1');
+('tzcc_ren', '四川省成都市', NULL, '15520449931', '2020-12-29 14:21:55.183332', 'it_tangzhang@163.com', 'https://my-admin-v2.oss-cn-chengdu.aliyuncs.com/noAuth/1610618179530_2020LOGO_方形.png_custom', 'TZCC-REN', '哇...', b'0', b'1', '唐彰', b'1');
 
 -- 初始用户
 CREATE TABLE IF NOT EXISTS `tbl_common_service_user` (
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `tbl_common_service_user` (
     ENGINE=InnoDB
 ;
 INSERT IGNORE INTO `tbl_common_service_user` (`id`, `client_id`, `create_time`, `creator_id`, `remark`, `systemic`, `update_time`, `usable`, `avatars`, `phone`, `email`, `name`, `password`, `role_ids`, `username`, `creator_name`) VALUES
-(10000, 'tzcc_ren', '2020-12-13 19:40:47.000000', 10000, '企业管理员账号', b'1', '2021-01-16 19:53:36.678860', b'1', 'https://my-admin-v2.oss-cn-chengdu.aliyuncs.com/noAuth/1610893016281_logo.png_custom', '15520449931', 'it_tangzhang@163.com', 'TZCC-REN', 'aff1373ad9cf8836415a168cf7e67285', '', 'tzcc_ren', ''),
+(10000, 'tzcc_ren', '2020-12-13 19:40:47.000000', 10000, '企业管理员账号', b'1', '2021-01-16 19:53:36.678860', b'1', 'https://my-admin-v2.oss-cn-chengdu.aliyuncs.com/noAuth/1610618179530_2020LOGO_方形.png_custom', '15520449931', 'it_tangzhang@163.com', 'TZCC-REN', 'aff1373ad9cf8836415a168cf7e67285', '', 'tzcc_ren', ''),
 (27117392470016, '861136242', '2021-01-14 19:55:11.729222', 10000, '企业管理员账号', b'0', '2021-02-13 20:15:38.668409', b'1', 'https://my-admin-v2.oss-cn-chengdu.aliyuncs.com/noAuth/1610618179530_2020LOGO_方形.png_custom', '15520449931', 'it_tangzhang@163.com', 'tangzhangss(公众号)', '0b008dc06f6c9097ac9c9fcb194482ba', '', '861136242', '');
 
 -- 初始菜单

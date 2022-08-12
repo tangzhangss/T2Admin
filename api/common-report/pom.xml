@@ -16,29 +16,41 @@
         <java.version>11</java.version>
     </properties>
     <dependencies>
-
+        <!--common-utils-->
+<!--        <dependency>-->
+<!--            <groupId>com.tangzhangss</groupId>-->
+<!--            <artifactId>common-utils</artifactId>-->
+<!--            <version>${project.parent.version}</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.poi</groupId>-->
+<!--                    <artifactId>poi-ooxml</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
-
-        <!--common-utils-->
-        <dependency>
-            <groupId>com.tangzhangss</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${project.parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.poi</groupId>
-                    <artifactId>poi-ooxml</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!--jasperreports-->
+        <!--https://jaspersoft.jfrog.io/ui/native/third-party-ce-artifacts/com/lowagie/itext/-->
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>6.17.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.lowagie</groupId>
+                    <artifactId>itext</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7.js8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/itext-2.1.7.js8.jar</systemPath>
         </dependency>
         <!--5.0.0版本有问题-->
         <dependency>
@@ -54,6 +66,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <includeSystemScope>true</includeSystemScope>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -72,5 +85,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

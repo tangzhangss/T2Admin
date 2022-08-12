@@ -408,6 +408,7 @@ public class ClientService {
                 user.setId(uidGeneratorService.getuid());
                 user.setPassword(BaseUtil.twiceMd5Salt(BaseConfig.USER_DEFAULT_PASSWORD));//密码设置
             }
+            user.setCreateTime(LocalDateTime.now());
             user.setAvatars(data.getLogo());
             user.setEmail(data.getEmail());
             user.setPhone(data.getPhone());

@@ -64,6 +64,11 @@
     </distributionManagement>
 
     <dependencies>
+        <!--kafka支持-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
         <!-- 获取系统信息 -->
         <dependency>
             <groupId>com.github.oshi</groupId>

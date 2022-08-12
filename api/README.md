@@ -92,3 +92,15 @@
         "message": "远程调用失败",
         "data": "{\"result\":{\"code\":404,\"data\":\"访问的页面不存在\",\"message\":\"Not Found\"},\"service\":\"COMMON-DATA\"}"
     }
+
+#其他配置
+    可以通过创建配置文件覆盖原有配置
+    application-datasource.propertise
+    application-common.propertise
+    application-redis.propertise
+    -也可利用spring配置加载规则在classpath目录创建config/application.propertise(或者更高加载顺序)更改配置等【大多数时候没法覆盖include的配置】
+    可以自己新建一个application-custom.propertise 并且 spring.profiles.include=common,custom（custom放最后面）
+
+
+    
+    

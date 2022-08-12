@@ -6,7 +6,7 @@ import store from "@/store";
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
-  timeout: 10000 // request timeout,
+  timeout:30000 // request timeout,前端超时取消之后后端处理还会继续执行；如果设置建议大于后端的超时时间
 })
 
 // request interceptor
@@ -70,6 +70,12 @@ service.interceptors.response.use(
         showClose:true
       })
       store.commit("permission/CLEAR_TOKEN");
+    }else if(res.code==429) {
+      ElMessage({
+        message:"正在处理中，请勿重复提交!",
+        type: 'warning',
+        duration: 2 * 1000
+      })
     }else {
       ElMessage({
           message: res.message || "服务器加载失败，请刷新页面或稍后重试!",//有可能返回的不是后端Result对象

@@ -121,9 +121,13 @@
           data.externalService=true;
           this.externalServiceInit(data);
         }
+
         if(data && data.externalService){
           this.isExternalService=true;
         }else{this.isExternalService=false}
+
+        //给到记录值，地址编辑之后--由查看变成编辑--状态不变
+        data.externalService=this.isExternalService;
       },
       externalServiceInit(data){
         // data.path="iFrame/${id}";
@@ -131,7 +135,6 @@
         //不给默认值
       },
       externalServiceChange(val,data){
-        console.log(val,data);
         this.isExternalService=val;
         if(this.isExternalService)this.externalServiceInit(data);
       },

@@ -54,7 +54,6 @@ public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestSer
     @GetMapping("/no_auth")
     @SysLog(value = "获取测试数据")
     public Result getAll() throws InterruptedException {
-        Thread.sleep(10000);
         return Result.ok().data(myService.get(request,null));
     }
     @GetMapping("/feign/no_auth")

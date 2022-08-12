@@ -10,6 +10,7 @@ import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.*;
 import org.apache.commons.lang.StringUtils;
@@ -71,22 +72,21 @@ public class CommonApi {
                     docExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                     docExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
                     SimpleDocxExporterConfiguration configuration = new SimpleDocxExporterConfiguration();
-
                     docExporter.setConfiguration(configuration);
                     docExporter.exportReport();
                 }
                 break;
             }
             case "EXCEL":{//可以显示中文
-                response.setContentType("application/vnd.ms-excel");
-                JRXlsExporter exporter = new JRXlsExporter();
+                response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                JRXlsxExporter exporter = new JRXlsxExporter();
                 try(OutputStream outputStream = response.getOutputStream()){
                     exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                     exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
-                    SimpleXlsReportConfiguration configuration = new SimpleXlsReportConfiguration();
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
 //                    configuration.setOnePagePerSheet(true);//在一个excel中，每个单独的jasper对象（页数）放入到一个sheet页中
 //                    configuration.setSheetNames(sheetNames);//页名称集合
-//                    configuration.setDetectCellType(true);// 检查单元格格式
+                    configuration.setDetectCellType(true);// 检查单元格格式
                     configuration.setWhitePageBackground(false);//去除白边
                     exporter.setConfiguration(configuration);
                     exporter.exportReport();

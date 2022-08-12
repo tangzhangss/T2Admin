@@ -8,4 +8,4 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.io.Serializable;
 
 @NoRepositoryBean
-public interface SysBaseDao<T,TD extends Serializable> extends JpaRepository<T,TD>, PagingAndSortingRepository<T,TD>,JpaSpecificationExecutor<T>{}
+public interface SysBaseDao<T,ID extends Serializable> extends JpaRepository<T,ID>, PagingAndSortingRepository<T,ID>,JpaSpecificationExecutor<T>{}

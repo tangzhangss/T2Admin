@@ -124,13 +124,11 @@
 
 <script>
 import {Decimal} from 'decimal.js';
-//引入
-import JsonViewer from "vue3-json-viewer"
+
 
 export default {
   name: 'Home',
   components:{
-    "json-viewer":JsonViewer
   },
   data:function(){
     return {
@@ -163,6 +161,7 @@ export default {
         if(res.data.length==0)this.serviceShow=true;
         this.serviceLoading=false;
     })
+
   },
   methods:{
     getProgressStatus(val){

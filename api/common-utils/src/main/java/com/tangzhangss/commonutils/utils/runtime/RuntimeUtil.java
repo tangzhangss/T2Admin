@@ -128,7 +128,7 @@ public class RuntimeUtil {
         String[] lines = res.split(OSInfo.getLineBreak());
         for (int i = 0; i < lines.length; i++) {
             String[] resArr = lines[i].split("\\s+");
-            if (resArr.length == 10){//2.12-3.1.0
+            if (resArr.length >=9){//2.12-3.1.0
                 array.add(
                         new JSONObject(config).set("group", resArr[0])
                                 .set("topic", resArr[1])
@@ -136,9 +136,10 @@ public class RuntimeUtil {
                                 .set("currentOffset", resArr[3])
                                 .set("logEndOffset", resArr[4])
                                 .set("lag", resArr[5])
-                                .set("consumerId", resArr[6]+" "+resArr[7])
-                                .set("host", resArr[8])
-                                .set("clientId", resArr[9])
+                                .set("consumerId", resArr[6])
+                                .set("host", resArr[7])
+                                .set("clientId", resArr[8]) //可能解析之后不太正确 至少有9个
+                                .set("row", org.apache.commons.lang3.StringUtils.join(resArr," "))
                 );
             }else if (resArr.length == 8){ //2.11-1.0.0
                 array.add(
@@ -151,6 +152,7 @@ public class RuntimeUtil {
                                 .set("consumerId", resArr[5])
                                 .set("host", resArr[6])
                                 .set("clientId", resArr[7])
+                                .set("row", org.apache.commons.lang3.StringUtils.join(resArr," "))
                 );
             }else{
                 throw new RuntimeException("Parsing failed. Format error");

@@ -52,7 +52,7 @@
             <el-color-picker v-model="themeColor['--tz-table-header-bg']" />
           </div>
           <div class="menu-hover">
-            <el-button type="text" @click="themeDefault">恢复默认</el-button>
+            <el-button text type='primary' @click="themeDefault">恢复默认</el-button>
           </div>
           <el-icon title="关闭" size="20" class="pointer" style="position: absolute;right: 5px;top: 5px"  @click="themeColorVisible=false">
             <Close></Close>

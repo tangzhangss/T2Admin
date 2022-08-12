@@ -179,7 +179,7 @@ export default {
   },
   methods: {
     openSystemIntroducePage(){
-      window.open('http://mp.weixin.qq.com/s?__biz=MzU1Nzc2NTM1MA==&mid=100000159&idx=1&sn=ae709de837e3b7c09ba43f6b4dee2c6b&chksm=7c3186164b460f00b00bf0eb771c8980c61461d0d867eef47628a8c24987c8bf5d19715cb0a5&scene=18#wechat_redirect')
+      window.open('https://mp.weixin.qq.com/s/ueCA9TDQpxDMe76OjCrN8A')
     },
     //注册成功方法
     registerSuccessHandle(data){
@@ -245,16 +245,20 @@ $cursor: #000;
 .login-container {
   .el-input-login {
     display: inline-block;
-    height: 47px;
+    height: 48px;
     width: 85%;
+    .el-input__wrapper {
+        height: 40px;
+        margin:4px 0% 4px 4%;
+        width:100%;
+    }
     input {
       background: transparent;
       border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
-      padding: 12px 5px 12px 15px;
       color: $light_gray;
-      height: 47px;
+
       caret-color: $cursor;
 
       &:-webkit-autofill {
@@ -349,7 +353,7 @@ $opacity:0.85;
 
   .show-pwd {
     position: absolute;
-    right: 10px;
+    right: 15px;
     top: 7px;
     font-size: 16px;
     color: $dark_gray;

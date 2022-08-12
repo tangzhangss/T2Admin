@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <fontFamilies>
-
+    <fontFamily name="宋体">
+        <normal>fonts/simsun.ttf</normal>
+        <bold>fonts/simsun.ttf</bold>
+        <italic>fonts/simsun.ttf</italic>
+        <boldItalic>fonts/simsun.ttf</boldItalic>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+        <exportFonts>
+            <export key="net.sf.jasperreports.html">'宋体', Arial, Helvetica, sans-serif</export>
+            <export key="net.sf.jasperreports.xhtml">'宋体', Arial, Helvetica, sans-serif</export>
+        </exportFonts>
+    </fontFamily>
     <fontFamily name="DejaVu Sans">
-        <normal>net/sf/jasperreports/fonts/dejavu/DejaVuSans.ttf</normal>
-        <bold>net/sf/jasperreports/fonts/dejavu/DejaVuSans-Bold.ttf</bold>
-        <italic>net/sf/jasperreports/fonts/dejavu/DejaVuSans-Oblique.ttf</italic>
-        <boldItalic>net/sf/jasperreports/fonts/dejavu/DejaVuSans-BoldOblique.ttf</boldItalic>
+        <normal>fonts/dejavu/DejaVuSans.ttf</normal>
+        <bold>fonts/dejavu/DejaVuSans-Bold.ttf</bold>
+        <italic>fonts/dejavu/DejaVuSans-Oblique.ttf</italic>
+        <boldItalic>fonts/dejavu/DejaVuSans-BoldOblique.ttf</boldItalic>
         <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
         <exportFonts>
@@ -22,10 +33,10 @@
     </fontFamily>
 
     <fontFamily name="DejaVu Serif">
-        <normal>net/sf/jasperreports/fonts/dejavu/DejaVuSerif.ttf</normal>
-        <bold>net/sf/jasperreports/fonts/dejavu/DejaVuSerif-Bold.ttf</bold>
-        <italic>net/sf/jasperreports/fonts/dejavu/DejaVuSerif-Italic.ttf</italic>
-        <boldItalic>net/sf/jasperreports/fonts/dejavu/DejaVuSerif-BoldItalic.ttf</boldItalic>
+        <normal>fonts/dejavu/DejaVuSerif.ttf</normal>
+        <bold>fonts/dejavu/DejaVuSerif-Bold.ttf</bold>
+        <italic>fonts/dejavu/DejaVuSerif-Italic.ttf</italic>
+        <boldItalic>fonts/dejavu/DejaVuSerif-BoldItalic.ttf</boldItalic>
         <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
         <exportFonts>
@@ -35,10 +46,10 @@
     </fontFamily>
 
     <fontFamily name="DejaVu Sans Mono">
-        <normal>net/sf/jasperreports/fonts/dejavu/DejaVuSansMono.ttf</normal>
-        <bold>net/sf/jasperreports/fonts/dejavu/DejaVuSansMono-Bold.ttf</bold>
-        <italic>net/sf/jasperreports/fonts/dejavu/DejaVuSansMono-Oblique.ttf</italic>
-        <boldItalic>net/sf/jasperreports/fonts/dejavu/DejaVuSansMono-BoldOblique.ttf</boldItalic>
+        <normal>fonts/dejavu/DejaVuSansMono.ttf</normal>
+        <bold>fonts/dejavu/DejaVuSansMono-Bold.ttf</bold>
+        <italic>fonts/dejavu/DejaVuSansMono-Oblique.ttf</italic>
+        <boldItalic>fonts/dejavu/DejaVuSansMono-BoldOblique.ttf</boldItalic>
         <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
         <exportFonts>
@@ -64,18 +75,4 @@
             <export key="net.sf.jasperreports.xhtml">'DejaVu Sans Mono', 'Courier New', Courier, monospace</export>
         </exportFonts>
     </fontFamily>
-
-    <fontFamily name="宋体">
-        <normal>fonts/simsun.ttf</normal>
-        <bold>fonts/simsun.ttf</bold>
-        <italic>fonts/simsun.ttf</italic>
-        <boldItalic>fonts/simsun.ttf</boldItalic>
-        <pdfEncoding>Identity-H</pdfEncoding>
-        <pdfEmbedded>true</pdfEmbedded>
-        <exportFonts>
-            <export key="net.sf.jasperreports.html">'宋体', Arial, Helvetica, sans-serif</export>
-            <export key="net.sf.jasperreports.xhtml">'宋体', Arial, Helvetica, sans-serif</export>
-        </exportFonts>
-    </fontFamily>
-
 </fontFamilies>

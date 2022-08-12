@@ -32,6 +32,7 @@
         <module>common-report</module>
         <module>common-xxl-job-executor</module>
         <module>common-mq</module>
+        <module>common-es</module>
     </modules>
 
 
