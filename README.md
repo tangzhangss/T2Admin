@@ -10,9 +10,9 @@ vue3.0
 
 #### 系统介绍  
 
-扫描二维码查看公众号-System-v2.x
 
-![](./资料/qrcode_for_gh_ebb533508d15_258.jpg)
+[T2Admin 管理系统框架介绍](https://blog.csdn.net/qq_34813134/article/details/126674977)
+
 
 #### 开发日志
 2022-08-22
