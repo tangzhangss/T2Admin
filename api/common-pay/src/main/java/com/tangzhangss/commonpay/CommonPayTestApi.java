@@ -1,7 +1,7 @@
 package com.tangzhangss.commonpay;
 
 import cn.hutool.json.JSONObject;
-import com.tangzhangss.commonutils.aspect.syslog.SysLog;
+import com.tangzhangss.commonutils.annotation.SysLog;
 import com.tangzhangss.commonutils.resultdata.Result;
 import org.springframework.web.bind.annotation.*;
 

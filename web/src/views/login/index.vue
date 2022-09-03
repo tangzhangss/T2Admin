@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <div class="title-admin">TZCC-REN ADMIN SYSTEM</div>
+    <div class="title-admin">T2Admin System</div>
     <div class="login-box">
        <el-image class="mJpg" :src="mJpg"></el-image>
        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
@@ -89,8 +89,8 @@ export default {
       nowYear:new Date().getFullYear(),
       mJpg:require("@/assets/login/m.jpg"),
       loginForm: {
-        username: '',
-        password: ''
+        username: 'T2Admin',
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -179,7 +179,7 @@ export default {
   },
   methods: {
     openSystemIntroducePage(){
-      window.open('https://mp.weixin.qq.com/s/ueCA9TDQpxDMe76OjCrN8A')
+      window.open('https://blog.csdn.net/qq_34813134/article/details/126674977')
     },
     //注册成功方法
     registerSuccessHandle(data){

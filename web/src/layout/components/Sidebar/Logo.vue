@@ -29,7 +29,7 @@ export default {
         this.title=res.data.name;
         this.logo=res.data.logo;
       }else{
-       this.title='TZCC-REN ADMIN';
+       this.title='T2Admin';
        this.logo=require("@/assets/logo.jpg");
       }
     })

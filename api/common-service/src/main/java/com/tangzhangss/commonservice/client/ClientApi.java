@@ -71,7 +71,7 @@ public class ClientApi {
 
     @PostMapping
     public Result post(@RequestBody ClientEntity data) throws Exception {
-        return Result.ok().data(myService.save(data));
+        return myService.save(data);
     }
 
     @GetMapping("/get_approved_status")

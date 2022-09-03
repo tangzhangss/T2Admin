@@ -5,7 +5,7 @@ export const myApp = createApp(App);
 
 window.userInfoCookieKey="userInfo";
 window.userMenuCookieKey="userMenu";
-window.superAdminClientId="tzcc_ren";//超级管理员客户ID
+window.superAdminClientId="T2Admin";//超级管理员客户ID
 
 window.addEventListener('message',function(event){
     if(self==top)return false;//顶层不需要

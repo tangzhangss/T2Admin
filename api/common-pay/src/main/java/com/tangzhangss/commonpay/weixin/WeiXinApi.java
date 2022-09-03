@@ -10,7 +10,7 @@ import com.tangzhangss.commonpay.orderinfo.OrderInfoService;
 import com.tangzhangss.commonpay.orderinfo.PayType;
 import com.tangzhangss.commonpay.weixin.merchant.WeiXinMerchantEntity;
 import com.tangzhangss.commonpay.weixin.merchant.WeiXinMerchantService;
-import com.tangzhangss.commonutils.aspect.syslog.SysLog;
+import com.tangzhangss.commonutils.annotation.SysLog;
 import com.tangzhangss.commonutils.base.SysContext;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.resultdata.ResultCode;

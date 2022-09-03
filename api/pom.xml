@@ -12,7 +12,7 @@
         <hutool-all>5.4.6</hutool-all>
         <lombok.version>1.18.0</lombok.version>
         <nacos.version>2.1.1.RELEASE</nacos.version>
-        <commonutils.version>1.0.20.SNAPSHOT</commonutils.version>
+        <commonutils.version>2.0.0.SNAPSHOT</commonutils.version>
         <jna.version>5.8.0</jna.version>
     </properties>
 
@@ -40,6 +40,19 @@
     <artifactId>my_admin</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!--java参数校验-->

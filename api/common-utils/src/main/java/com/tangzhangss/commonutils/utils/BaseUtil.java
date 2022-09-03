@@ -34,6 +34,10 @@ public class BaseUtil {
     }
 
 
+    public static void main(String[] args) {
+        System.out.println(twiceMd5Salt("123456"));
+    }
+
     public static String readInputStream(InputStream inputStream,String charset) throws IOException {
         byte[] buffer = new byte[1024];
         int len = 0;

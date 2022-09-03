@@ -127,6 +127,7 @@
         }else{this.isExternalService=false}
 
         //给到记录值，地址编辑之后--由查看变成编辑--状态不变
+        if (!data) data = {};
         data.externalService=this.isExternalService;
       },
       externalServiceInit(data){

@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'TZCC-REN ADMIN',
+  title: 'T2Admin',
 
   /**
    * @type {boolean} true | false

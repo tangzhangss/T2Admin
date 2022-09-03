@@ -36,7 +36,7 @@ public class ServiceTestService extends SysBaseService<ServiceTestEntity, Servic
      */
     @Transactional
     public Object fetchModeTest(){
-        SysContext.setUser(new JSONObject().set("clientId","tzcc_ren"));
+        SysContext.setUser(new JSONObject().set("clientId","T2Admin"));
         Page<MenuEntity> menuEntities = menuService.get(null, null);
         List<MenuEntity> content = menuEntities.getContent();
         JSONArray array = new JSONArray();

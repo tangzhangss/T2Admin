@@ -44,7 +44,7 @@ public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestSer
 
     @GetMapping("/FetchModeTest")
     public Object FetchModeTest(){
-        SysContext.setUser(new JSONObject().set("clientId","tzcc_ren"));
+        SysContext.setUser(new JSONObject().set("clientId","T2Admin"));
 
         return myService.fetchModeTest();
     }
@@ -66,7 +66,7 @@ public class ServiceTestApi extends SysBaseApi<ServiceTestEntity, ServiceTestSer
     @PostMapping("/no_auth")
     public Result post(@RequestBody ServiceTestEntity serviceTestEntity) throws Exception {
         JSONObject object = new JSONObject();
-        object.set("clientId","tzcc_ren");
+        object.set("clientId","T2Admin");
         SysContext.setUser(object);
         return Result.ok().data(myService.save(serviceTestEntity));
     }

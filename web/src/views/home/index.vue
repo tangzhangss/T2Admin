@@ -1,6 +1,6 @@
 <template>
   <div style="padding:5px 40px">
-    <p style="font-size: 18px">欢迎使用 TZCC-REN ADMIN SYSTEM（v2.x版本）</p>
+    <p style="font-size: 18px">欢迎使用 T2Admin System（v2.x版本）</p>
     <el-divider class="divider-title" content-position="left">系统概括</el-divider>
     <div class="sys-info">
       <div class="box"  v-loading="serverLoading">

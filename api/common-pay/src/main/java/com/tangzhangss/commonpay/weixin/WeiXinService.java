@@ -1,8 +1,10 @@
 package com.tangzhangss.commonpay.weixin;
 
 import cn.hutool.http.HttpRequest;
+import com.alibaba.nacos.client.utils.IPUtil;
 import com.tangzhangss.commonpay.weixin.merchant.WeiXinMerchantEntity;
 import com.tangzhangss.commonutils.utils.BaseUtil;
+import com.tangzhangss.commonutils.utils.IpUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +72,7 @@ public class WeiXinService {
         //设置请求参数(总金额)
         paraMap.put("total_fee", String.valueOf((int)(Double.valueOf(money)*100)));
         //设置请求参数(终端IP)
-        paraMap.put("spbill_create_ip", BaseUtil.getLocalIP());
+        paraMap.put("spbill_create_ip", IpUtil.getHostIp());
         //设置请求参数(通知地址)
         paraMap.put("notify_url",serverAddress+WeiXinURL.PAY_NOTIFY.url);
         //设置请求参数(交易类型)
