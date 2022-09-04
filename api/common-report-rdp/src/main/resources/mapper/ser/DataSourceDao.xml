@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.report.modules.ser.dao.DataSourceDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.report.modules.ser.entity.DataSourceEntity" id="dataSourceMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="model" column="model"/>
+        <result property="type" column="type"/>
+        <result property="version" column="version"/>
+        <result property="driver" column="driver"/>
+        <result property="addr" column="addr"/>
+        <result property="usr" column="usr"/>
+        <result property="password" column="password"/>
+        <result property="icon" column="icon"/>
+        <result property="sts" column="sts"/>
+        <result property="readonly" column="readonly"/>
+        <result property="txTime" column="tx_time"/>
+        <result property="upTime" column="up_time"/>
+        <result property="txOp" column="tx_op"/>
+        <result property="upOp" column="up_op"/>
+    </resultMap>
+</mapper>

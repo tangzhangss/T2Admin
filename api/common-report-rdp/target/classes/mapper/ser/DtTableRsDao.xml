@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.report.modules.ser.dao.DtTableRsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.report.modules.ser.entity.DtTableRsEntity" id="dtTableRsMap">
+        <result property="rsId" column="rs_id"/>
+        <result property="useId" column="use_id"/>
+        <result property="rsType" column="rs_type"/>
+        <result property="rsModel" column="rs_model"/>
+        <result property="txTime" column="tx_time"/>
+        <result property="upTime" column="up_time"/>
+        <result property="txOp" column="tx_op"/>
+        <result property="upOp" column="up_op"/>
+    </resultMap>
+
+
+</mapper>

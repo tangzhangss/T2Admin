@@ -1,0 +1,234 @@
+[{
+	"name":"基础属性",
+	"sort":false,
+	"props":[
+		{
+			"name": "主题设置",
+			"propType": "title"
+		},
+		{	
+			"name": "主题配置",
+			"prop": "theme",
+			"propType":"radio",
+			"pram": "Dark-dark|Halloween-halloween|Walden-walden|Westeros-westeros|Wonderland-wonderland"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "标题设置",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示标题",
+			"prop": "options.title.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "标题文本",
+			"prop": "options.title.text",
+			"propType": "input"
+		},
+		{
+			"name": "字体颜色",
+			"prop": "options.title.textStyle.color",
+			"propType": "color"
+		},
+		{
+			"name": "字体大小",
+			"prop": "options.title.textStyle.fontSize",
+			"propType": "input"
+		},
+		{
+			"name":"背景颜色",
+			"prop": "options.backgroundColor",
+			"propType": "color"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "图例",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示图例",
+			"prop": "options.legend.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "图例选择模式",
+			"prop": "options.legend.selectedMode",
+			"propType": "radio",
+			"pram": "不可选-true|单选-single|多选-multiple"
+		},
+		{
+			"name": "图例位置",
+			"prop": "options.legend.align",
+			"propType": "radio",
+			"pram": "自动-auto|左-left|右-right"
+		},
+		{
+			"name": "距离左侧",
+			"prop": "options.legend.left",
+			"propType": "radio",
+			"pram": "左-left|中-center|右-right"
+		},
+		{
+			"name": "距离顶部",
+			"prop": "options.legend.top",
+			"propType": "radio",
+			"pram": "上-top|中-middle|下-bottom"
+		},
+		{
+			"name": "距离右侧",
+			"prop": "options.legend.right",
+			"propType": "slider"
+		},
+		{
+			"name": "距离底部",
+			"prop": "options.legend.bottom",
+			"propType": "slider"
+		},
+		{
+			"name": "图例宽",
+			"prop": "options.legend.width",
+			"propType": "slider"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "视区",
+			"propType": "title"
+		},
+		{
+			"name": "距离顶部",
+			"prop": "options.grid.top",
+			"propType": "slider"
+		},
+		{
+			"name": "距离底部",
+			"prop": "options.grid.bottom",
+			"propType": "slider"
+		},
+		{
+			"name": "距离左端",
+			"prop": "options.grid.left",
+			"propType": "slider"
+		},
+		{
+			"name": "距离右端",
+			"prop": "options.grid.right",
+			"propType": "slider"
+		},
+		{
+			"name": "宽度",
+			"prop": "options.grid.width",
+			"propType": "slider"
+		},
+		{
+			"name": "高度",
+			"prop": "options.grid.height",
+			"propType": "slider"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		}
+	]
+},
+{
+	"name":"系列",
+	"sort":true,
+	"props":[
+		{
+			"name": "系列",
+			"propType": "title"
+		},
+		{
+			"name":"玫瑰图",
+			"prop": "options.series.roseType",
+			"propType": "radio",
+			"pram": "否-false|半径-area|面积-radius"
+		},
+		{
+			"name": "扇形配置",
+			"propType": "title"
+		},
+		{
+			"name": "扇形位置",
+			"prop": "options.series.center",
+			"propType": "slider"
+		},
+		{
+			"name": "内外径大小",
+			"prop": "options.series.radius",
+			"propType": "slider"
+		},
+		{
+			"name": "内外径大小",
+			"prop": "options.series.radius",
+			"propType": "slider"
+		},
+		{
+			"name": "是否显示标签",
+			"prop": "options.series.label.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name":"标签颜色",
+			"prop": "options.series.label.color",
+			"propType": "color"
+		},
+		{
+			"name": "标签大小",
+			"prop": "options.series.label.fontSize",
+			"propType": "slider"
+		},
+		{
+			"name": "是否显示引导线",
+			"prop": "options.series.labelLine.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "第一段长度",
+			"prop": "options.series.labelLine.length",
+			"propType": "slider"
+		},
+		{
+			"name": "第二段长度",
+			"prop": "options.series.labelLine.length2",
+			"propType": "slider"
+		},
+		{
+			"name": "是否平滑",
+			"prop": "options.series.labelLine.smooth",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name":"线颜色",
+			"prop": "options.series.labelLine.lineStyle.color",
+			"propType": "color"
+		},
+		{
+			"name": "引导线角度",
+			"prop": "options.series.startAngle",
+			"propType": "slider"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		}
+	]
+}
+	
+]

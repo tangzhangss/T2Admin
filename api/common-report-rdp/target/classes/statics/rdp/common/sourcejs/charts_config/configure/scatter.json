@@ -1,0 +1,183 @@
+[{
+	"name":"基础属性",
+	"sort":false,
+	"props":[
+		{
+			"name": "标题设置",
+			"propType": "title"
+		},
+		{	
+			"name": "主题配置",
+			"prop": "theme",
+			"propType":"radio",
+			"pram": "Dark-dark|Halloween-halloween|Walden-walden|Westeros-westeros|Wonderland-wonderland"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "标题设置",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示标题",
+			"prop": "options.title.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "标题文本",
+			"prop": "options.title.text",
+			"propType": "input"
+		},
+		{
+			"name": "字体颜色",
+			"prop": "options.title.textStyle.color",
+			"propType": "color"
+		},
+		{
+			"name": "字体大小",
+			"prop": "options.title.textStyle.fontSize",
+			"propType": "input"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "视区",
+			"propType": "title"
+		},
+		{
+			"name": "距离顶部",
+			"prop": "options.grid.top",
+			"propType": "slider"
+		},
+		{
+			"name": "距离底部",
+			"prop": "options.grid.bottom",
+			"propType": "slider"
+		},
+		{
+			"name": "距离左端",
+			"prop": "options.grid.left",
+			"propType": "slider"
+		},
+		{
+			"name": "距离右端",
+			"prop": "options.grid.right",
+			"propType": "slider"
+		},
+		{
+			"name": "宽度",
+			"prop": "options.grid.width",
+			"propType": "slider"
+		},
+		{
+			"name": "高度",
+			"prop": "options.grid.height",
+			"propType": "slider"
+		}
+		,
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "X轴",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示隔线",
+			"prop": "options.xAxis.splitLine.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "X轴标签",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示标签",
+			"prop": "options.xAxis.axisLabel.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "标签间隔",
+			"prop": "options.xAxis.axisLabel.interval",
+			"propType": "slider"
+		},
+		{
+			"name": "标签旋转角度",
+			"prop": "options.xAxis.axisLabel.rotate",
+			"propType": "slider"
+		},
+		{
+			"name": "标签与轴线距离",
+			"prop": "options.xAxis.axisLabel.margin",
+			"propType": "slider"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "Y轴",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示隔线",
+			"prop": "options.yAxis.splitLine.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		}
+	]
+},
+{
+	"name":"系列",
+	"sort":true,
+	"props":[
+		{
+			"name": "系列",
+			"propType": "title"
+		},
+		{
+			"name": "标记的图形",
+			"prop": "options.series.symbol",
+			"propType": "radio",
+			"pram": "圆形-circle|方形-rect|方圆形-roundRect|三角形-triangle|菱形-diamond|针型-pin|箭头-arrow|无-none"
+		},{
+			"name":"标记的大小",
+			"prop": "options.series.symbolSize",
+			"propType": "slider"
+		},
+		{
+			"name":"系列特定主色",
+			"prop": "options.series.itemStyle.color",
+			"propType": "color"
+		},
+		{
+			"name":"边框颜色",
+			"prop": "options.series.itemStyle.borderColor",
+			"propType": "color"
+		},
+		{
+			"name":"边框宽度",
+			"prop": "options.series.itemStyle.borderWidth",
+			"propType": "slider"
+		},
+		{
+			"name":"边框圆角",
+			"prop": "options.series.itemStyle.barBorderRadius",
+			"propType": "slider"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		}
+	]
+}
+	
+]

@@ -1,0 +1,713 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  touch-action: pan-y;
+  /*color: #8d9ea7;*/
+}
+
+html, body {
+  overflow: hidden;
+  background-color: rgb(24, 44, 63);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  transition: all 1s;
+}
+
+.content {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  transition: all 0.3s ease 0s;
+  z-index: 1;
+}
+#content {
+  /*transition: all 1s;*/
+}
+
+
+.box {
+  position: absolute;
+}
+.box:hover {
+
+}
+.box.big{
+  background-color: #142f4a;
+}
+
+.bg {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: #21333c;
+  z-index: 9999999;
+}
+
+.spinner {
+  margin: 0px auto;
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 10px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.spinner > div {
+  box-shadow: 0 0 8px 1px #03a9f4;
+  background-color: #ffffff;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% {
+    -webkit-transform: scaleY(0.4);
+  }
+
+  20% {
+    -webkit-transform: scaleY(1);
+  }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }
+
+  20% {
+    transform: scaleY(1);
+    -webkit-transform: scaleY(1);
+  }
+}
+
+.tag-text {
+  text-align: center;
+}
+
+
+.filterBlur {
+  -webkit-filter: blur(5px);
+}
+
+.close-span {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  transform: rotate(45deg);
+}
+
+.close-span::before {
+  content: " ";
+  height: 2px;
+  width: 40px;
+  background-color: #fff;
+  display: block;
+  position: absolute;
+  top: 19px;
+}
+
+.close-span::after {
+  content: " ";
+  width: 2px;
+  background-color: #fff;
+  display: block;
+  height: 40px;
+  position: absolute;
+  left: 19px;
+}
+
+.swiper-pagination.swiper-pagination-bullets {
+  pointer-events: none;
+}
+
+.tag-swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.bd-buttons {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 999;
+  /* background-color: red; */
+  transition: all 0.3s;
+}
+
+.bd-edit {
+  background-image: url(../img/edit3.png);
+  width: 32px;
+  height: 32px;
+  display: block;
+  opacity: 0.5;
+  background-size: 50%;
+  background-position: center center;
+  margin: 10px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  transition: all 0.3s;
+  background-color: #03a9f429;
+  cursor: pointer;
+}
+
+.bd-buttons:hover .bd-edit {
+  background-color: #03a9f4;
+  opacity: 1;
+}
+
+.bd-zoom {
+  background-image: url(../img/readmore-icon.png);
+  width: 32px;
+  height: 32px;
+  display: block;
+  opacity: 0.5;
+  background-size: 50%;
+  background-position: center center;
+  margin: 10px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  transition: all 0.3s;
+  background-color: #03a9f429;
+  cursor: pointer;
+}
+
+.bd-buttons:hover .bd-zoom {
+  background-color: #03a9f4;
+  opacity: 1;
+}
+
+.bd-r-panel {
+  position: fixed;
+  top: 0px;
+  width: 300px;
+  right: -9999px;
+  bottom: 0px;
+  z-index: 1000;
+  transition: all 0.3s;
+  background-color: #171717;
+}
+
+.bd-r-panel.on {
+  right: 0px;
+}
+
+.bd-boxs {
+  height: calc(100% - 30px);
+  width: 100%;
+  float: left;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.panel-foot {
+  height: 30px;
+  text-align: right;
+}
+
+.save-panel {
+  border: 0px;
+  outline: 0px;
+  border-radius: 5px;
+  height: 26px;
+  width: 70px;
+  background-color: #07417f;
+  color: #ffffff;
+  margin-right: 10px;
+}
+
+.box-hide {
+  height: 200px;
+  width: 300px;
+  margin: 10px auto;
+  position: relative;
+}
+
+.box-shade {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  text-align: center;
+  transition: all 0.75s;
+  overflow: hidden;
+}
+
+.hide-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  margin: 0px 10px;
+  top: 50%;
+  position: relative;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  transition: all 0.75s;
+  line-height: 40px;
+  text-align: center;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 90% 90%;
+}
+
+.hide-replace {
+  background-color: #96c797;
+  left: -200px;
+  background-image: url(../img/replace.png);
+}
+
+.hide-add {
+  background-color: #00a9ff;
+  right: -200px;
+  background-image: url(../img/add.png);
+}
+
+.hide-recovery {
+  width: 40px;
+  height: 40px;
+  display: none;
+  top: 10px;
+  position: absolute;
+  border-radius: 50%;
+  right: 20px;
+  transition: all 0.75s;
+  background-image: url(../img/replace.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 90% 90%;
+  cursor: pointer;
+}
+
+.box-shade:hover {
+  background-color: #00000078;
+}
+
+.box-shade:hover .hide-replace {
+  left: 0px;
+}
+
+.box-shade:hover .hide-add {
+  right: 0px;
+}
+
+.box-shade.on .hide-replace {
+  left: 0px;
+}
+
+.box-shade.on .hide-add {
+  right: 0px;
+}
+
+.box-shade.open {
+  background-color: #000000bd;
+}
+
+.box-clone {
+  position: absolute;
+  user-select: none;
+  text-align: center;
+  /* border: 1px solid rgb(255, 255, 255); */
+  background-color: #00a9ff30;
+  background-image: url(../img/replace.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100px 100px;
+  z-index: 1020;
+}
+
+.box-drag {
+  position: absolute;
+  user-select: none;
+  text-align: center;
+  background-color: #00a9ff30;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100px 100px;
+  z-index: 1008;
+}
+
+.box-drag.on {
+  cursor: move;
+  border: 2px #03a9f4 dashed;
+  z-index: 1009;
+}
+
+.box-drag:hover .hide-recovery {
+  display: block;
+}
+
+.box-clone.shake {
+  animation-name: breathe;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  animation-play-state: running;
+}
+
+@keyframes breathe {
+  0% {
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+  }
+
+  50% {
+    border: 1px solid rgba(59, 235, 235, 1);
+    box-shadow: 0 1px 30px rgba(59, 255, 255, 1);
+  }
+
+  100% {
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.resizable-handle {
+  width: 10px;
+  height: 10px;
+  background-color: #03a9f4;
+  display: none;
+  position: absolute;
+}
+
+.resizable-handle.tl {
+  left: -5px;
+  top: -5px;
+  cursor: nw-resize;
+}
+
+.resizable-handle.t {
+  top: -5px;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  cursor: n-resize;
+}
+
+.resizable-handle.tr {
+  top: -5px;
+  right: -5px;
+  cursor: ne-resize;
+}
+
+.resizable-handle.r {
+  top: 0px;
+  bottom: 0px;
+  right: -5px;
+  margin: auto;
+  cursor: e-resize;
+}
+
+.resizable-handle.br {
+  bottom: -5px;
+  right: -5px;
+  cursor: se-resize;
+}
+
+.resizable-handle.b {
+  bottom: -5px;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  cursor: s-resize;
+}
+
+.resizable-handle.bl {
+  bottom: -5px;
+  left: -5px;
+  cursor: sw-resize;
+}
+
+.resizable-handle.l {
+  top: 0px;
+  bottom: 0px;
+  left: -5px;
+  margin: auto;
+  cursor: w-resize;
+}
+
+.resizable-handle.touch.tl {
+  left: -5px;
+  top: -5px;
+  cursor: nw-resize;
+  width: 30px;
+  height: 30px;
+  border-radius: 0 0 100% 0;
+  background-color: #03a9f4e3;
+}
+
+.resizable-handle.touch.t {
+  top: -5px;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  cursor: n-resize;
+  width: 40px;
+  height: 20px;
+  border-radius: 0 0 20px 20px;
+  background-color: #03a9f4e3;
+}
+
+.resizable-handle.touch.tr {
+  top: -5px;
+  right: -5px;
+  cursor: ne-resize;
+  width: 30px;
+  height: 30px;
+  border-radius: 0 0 0 100%;
+  background-color: #03a9f4e3;
+}
+
+.resizable-handle.touch.r {
+  top: 0px;
+  bottom: 0px;
+  right: -5px;
+  margin: auto;
+  cursor: e-resize;
+  width: 20px;
+  height: 40px;
+  border-radius: 20px 0 0 20px;
+  background-color: #03a9f4e3;
+}
+
+.resizable-handle.touch.br {
+  bottom: -5px;
+  right: -5px;
+  cursor: se-resize;
+  width: 30px;
+  height: 30px;
+  border-radius: 100% 0 0 0;
+  background-color: #03a9f4e3;
+}
+
+.resizable-handle.touch.b {
+  bottom: -5px;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  cursor: s-resize;
+  width: 40px;
+  height: 20px;
+  border-radius: 20px 20px 0 0;
+  background-color: #03a9f4e3;
+}
+
+.resizable-handle.touch.bl {
+  bottom: -5px;
+  left: -5px;
+  cursor: sw-resize;
+  width: 30px;
+  height: 30px;
+  border-radius: 0 100% 0 0;
+  background-color: #03a9f4e3;
+}
+
+.resizable-handle.touch.l {
+  top: 0px;
+  bottom: 0px;
+  left: -5px;
+  margin: auto;
+  cursor: w-resize;
+  width: 20px;
+  height: 40px;
+  border-radius: 0 20px 20px 0;
+  background-color: #03a9f4e3;
+}
+
+.box-drag.on .resizable-handle {
+  display: block;
+}
+
+.tag-headtable {
+  color: #dddddd;
+  border: 1px solid #dddddd;
+}
+
+.tag-headtable td, .tag-headtable th {
+  border: 1px solid #dddddd;
+}
+
+.enlarge-tag-div {
+  position: absolute;
+  z-index: 9999;
+}
+
+.enlarge-tag-div .close-div {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  overflow: hidden;
+  background-color: #ff000066;
+  z-index: 9999;
+  width: 20px;
+  height: 20px;
+}
+
+.enlarge-tag-div .close-div::before {
+  content: " ";
+  width: 2px;
+  height: 20px;
+  display: block;
+  transform: rotate(45deg);
+  background-color: #ffffff;
+  position: absolute;
+  left: 9px;
+  top: 0px;
+}
+
+.enlarge-tag-div .close-div::after {
+  content: " ";
+  width: 20px;
+  height: 2px;
+  display: block;
+  background-color: #ffffff;
+  position: absolute;
+  left: 0px;
+  top: 9px;
+  transform: rotate(45deg);
+}
+
+ul.line, ul.line > li {
+  height: 100%;
+}
+
+.box-enlarge-btn {
+  z-index: 3000;
+  background-color: #00a9ff;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  display: block;
+  cursor: pointer;
+  border-radius: 50%;
+  animation-name: fadeIn;
+  /*动画名称*/
+  animation-duration: 3s;
+  /*动画持续时间*/
+  animation-delay: 0s;
+  /*延迟时间*/
+  animation-iteration-count: infinite;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    /*初始状态 透明度为0*/
+  }
+
+  50% {
+    opacity: 0.2;
+    /*结尾状态 透明度为1*/
+  }
+
+  100% {
+    opacity: 0;
+    /*中间状态 透明度为0*/
+  }
+}
+
+#contentHandle {
+  position: absolute;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  cursor: move;
+  top: 0px;
+  display: none;
+  z-index: 9999;
+}
+
+#content.on {
+  transition: 0s;
+}
+
+#content.on #contentHandle {
+  position: absolute;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  right: 0px;
+  cursor: move;
+  top: 0px;
+  display: block;
+}
+
+.widget-btns {
+  display: none;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  /* height: 30px; */
+  justify-content: flex-end;
+  z-index: 100;
+}
+
+.box:hover .widget-btns {
+  display: flex;
+  z-index: 999;
+}
+
+.widget-btn {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.widget-btn.zoommax {
+  background-image: url(../img/zoommax2.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.widget-btn.openlink {
+  background-image: url(../img/openlink2.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.no-data-info{
+
+  position: absolute;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 100%;
+
+  text-align: center;
+
+  font-size: 32px;
+
+  color: #7d8c8e;
+}

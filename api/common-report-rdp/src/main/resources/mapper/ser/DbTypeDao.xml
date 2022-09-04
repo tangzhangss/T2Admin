@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.report.modules.ser.dao.DbTypeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.report.modules.ser.entity.DbTypeEntity" id="dbTypeMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="model" column="model"/>
+        <result property="type" column="type"/>
+        <result property="driver" column="driver"/>
+        <result property="addrDemo" column="addr_demo"/>
+        <result property="sts" column="sts"/>
+        <result property="icon" column="icon"/>
+    </resultMap>
+
+
+</mapper>

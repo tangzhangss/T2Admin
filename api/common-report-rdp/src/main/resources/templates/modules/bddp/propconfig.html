@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>大屏幕设计器-属性配置</title>
+    <link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/reset.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/config/config.css">
+    
+
+    <script src="${request.contextPath}/statics/bddp/static/common/jquery/jquery-1.11.0.js"></script>
+    <script src="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.js"></script>
+    <script src="${request.contextPath}/statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script src="${request.contextPath}/statics/bddp/web/dataTools.js"></script>
+    <script src="${request.contextPath}/statics/bddp/static/config/config.js"></script>
+  
+
+</head>
+
+<body>
+    <div class="left">
+        <div id="accordion">
+
+        </div>
+    </div>
+    <div class="center">
+       <ul id="propTree" class="ztree"></ul>
+       <button type="button" id="saveBtn">保存当前控件属性</button>
+    </div>
+    <div class="right">
+       <button type="button" id="addTagBtn">新增标签属性</button>
+        <ul id="propitems"></ul>
+    </div>
+    <div class="itemform" id="itemform" style="display: none;">
+        <div class="input-group">
+            <label for="">类型</label>
+            <select id="propType">
+                <option value="title">标题</option>
+                <option value="tag">属性</option>
+                <option value="driver">分割线</option>
+                <option value="btn">按钮</option>
+                <!-- <option value="tabs">选项卡</option> -->
+            </select>
+        </div>
+        <div class="input-group propTag">
+            <label for="">属性类型</label>
+            <select id="propTag">
+                
+                <option value="input">输入框</option>
+                <option value="radio">选择器</option>
+                <option value="slider">滑块</option>
+                <option value="doubleSlider">双滑块</option>
+                <option value="color">颜色选择器</option>
+                <option value="inputBtn">输入框+按钮</option>
+                <option value="button">按钮</option>
+          
+            </select>
+        </div>
+        <div class="input-group propTitle" >
+            <label for="">标签名称</label>
+            <input id="propTitle" type="text">
+        </div>
+        <div class="input-group propName" >
+            <label for="">对象名称</label>
+            <input id="propName" type="text">
+        </div>
+        <div class="input-group propItems" >
+            <label for="">参数</label>
+            <input id="propItems" type="text">
+        </div>
+        <button type="button" id="saveItemBtn">保存标签属性</button>
+     </div>
+    
+
+</body>
+
+</html>

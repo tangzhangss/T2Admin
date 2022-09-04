@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.report.modules.material.dao.MaterialDao">
+    
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.report.modules.material.entity.MaterialEntity" id="materialMap">
+        <result property="materialId" column="material_id" />
+        <result property="materialName" column="material_name" />
+        <result property="materialPath" column="material_path" />
+        <result property="materialRelativePath" column="material_relative_path" />
+        <result property="materialTags" column="material_tags" />
+        <result property="materialGroup" column="material_group" />
+        <result property="uploadTime" column="upload_time" />
+        <result property="uploadUser" column="upload_user" />
+    </resultMap>
+    
+    
+</mapper>

@@ -1,0 +1,157 @@
+body {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0;
+}
+
+fieldset {
+    border-color: #edeef0;
+}
+
+#top p {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+}
+
+#top #dslist {
+    width: 200px;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.left {
+    width: 30%;
+    float: left;
+}
+
+.ztree li span.button.home_ico_open, .ztree li span.button.home_ico_close {
+    margin-right: 2px;
+    background: url(../lib/ztree/css/zTreeStyle/img/diy/1_open.png) no-repeat scroll 0 0 transparent;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.right {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 40px;
+    bottom: 0px;
+    overflow: auto;
+}
+
+input.ui-button {
+    height: 32px;
+    line-height: 32px;
+    width: 120px;
+    border: 1px solid #ddd;
+    padding: 0px !important;
+    font-size: 12px;
+    color: #000;
+    background: #fff;
+}
+
+.ui-button.del {
+}
+
+.ui-button.edit {
+}
+
+.ui-button.add {
+}
+
+.dsform {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    line-height: 1.8;
+    font-size: 13px;
+}
+
+.dsform p {
+    margin: 0px;
+    padding: 0;
+    border: 0;
+    width: 300px;
+    float: left;
+    margin-bottom: 10px;
+}
+
+.dsform legend {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.dsform label.p {
+    display: inline-block;
+    float: left;
+    width: 70px;
+    padding: 0 10px;
+}
+
+.dsform label.error {
+    display: inline-block;
+    color: red;
+    padding-left: 10px;
+}
+
+.dsform .txt {
+    width: 200px;
+    border: 1px solid #ccc;
+    height: 26px;
+}
+
+.dsform .txtp {
+    width: 100px;
+    border: 1px solid #ccc;
+    height: 26px;
+}
+
+.dsform .sel {
+    width: 204px;
+    border: 1px solid #ccc;
+    height: 31px;
+}
+
+.dsform .selp {
+    width: 104px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    height: 31px;
+}
+
+.dsform textarea {
+    width: 200px;
+    height: 40px;
+    border: 1px solid #ccc;
+}
+
+.dsform .submit {
+    margin-left: 90px;
+    width: auto;
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    height: 30px;
+    font-size: 12px;
+    color: #000;
+    background: #fff;
+}
+
+.dsform .padd {
+    width: 50px;
+    height: 25px;
+    border: 0;
+    cursor: pointer;
+    background: transparent url(../images/plusmin.png) top center no-repeat;
+}
+
+.dsform .pdel {
+    width: 50px;
+    height: 25px;
+    border: 0;
+    cursor: pointer;
+    background: transparent url(../images/plusmin.png) 12px -25px no-repeat;
+}

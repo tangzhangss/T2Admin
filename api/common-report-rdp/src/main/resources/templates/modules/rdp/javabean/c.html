@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<title>动态列JAVABEAN示例</title>
+<#include "/header.html">
+</head>
+<style>
+table {
+	border-collapse: collapse;
+	background: #ffffff;
+}
+
+.dynamic {
+	border: 1px solid #000;
+	width: 90%;
+}
+
+.dynamic .rtitle td {
+	text-align: center;
+	vertical-align: middle;
+	mso-pattern: auto;
+	font-size: 14pt;
+	font-weight: 700;
+	font-style: normal;
+	font-family: "Microsoft YaHei UI", "sans-serif";
+	border-bottom: 2px solid #cdcdcd;
+	height: 23.25pt;
+}
+
+.dynamic .rhead td {
+	text-align: left;
+	vertical-align: middle;
+	font-size: 12pt;
+	font-weight: 400;
+	font-style: normal;
+	font-family: "Microsoft YaHei UI", "sans-serif";
+	border-bottom: 1px solid #bfbfbf;
+	overflow: hidden;
+}
+
+.dynamic tbody td {
+	height: 26.45pt;
+	color: rgb(0, 0, 0);
+	font-family: "Microsoft YaHei UI";
+	font-size: 10pt;
+	font-weight: 400;
+	border-bottom: 1px solid #bfbfbf;
+	text-decoration: none;
+	text-line-through: none;
+	padding-left: 3px;
+	padding-right: 6px;
+}
+
+tfoot td {
+	text-align: left;
+	vertical-align: middle;
+	padding-left: 3px;
+	overflow: hidden;
+}
+</style>
+<body>
+
+	<table style="width: 100%; height: 100%; table-layout: fixed;"
+		border="0" cellspacing="0" cellpadding="0">
+		<tbody>
+			<tr>
+				<td style="overflow: auto;">
+					<form name="subfrm" method="post" target="ifmreport"
+						action="../../../rdppage/show/aacefa4f7c6f82bbab764e59afd6f99b">
+						<table width="100%" height="100%" style="table-layout: fixed;">
+							<tbody>
+								<tr>
+									<td><div style="-ms-overflow-x: auto;">
+											<!-- javabean数据： -->
+											<textarea rows="4" cols="100" name="list" id="list"
+												style="display:none">
+[{"dian_1":"128.50", "shui":"76", "shui_1":"68", "dian_2":"328.00", "dian":"180.50", "yue":"1", "shui_2":"150","nian":[2014,2015,2016]}, {"dian_1":"99.00", "shui":"89", "shui_1":"60", "dian_2":"266.50", "dian":"200.50", "yue":"2", "shui_2":"72"}, {"dian_1":"238.50", "shui":"28", "shui_1":"90", "dian":"219.00", "yue":"3"}, {"dian_1":"430.00", "shui_1":"120", "yue":"4"}]
+</textarea>
+											<input  class="btn btn-default"  type="submit" value="查询">
+										</div></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" height="100%"><div
+						style="width:100%;height:100%;z-index:-1;">
+						<iframe id="ifmreport" name="ifmreport" src="about:blank"
+							frameborder="0" style="width: 100%; height: 100%;"></iframe>
+					</div></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

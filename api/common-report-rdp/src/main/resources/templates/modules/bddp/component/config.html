@@ -1,0 +1,84 @@
+<div id="cglv1">
+    <ul>
+        <li>
+            <a href="#base">基础</a>
+        </li>
+        <li>
+            <a href="#title">标题</a>
+        </li>
+        <li>
+            <a href="#grid">视区</a>
+        </li>
+        <li>
+            <a href="#xAxis-0">X轴</a>
+        </li>
+        <li>
+            <a href="#yAxis-0">Y轴</a>
+        </li>
+        <li>
+            <a href="#legend">图例</a>
+        </li>
+        <li>
+            <a href="#tooltip">提示</a>
+        </li>
+        <li>
+            <a href="#toolbox">工具</a>
+        </li>
+    </ul>
+    <div id="base">
+        1
+    </div>
+    <div id="title">
+        2
+    </div>
+    <div id="grid">
+        3
+    </div>
+    <div id="xAxis-0">
+        4
+    </div>
+    <div id="yAxis-0">
+        5
+    </div>
+    <div id="legend">
+        6
+    </div>
+    <div id="tooltip">
+        7
+    </div>
+    <div id="toolbox">
+        8
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        $("#cglv1").tabs({
+            activate: function (event, ui) {
+               // console.log(event, ui);
+               let id =  ui.newPanel.attr("id");
+               let page = id.split("-")[0];
+                ui.newPanel.load("component/design/configs/" + page + ".html",
+                    function () {
+
+                    });
+            },
+            beforeActivate: function (event, ui) {
+               // console.log(event, ui);
+            },
+            beforeLoad: function (event, ui) {
+               // console.log(event, ui);
+            },
+            create: function (event, ui) {
+                //console.log(event, ui);
+                ui.panel.load("component/design/configs/" + ui.panel.attr("id") + ".html",
+                    function () {
+
+                    });
+            },
+            load: function (event, ui) {
+                //console.log(event, ui);
+            }
+        }).addClass("ui-tabs-vertical ui-helper-clearfix");
+        $("#cglv1 li").removeClass("ui-corner-top").addClass("ui-corner-left");
+    }, 100);
+</script>

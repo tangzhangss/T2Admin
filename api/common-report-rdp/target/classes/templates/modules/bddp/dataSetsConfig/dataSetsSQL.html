@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>数据源配置</title>
+<link href="${request.contextPath}/statics/plugins/jqueryui/jquery-ui.min.css" rel="stylesheet">
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/dataSetsConfig/css/buttons.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/plugins/select2/css/select2.min.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/plugins/ztree/css/metroStyle/metroStyle.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/plugins/gm/gm.css" />
+
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/bddp/static/dataSetsConfig/css/ds.css" />
+<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/jquery-1.11.0.js"></script>
+<script src="${request.contextPath}/statics/plugins/jqueryui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/gm/gm.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/getConfig.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/data.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/select2/js/select2.full.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/ace/ace.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-error_marker.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-spellcheck.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-options.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-settings_menu.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/libs/base64Util.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/dsDesignSQL.js"></script>
+
+</head>
+
+<body>
+	<div class="ds-layout ds-layout-top">
+		<div class="ds-title">数据集设计器(SQL)</div>
+		<div class="ds-tools">
+			<button type="button" id="saveDateSetsBtn" class="button button-primary ">保存</button>
+			<button type="button" id="viewDataSetsBtn" class="button button-primary ">预览</button>
+		</div>
+		<div class="ds-tablename">
+			<input type="text" id="dataSetsName" placeholder="请输入数据集名称">
+		</div>
+		<div class="ds-quit">
+			<button type="button" id="goBack" class="button button-primary">返回</button>
+		</div>
+	</div>
+	<div class="ds-layout ds-layout-left">
+		<div class="dsl-datasources-list">
+			<!-- <button class="dsl-btn button button-border  button-primary button-small">数据源列表</button> -->
+			<select id="dataSourcesList"></select>
+		</div>
+		<div class="dsl-datasource-tree">
+			<ul class="ztree" id="dsl-tables"></ul>
+		</div>
+		<div class="dsl-datasource-define">自定义数据集</div>
+	</div>
+	<div class="ds-layout ds-layout-center datasetsSQL">
+		<div class="dsc-content edit-content">
+			<div id="dsc-tabs" class="ec-tabs">
+				<ul>
+					<li><a href="#tabs-1">SQL编辑器</a></li>
+					<li><a href="#tabs-2">字段列表</a></li>
+					<li><a href="#tabs-3">参数设置</a></li>
+					<li><a href="#tabs-4">数据过滤</a></li>
+				</ul>
+				<div id="tabs-1">
+					<div class="ec-scene" id="editor"></div>
+				</div>
+				<div id="tabs-2">SQL编辑器暂未开放字段列表</div>
+				<div id="tabs-3">
+					<div class="params-btn">
+						<button type="button" class="getparambtn">获取参数</button>
+					</div>
+					<ul class="params-list"></ul>
+
+
+				</div>
+				<div id="tabs-4">SQL编辑器暂未开放数据过滤</div>
+			</div>
+
+		</div>
+		<div class="dsc-content orderby-content">
+			<span class="orderby-label">
+				排序字段：
+			</span>
+			<div class="orderby-input">
+				<input type="text" id="orderByInput" placeholder="例如：id desc,no asc  必须是返回的结果集包含的字段"/>
+			</div>
+		</div>
+		<div class="dsc-content view-content">
+			<table grid-manager="dataSetsViewTable"></table>
+			<!-- <div class="view-header"></div>
+				<div class="view-body">
+				</div> -->
+		</div>
+	</div>
+</body>
+
+</html>

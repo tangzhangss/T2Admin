@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DEMO</title>
+    <#include "/header.html">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/intro/introjs.css">
+        <script src="${request.contextPath}/statics/plugins/intro/intro.js"></script>
+        <style>
+            html,
+            body {
+                margin: 0px;
+                padding: 0px;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            .introjs-overlay {
+                background: unset;
+                background-color: transparent;
+
+            }
+
+            .introjs-helperLayer {
+                background-color: transparent;
+                box-shadow: inset 0 2px 15px rgb(230, 21, 21);
+            }
+
+            .introjs-helperNumberLayer {
+                left: unset !important;
+                right: -16px;
+                top: unset !important;
+                bottom: -16px;
+            }
+
+            .intro-tips {
+                position: absolute;
+                background-color: rgba(0, 0, 0, 0);
+                pointer-events: none;
+            }
+
+            .intro-tips1 {
+                top: 15px;
+                left: 10px;
+                right: 20px;
+                height: 150px;
+            }
+
+            .intro-tips2 {
+                top: 160px;
+                left: 0px;
+                right: 18px;
+                width: 100px;
+                height: 50px;
+                margin: auto;
+            }
+
+            .intro-tips3 {
+                top: 0px;
+                left: 5px;
+                right: 20px;
+                height: 40px;
+            }
+
+            .intro-tips4 {
+                top: 40px;
+                left: 10px;
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .intro-tips5 {
+                bottom: 0px;
+                left: 5px;
+                height: 20px;
+                width: 100px;
+            }
+        </style>
+</head>
+
+<body>
+    <div class="intro-tips intro-tips1"></div>
+    <div class="intro-tips intro-tips2"></div>
+    <div class="intro-tips intro-tips3"></div>
+    <div class="intro-tips intro-tips4"></div>
+    <div class="intro-tips intro-tips5"></div>
+    <iframe id="demo2" name="demo2" src="${request.contextPath}/rdppage/main/c5913481563309808c929e53b9a7b9e0"
+        frameborder="0" style="width:  100%;height: 100%;"></iframe>
+
+    <script>
+        $(function () {
+
+
+
+            var intro = introJs();
+            intro.setOptions({
+                steps: [{
+                    element: '.intro-tips1',
+                    intro: '<font>当前页面全部由报表设计器生成</font><br>根据报表设计所配置的参数自动生成查询条件表单，目前支持组件：<br>·输入框<br>·下拉框<br>·日期选择器<br>·年选择器<br>·年月选择器<br>·时间选择器<br>·日期时间选择器<br>·多选组件',
+                    position: 'bottom'
+                }, {
+                    element: '.intro-tips2',
+                    intro: '点击这里可以将查询条件收缩起来，方便展示报表内容',
+                    position: 'bottom'
+                }, {
+                    element: '.intro-tips3',
+                    intro: '这里是报表工具条，支持报表的打印、导出及分页功能',
+                    position: 'bottom'
+                }, {
+                    element: '.intro-tips4',
+                    intro: '这里是报表的展示区，未授权的用户预览报表会带有水印。',
+                    position: 'bottom'
+                }, {
+                    element: '.intro-tips5',
+                    intro: '用户可以通过点击左下角的“报表应用激活”来授权报表系统',
+                    position: 'top'
+                }],
+                nextLabel: '下一步 &rarr;',
+                prevLabel: '&larr; 上一步',
+                skipLabel: '跳过',
+                doneLabel: "完成",
+                exitOnOverlayClick: false,
+                exitOnEsc: false,
+                showBullets: false
+            });
+            intro.onbeforechange(function () {
+                console.log(this);
+                if (this._currentStep == 2&&this._direction=="forward") {
+                    $("#demo2").contents().find(".rt-swicth").click();
+                }
+                if (this._currentStep == 1&&this._direction=="backward") {
+                    $("#demo2").contents().find(".rt-swicth").click();
+                }
+            });
+
+            intro.start();
+        });
+    </script>
+</body>
+
+</html>

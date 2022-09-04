@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.report.modules.ser.dao.DtTableRsConditionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.report.modules.ser.entity.DtTableRsConditionEntity" id="dtTableRsConditionMap">
+        <result property="cdId" column="cd_id"/>
+        <result property="cdType" column="cd_type"/>
+        <result property="rename" column="rename"/>
+        <result property="leftTable" column="left_table"/>
+        <result property="leftCol" column="left_col"/>
+        <result property="operator" column="operator"/>
+        <result property="rightTable" column="right_table"/>
+        <result property="rightCol" column="right_col"/>
+        <result property="txTime" column="tx_time"/>
+        <result property="txOp" column="tx_op"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,44 @@
+table {
+	margin: auto;
+}
+
+table thead tr {
+	
+}
+
+table thead tr th, table thead tr td {
+	padding: 5px 10px;
+	border-color: rgb(255, 255, 255) !important;
+}
+
+table tr {
+	
+}
+
+table tr:hover {
+	
+}
+table tr:active {
+	
+}
+table>tbody>tr>td {
+	border-color: rgb(242, 242, 242) !important;
+	border-left: none !important;
+	border-right: none !important;
+	padding: 5px 10px;
+}
+
+table>tbody>tr:nth-of-type(odd) {
+	background-color: rgba(246, 247, 250, 1);
+}
+
+table>tfoot>tr>td {
+	border-color: rgb(242, 242, 242) !important;
+	border-left: none !important;
+	border-right: none !important;
+	padding: 5px 10px;
+}
+
+table>tfoot>tr:nth-of-type(odd) {
+	background-color: rgba(246, 247, 250, 1);
+}

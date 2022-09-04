@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>素材管理</title>
+	<#include "/header.html">
+		<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.css">
+		<link rel="stylesheet" href="${request.contextPath}/statics/material/material.css">
+		<script src="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.js"></script>
+		<script src="${request.contextPath}/statics/plugins/waterfall/jquery.waterfall.js"></script>
+</head>
+
+<body>
+	<div class="mt-header">
+
+		<span id="mt-group">
+		
+		</span>
+		<button type="button" class="btn btn-default"  onclick="openUpload()">上传素材</button>
+	</div>
+	<div class="mt-body">
+		<div id="mt-items">
+			<!-- <div class="mt-box"><img src="img/01.jpg" alt=""></div> -->
+		</div>
+		<div id="mt-info"></div>
+	</div>
+	<div id="cpdiv" style="display: none;">
+		<input type="text" id="cpIds">
+		<button type="button" data-clipboard-target="#cpIds">复制</button>
+	</div>
+	<script src="${request.contextPath}/statics/js/modules/material/material.js"></script>
+</body>
+
+</html>

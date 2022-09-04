@@ -1,0 +1,34 @@
+{
+    "data":[
+        {
+            "name":"1月",
+            "Territory":500,
+            "Abroad":80
+        },
+		{
+            "name":"3月",
+            "Territory":510,
+            "Abroad":110
+        },
+		{
+            "name":"5月",
+            "Territory":530,
+            "Abroad":100
+        },
+		{
+            "name":"7月",
+            "Territory":620,
+            "Abroad":120
+        },
+		{
+            "name":"9月",
+            "Territory":650,
+            "Abroad":180
+        },
+		{
+            "name":"11月",
+            "Territory":680,
+            "Abroad":200
+        }
+    ]
+}

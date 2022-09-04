@@ -1,0 +1,203 @@
+<ul id="filterTags" class="tags-navs">
+	<li class="tags-nav" tag-type="filter-input">
+		<i class="fa fa-text-width"></i>
+		<span>
+			输入框
+		</span>
+	</li>
+	<li class="tags-nav" tag-type="filter-searchbtn">
+		<i class="fa fa-text-width"></i>
+		<span>
+			查询按钮
+		</span>
+	</li>
+
+	<li class="tags-nav one" tag-type="filter-y">
+		<i class="fa fa-calendar"></i>
+		<span>
+			年选择器
+		</span>
+	</li>
+	<li class="tags-nav one" tag-type="filter-ym">
+		<i class="fa fa-calendar"></i>
+		<span>
+			年月选择器
+		</span>
+	</li>
+	<li class="tags-nav one" tag-type="filter-date">
+		<i class="fa fa-calendar"></i>
+		<span>
+			日期选择器
+		</span>
+	</li>
+	<li class="tags-nav one" tag-type="filter-y-rang">
+		<i class="fa fa-calendar"></i>
+		<span>
+			年范围选择器
+		</span>
+	</li>
+	<li class="tags-nav one" tag-type="filter-ym-rang">
+		<i class="fa fa-calendar"></i>
+		<span>
+			年月范围选择器
+		</span>
+	</li>
+	<li class="tags-nav one" tag-type="filter-date-rang">
+		<i class="fa fa-calendar"></i>
+		<span>
+			日期范围选择器
+		</span>
+	</li>
+	<li class="tags-nav one off" tag-type="filter-select">
+		<i class="fa fa-text-width"></i>
+		<span>
+			下拉框
+		</span>
+	</li>
+
+</ul>
+<script type="text/javascript">
+	$(function () {
+		$("#filterTags li").not(".off").draggable({
+			containment: "#content",
+			cursor: "move",
+			cursorAt: {
+				top: 0,
+				left: 0
+			},
+			helper: function (event) {
+				let zoom = $("#content").data("zoom");
+				let type = $(event.currentTarget).attr("tag-type");
+				let html = $("#tag-" + type).html();
+				return $(html).css({
+					"transform": "scale(" + zoom + ")",
+					"transform-origin": "left top 0px"
+				});
+			},
+			stop: function (event, ui) {
+				//console.log(event, ui);
+				let zoom = $("#content").data("zoom");
+				let type = $(event.target).attr("tag-type");
+				let html = $($("#tag-" + type).html());
+				var pLeft = $("#content").offset().left;
+				var pTop = $("#content").offset().top;
+				html.css({
+					left: (ui.offset.left - pLeft) / zoom,
+					top: (ui.offset.top - pTop) / zoom
+				});
+				html.appendTo("#content");
+				var tempProp = html.data("prop");
+				var prop = $.extend({}, tempProp, {
+					options: {},
+					type: type,
+					bigType: "filter"
+				});
+				if (type == "filter-searchbtn") {
+					prop.parts ={
+						text:"查询"
+					}
+				}
+				html.data("prop", prop);
+				html.initBox({
+					tagType: type
+				});
+				if (type == "filter-input") {
+
+				} else if (type == "filter-y") {
+					laydate.render({
+						elem: html.find(".tag-filter-input")[0],
+						type: 'year'
+					});
+
+				} else if (type == "filter-ym") {
+					laydate.render({
+						elem: html.find(".tag-filter-input")[0],
+						type: 'month'
+					});
+
+				} else if (type == "filter-date") {
+					laydate.render({
+						elem: html.find(".tag-filter-input")[0]
+					});
+
+				} else if (type == "filter-y-rang") {
+					laydate.render({
+						elem: html.find(".tag-filter-input")[0],
+						type: 'year',
+						range: true
+					});
+
+				} else if (type == "filter-ym-rang") {
+					laydate.render({
+						elem: html.find(".tag-filter-input")[0],
+						type: 'month',
+						range: true
+					});
+
+				} else if (type == "filter-date-rang") {
+					laydate.render({
+						elem: html.find(".tag-filter-input")[0],
+						range: true
+					});
+
+				} else if (type == "filter-select") {
+
+				} else if (type == "filter-searchbtn") {
+
+				}
+			}
+		});
+		$(".tags-nav.off").each(function () {
+			layx.tip('当前组件未开放！', this, 'top');
+		});
+	})
+</script>
+<script id="tag-filter-input" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<input type="text" class="tag-filter-input" style="width: 100%;height: 100%;"/>
+	</div>
+</script>
+<script id="tag-filter-y" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<input type="text" class="tag-filter-y" style="width: 100%;height: 100%;"/>
+	</div>
+</script>
+<script id="tag-filter-ym" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<input type="text" class="tag-filter-ym" style="width: 100%;height: 100%;"/>
+	</div>
+</script>
+<script id="tag-filter-date" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<input type="text" class="tag-filter-date" style="width: 100%;height: 100%;"/>
+	</div>
+</script>
+<script id="tag-filter-y-rang" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<input type="text" class="tag-filter-y-rang" style="width: 100%;height: 100%;"/>
+	</div>
+</script>
+<script id="tag-filter-ym-rang" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<input type="text" class="tag-filter-ym-rang" style="width: 100%;height: 100%;"/>
+	</div>
+</script>
+<script id="tag-filter-date-rang" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<input type="text" class="tag-filter-date-rang" style="width: 100%;height: 100%;"/>
+	</div>
+</script>
+<script id="tag-filter-select" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<select name="" id="" class="tag-filter-select" style="width: 100%;height: 100%;">
+			<option value="">请选择</option>
+		</select>
+	</div>
+</script>
+<script id="tag-filter-searchbtn" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<button class="tag-filter-searchbtn"  style="width: 100%;height: 100%;">
+			查询
+		</button>
+	</div>
+</script>

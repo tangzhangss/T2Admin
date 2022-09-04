@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>报表设计器</title>
+<link rel="icon" href="${request.contextPath}/statics/rdp/common/img/favicon.ico">
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/css/initLoad.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.css">
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/handsontable/5.0.1/handsontable.full.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/colorpicker/spectrum.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/zTree_v3/css/metroStyle/metroStyle.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/layer/theme/default/layer.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/highlight/styles/github.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/webuploader/webuploader.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/customscrollbar/css/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/rdp/common/lib/cropper/cropper.min.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/rdp/common/lib/font-awesome-4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/rdp/common/lib/select2/css/select2.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/rdp/common/css/dataExpr.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/css/main.css" />
+<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/all/jquery-1.11.0.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/common/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/customscrollbar/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/ace/ace.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/ace/mode-css.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/ace/mode-javascript.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/plugins/ace/ace.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-error_marker.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-spellcheck.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-options.js"></script>
+<script src="${request.contextPath}/statics/plugins/ace/ext-settings_menu.js"></script>
+
+	<script>
+	$(window).load(function() {
+		//	setTimeout(function() {
+		$('div.initloading').fadeOut(1000);
+	//	}, 1000);
+	})
+</script>
+</head>
+
+<body>
+	<#include "loading.html">
+	<div class="tb-top">
+		<div class="top-header">
+			<div class="logo"></div>
+			<div class="title" id="reportTitle">报表名称</div>
+			<input type="hidden" id="reportTitleInput">
+		</div>
+		<div class="toolbars" id="toolbars">
+			<div class="customScrollbar" style="min-width: 1500px;height: 90px;">
+				<div class="group common">
+					<div class="body">
+						<button type="button" class="tag-btn" onclick="tb_modif()">
+							<i class="tag modif"></i> <span>保存</span>
+						</button>
+						<button type="button" class="tag-btn" onclick="tb_save()">
+							<i class="tag save"></i> <span>另存为</span>
+						</button>
+						<button type="button" class="tag-btn" onclick="tb_view()">
+							<i class="tag view"></i> <span>预览</span>
+						</button>
+						<button type="button" class="tag-btn" id="fileupload">
+							<i class="tag upload"></i> <span>导入</span>
+						</button>
+					</div>
+					<div class="foot">常用</div>
+					<a class="corner_mark"></a>
+				</div>
+				<div class="group clipboard">
+					<div class="body">
+						<div class="sub sub-left">
+							<button type="button" class="tag-btn paste-btn" onclick="tb_paste();">
+								<i class="tag paste"></i> <span>粘贴</span>
+							</button>
+						</div>
+						<div class="sub sub-right">
+							<button type="button" class="tag-btn" onclick="tb_copy();">
+								<i class="tag copy"></i> <span>复制</span>
+							</button>
+							<button type="button" class="tag-btn" onclick="tb_cut();">
+								<i class="tag cut"></i> <span>剪切</span>
+							</button>
+						</div>
+					</div>
+					<div class="foot">剪切板</div>
+					<div class="bar_shrink"></div>
+					<a class="corner_mark"></a>
+				</div>
+				<div class="group font">
+					<div class="body">
+						<div class="sub sub-top">
+							<select name="" id="fontfamily" class="fontfamily" onchange="setFontFamily(this)">
+								<option value=""></option>
+								<option value="SimHei">黑体</option>
+								<option value="SimSun">宋体</option>
+								<option value="Microsoft YaHei">微软雅黑</option>
+								<option value="NSimSun">新宋体</option>
+								<option value="FangSong">仿宋</option>
+								<option value="KaiTi">楷体</option>
+							</select> <select name="" id="fontsize" class="fontsize">
+								<!-- onchange="setFontSize(this)" -->
+								<option value=""></option>
+								<option value="6px">6</option>
+								<option value="8px">8</option>
+								<option value="9px">9</option>
+								<option value="10px">10</option>
+								<option value="12px">12</option>
+								<option value="14px">14</option>
+								<option value="15px">15</option>
+								<option value="16px">16</option>
+								<option value="18px">18</option>
+								<option value="20px">20</option>
+								<option value="22px">22</option>
+								<option value="24px">24</option>
+								<option value="26px">26</option>
+								<option value="28px">28</option>
+								<option value="36px">36</option>
+								<option value="48px">48</option>
+								<option value="72px">72</option>
+							</select>
+						</div>
+						<div class="sub sub-bottom">
+							<button type="button" class="tag-btn btn-bold" onclick="setFontStyle('700')">
+								<i class="tag bold"></i>
+							</button>
+							<button type="button" class="tag-btn btn-italic" onclick="setFontStyle('italic')">
+								<i class="tag italic"></i>
+							</button>
+							<button type="button" class="tag-btn btn-underline" onclick="setFontStyle('underline')">
+								<i class="tag underline"></i>
+							</button>
+							<button type="button" class="tag-btn btn-strike" onclick="setFontStyle('strike')">
+								<i class="tag strike"></i>
+							</button>
+							<button type="button" class="tag-btn" id="bgColor">
+								<i class="tag bgColor"></i>
+							</button>
+							<button type="button" class="tag-btn" id="fontColor">
+								<i class="tag fontColor"></i>
+							</button>
+						</div>
+
+					</div>
+					<div class="foot">字体</div>
+					<a class="corner_mark"></a>
+				</div>
+				<div class="group alignment">
+					<div class="body">
+						<div class="sub sub-left">
+							<button type="button" class="tag-btn btn-htTop btn-av" onclick="setAlignmentV('htTop')">
+								<i class="tag topAlign"></i>
+							</button>
+							<button type="button" class="tag-btn btn-htMiddle btn-av" onclick="setAlignmentV('htMiddle')">
+								<i class="tag velAlign"></i>
+							</button>
+							<button type="button" class="tag-btn btn-htBottom btn-av" onclick="setAlignmentV('htBottom')">
+								<i class="tag bottomAlign"></i>
+							</button>
+							<button type="button" class="tag-btn btn-htLeft btn-ah" onclick="setAlignmentH('htLeft')">
+								<i class="tag leftAlign"></i>
+							</button>
+							<button type="button" class="tag-btn btn-htCenter btn-ah" onclick="setAlignmentH('htCenter')">
+								<i class="tag levelAlign"></i>
+							</button>
+							<button type="button" class="tag-btn btn-htRight btn-ah" onclick="setAlignmentH('htRight')">
+								<i class="tag rightAlign"></i>
+							</button>
+						</div>
+						<div class="sub sub-right">
+							<button type="button" class="tag-btn merge-btn" onclick="tb_merge()">
+								<i class="tag merge"></i> <span>合并单元格</span>
+							</button>
+							<button type="button" class="tag-btn split-btn" onclick="tb_split()">
+								<i class="tag split"></i> <span>拆分单元格</span>
+							</button>
+						</div>
+
+					</div>
+					<div class="foot">对齐方式</div>
+					<a class="corner_mark"></a>
+				</div>
+				<div class="group cells">
+					<div class="body">
+						<div class="sub sub-left">
+							<button type="button" class="tag-btn wrap-btn" onclick="tb_wrap()">
+								<i class="tag wrap"></i> <span>自动换行</span>
+							</button>
+							<select name="category" id="category" class="category" onchange="tb_category(this);">
+								<option value="">选行类型</option>
+								<option value="headtitle">头标题</option>
+								<option value="reporthead">报表头</option>
+								<option value="dataarea">数据区</option>
+								<option value="reportfoot">报表尾</option>
+								<option value="foottitle">尾标题</option>
+							</select>
+
+						</div>
+						<div class="sub sub-right">
+							<button type="button" class="tag-btn rows-btn">
+								<i class="tag rows"></i> <span>插入行</span>
+							</button>
+							<ul class="select-div select-ctrl-rows">
+								<li data-ctrl="insertRowAbove">在上方插入一行</li>
+								<li data-ctrl="insertRowBelow">在下方插入一行</li>
+								<li data-ctrl="insertRowBelow-5">在下方插入5行</li>
+								<li data-ctrl="delRow">删除选中行</li>
+							</ul>
+							<button type="button" class="tag-btn cols-btn">
+								<i class="tag cols"></i> <span>插入列</span>
+							</button>
+							<ul class="select-div select-ctrl-cols">
+								<li data-ctrl="insertColLeft">在左方插入一列</li>
+								<li data-ctrl="insertColRight">在右方插入一列</li>
+								<li data-ctrl="delCol">删除选中列</li>
+							</ul>
+							<!--	<button type="button" class="tag-btn frame-btn">
+								<i class="tag frame"></i> <span>边框</span>
+							</button>-->
+
+							<ul class="border-btn select-ctrl-border">
+								<li data-ctrl="borderLeft"><i class="tag btn-borderLeft"></i></li>
+								<li data-ctrl="borderRight"><i class="tag btn-borderRight"></i></li>
+								<li data-ctrl="borderTop"><i class="tag btn-borderTop"></i></li>
+								<li data-ctrl="borderBottom"><i class="tag btn-borderBottom"></i></li>
+								<li data-ctrl="borderOut"><i class="tag btn-borderOut"></i></li>
+								<li data-ctrl="borderIn"><i class="tag btn-borderIn"></i></li>
+								<li data-ctrl="borderAll"><i class="tag btn-borderAll"></i></li>
+								<li data-ctrl="borderNode"><i class="tag btn-borderNode"></i></li>
+							</ul>
+						</div>
+
+					</div>
+					<div class="foot">单元格</div>
+					<a class="corner_mark"></a>
+				</div>
+				
+				<div class="group charts">
+					<div class="body">
+						<ul class="charts-btn">
+							<li data-ctrl="pie"><i class="charts pie"></i></li>
+							<li data-ctrl="column"><i class="charts column"></i></li>
+							<li data-ctrl="line"><i class="charts line"></i></li>
+							<li data-ctrl="radar"><i class="charts gauge"></i></li>
+							<li data-ctrl="radar"><i class="charts radar"></i></li>
+							<li data-ctrl="radar"><i class="charts combination"></i></li>
+						</ul>
+					</div>
+					<div class="foot">图表</div>
+					<a class="corner_mark"></a>
+				</div>
+				
+				<div class="group edit">
+					<div class="body">
+						<div class="sub sub-left">
+							<button type="button" class="tag-btn exp-btn" onclick="openExpr()">
+								<i class="tag exp"></i> <span>函数</span>
+							</button>
+						</div>
+						<div class="sub sub-right">
+							<div class="input-group">
+								<label for="">宽</label> <input type="number" id="cell-width" class="cell-width" />
+							</div>
+							<div class="input-group">
+								<label for="">高</label> <input type="number" id="cell-height" class="cell-height" />
+							</div>
+						</div>
+					</div>
+					<div class="foot">编辑</div>
+					<a class="corner_mark"></a>
+				</div>
+				<div class="group pagesetting">
+					<div class="body">
+						<select name="orientation" id="orientation" class="orientation" onchange="tb_orientation(this)">
+							<option value="1">横向</option>
+							<option value="0">纵向</option>
+						</select> <select name="paging" id="paging" class="paging" onchange="tb_paging(this)">
+							<option value="-1">不分页</option>
+							<option value="0">自动分页</option>
+							<!-- <option value="-2">瀑布流</option> -->
+							<option value="10" selected="selected">10条/页</option>
+							<option value="20">20条/页</option>
+							<option value="30">30条/页</option>
+							<option value="40">40条/页</option>
+							<option value="50">50条/页</option>
+							<option value="100">100条/页</option>
+						</select> <label>工具栏位置</label> <select name="toolbarpos" id="toolbarpos" class="toolbarpos" onchange="tb_toolbarpos(this);">
+							<option value="top">上</option>
+							<option value="bottom">下</option>
+						</select> <label>辅助线</label> <select id="guide_line" class="toolbarpos" onchange="guide_line(this);">
+							<option value="">去辅助线</option>
+							<option value="A3">A3辅助线</option>
+							<option value="A4">A4辅助线</option>
+							<option value="A5">A5辅助线</option>
+							<option value="B4">B4辅助线</option>
+							<option value="B5">B5辅助线</option>
+						</select> <label>皮肤</label> <select id="skinType" class="skinType">
+							<option value="0">无样式</option>
+							<option value="1">layUi</option>
+							<option value="2">Bootstrap</option>
+							<option value="3">iview</option>
+							<option value="4">简介样式</option>
+						</select> <label onclick="skinCustomShow()"><i class="fa_btn fa fa-edit"></i>编辑</label> 
+
+					</div>
+					<div class="foot">页面设置</div>
+					<a class="corner_mark" title="扩展配置"></a>
+				</div>
+			</div>
+		</div>
+		<div class="top-foot">
+			<i class="dot"></i>
+			<div class="btn">
+				<!-- <i class="expNo"></i> <i class="expYes"></i> -->
+				<i class="expFor" onclick="openExpr()"></i>
+			</div>
+			<div class="form">
+				<input type="text" name="cellval" id="cellval" value="" readonly="readonly" onclick="openExpr()" />
+			</div>
+			<div class="parmdic">
+				<label>数据字典</label> <input type="text" id="parmdic" onclick="openDic()" readonly="readonly" />
+			</div>
+		</div>
+	</div>
+	<div class="select_panel">
+		<div class="show_btn"><span class="fa_btns"><span class="btn_type" title="自定义查询"></span><i class="fa_btn fa fa-eye-slash"></i></span></div>
+		<div class="panel_design">
+			<div class="panel_tool" title="工具栏">
+				<span class="css_edit" title="CSS编辑"></span>
+				<span class="js_edit" title="JS编辑"></span>
+				<ul class="menu_list">
+				</ul>
+			</div>
+			<div class="panel_area">
+			</div>
+		</div>
+		<div class="resize_line"></div>
+	</div>
+	<div class="resizable select-resizable" style="display:none;">
+		<span class="resizable-handle tl" draggable="true" style="cursor: nwse-resize;"></span>
+		<span class="resizable-handle t" draggable="true" style="cursor: ns-resize;"></span>
+		<span class="resizable-handle tr" draggable="true" style="cursor: nesw-resize;"></span>
+		<span class="resizable-handle r" draggable="true" style="cursor: ew-resize;"></span>
+		<span class="resizable-handle br" draggable="true" style="cursor: nwse-resize;"></span>
+		<span class="resizable-handle b" draggable="true" style="cursor: ns-resize;"></span>
+		<span class="resizable-handle bl" draggable="true" style="cursor: nesw-resize;"></span>
+		<span class="resizable-handle l" draggable="true" style="cursor: ew-resize;"></span>
+	</div>
+	<div class="param_panel" style="display: none;">
+		<div id="param_data_panel">
+			<div class="set_title">
+				<p>参数设置</p>
+				<span class="head_btn">
+					<i class="btn_lock fa fa-unlock"></i>
+					<i class="btn_close fa fa-close"></i>
+				</span>
+			</div>
+			<div class="set_body">
+				<div class="set_module">
+					<div class="m_title">
+						<span class="t_text">基础属性</span>
+						<span class="t_btn"></span>
+					</div>
+					<ul class="m_body">
+						<li class="b_line">
+							<lable class="p_lable">参数字段</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="parmName" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">参数名称</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="parmCName" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">表单类型</lable>
+							<div class="r_content">
+								<select data-type="p_data" name="showType" title="请选择表单类型" class="p_text_3">
+									<option value="input">输入框</option>
+									<option value="select">选择框(可选)</option>
+									<option value="select2">选择框</option>
+									<option value="multiple">多选选择器</option>
+									<option value="date">日期选择器</option>
+									<option value="year">年选择器</option>
+									<option value="month">年月选择器</option>
+									<option value="time">时间选择器</option>
+									<option value="datetime">日期时间选择器</option>
+									
+									<option value="render">区域时间</option>
+									<option value="radio">单选</option>
+									<option value="checkbox">复选</option>
+									<option value="radio-pop">单选（弹出式）</option>
+									<option value="checkbox-pop">复选（弹出式）</option>
+									<option value="radio-pop-tree">单选（树形）</option>
+									<option value="checkbox-pop-tree">复选（树形）</option>
+								</select>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">参数类型</lable>
+							<div class="r_content">
+								<select  data-type="p_data" name="parmType" title="请选择参数类型" class="p_text_3">
+									<option value="normal">普通参数</option>
+									<option value="dynamic">动态参数</option>
+								</select>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">数据类型</lable>
+							<div class="r_content">
+								<select  data-type="p_data" name="dbType" title="请选择数据类型" class="p_text_3">
+									<option value="string">字符串</option>
+									<option value="date">日期</option>
+									<option value="double">货币</option>
+									<option value="int">整数</option>
+								</select>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">初值</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="parmvl" type="text" class="p_text p_text_3" />
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">参数</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="format" type="text" class="p_text p_text_3" />
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">最大长度</lable>
+							<div class="r_content">
+								<input data-type="p_data" name=maxLength type="text" class="p_text p_text_3" />
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="set_module">
+					<div class="m_title">
+						<span class="t_text">显示属性</span>
+						<span class="t_btn"><i class="fa fa-minus"></i></span>
+					</div>
+					<ul class="m_body">
+						<li class="b_line">
+							<lable class="p_lable">显示区域</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="selRange" type="hidden" value="0"/>
+								<ul class="customMenu radioIcon">
+									<li class="licon selected" data-value="0" title="全部"><span class="sicon align_left"></span></li>
+									<li class="licon" data-value="1" title="文本"><span class="sicon align_center"></span></li>
+									<li class="licon" data-value="2" title="字段"><span class="sicon align_right"></span></li>
+								</ul>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable"></lable>
+							<div class="r_content">
+								<lable>
+									<span>宽度</span>
+									<input data-type="p_data" min="0" name="width" type="number" class="key_input p_center p_text p_text_1" />
+								</lable>
+								<lable>
+									<span>高度</span>
+									<input data-type="p_data" min="0" name="height" type="number" class="key_input p_center p_text p_text_1" />
+								</lable>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">宽度</lable>
+							<div class="r_content">
+								<lable>
+									<span>L</span>
+									<input data-type="p_data" min="0" name="widthL" type="number" class="key_input p_center p_text p_text_1" />
+								</lable>
+								<lable>
+									<span>R</span>
+									<input data-type="p_data" min="0" name="widthR" type="number" class="key_input p_center p_text p_text_1" />
+								</lable>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">字体大小</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="fontSize" type="number" class="key_input p_center p_text p_text_1" />
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">尺寸/选项</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="fieldSize" type="text" class="key_input p_center p_text p_text_3" />
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">位置</lable>
+							<div class="r_content">
+								<lable>
+									<span>X</span>
+									<input data-type="p_data" min="0" name="positionX" type="number" class="key_input p_center p_text p_text_1" />
+								</lable>
+								<lable>
+									<span>Y</span>
+									<input data-type="p_data" min="0" name="positionY" type="number" class="key_input p_center p_text p_text_1" />
+								</lable>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">标签对齐</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="labelAlign" type="hidden" value="2"/>
+								<ul class="customMenu radioIcon">
+									<li class="licon" data-value="0" title="居左"><span class="sicon align_left"></span></li>
+									<li class="licon" data-value="1" title="居中"><span class="sicon align_center"></span></li>
+									<li class="licon selected" data-value="2" title="居右"><span class="sicon align_right"></span></li>
+								</ul>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">字段对齐</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="fieldAlign" type="hidden" value="0"/>
+								<ul class="customMenu radioIcon">
+									<li class="licon selected" data-value="0"  title="居左"><span class="sicon align_left"></span></li>
+									<li class="licon" data-value="1" title="居中"><span class="sicon align_center"></span></li>
+									<li class="licon" data-value="2" title="居右"><span class="sicon align_right"></span></li>
+								</ul>
+							</div>
+						</li>
+							<li class="b_line">
+							<lable class="p_lable">垂直对齐</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="verticalAlign" type="hidden" value="1"/>
+								<ul class="customMenu radioIcon">
+									<li class="licon" data-value="0" title="居上"><span class="sicon align_top"></span></li>
+									<li class="licon selected" data-value="1" title="居中"><span class="sicon align_vel"></span></li>
+									<li class="licon" data-value="2" title="居下"><span class="sicon align_bottom"></span></li>
+								</ul>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">必填</lable>
+							<div class="r_content">
+								<select  data-type="p_data" name="mustInput" title="请选择输入条件" class="p_text_3">
+									<option value="0">非必填</option>
+									<option value="1">必填</option>
+								</select>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">只读</lable>
+							<div class="r_content">
+								<select  data-type="p_data" name="readonly" title="请选择只读属性" class="p_text_3">
+									<option value="0">可写</option>
+									<option value="1">只读</option>
+								</select>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="set_module">
+					<div class="m_title">
+						<span class="t_text">样式属性</span>
+						<span class="t_btn"><i class="fa fa-minus"></i></span>
+					</div>
+					<ul class="m_body" style="display: none;">
+							<li class="b_line">
+							<lable class="p_lable">标签样式</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="labelStyle" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">字段样式</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="fieldStyle" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="set_module">
+					<div class="m_title">
+						<span class="t_text">事件属性</span>
+						<span class="t_btn"><i class="fa fa-minus"></i></span>
+					</div>
+					<ul class="m_body" style="display: none;">
+						<li class="b_line">
+							<lable class="p_lable">单击事件</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="click" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">双击事件</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="dbclick" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">获取焦点</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="focus" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">失去焦点</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="blur" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+						<li class="b_line">
+							<lable class="p_lable">内容变更</lable>
+							<div class="r_content">
+								<input data-type="p_data" name="change" type="text" class="p_text p_text_3"/>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tb-center tb-center_left on">
+		<div class="showtable" id="showtable"></div>
+	</div>
+	<!--<div class="tb-right">
+			<div class="prop" id="prop"></div>
+		</div>-->
+	<div class="tb-foot on">
+		<i class="foot-switch"></i>
+		<div class="prop" id="prop">
+			<div class="box">
+				<ul class="tabs">
+					<li class="tab on">数据集与参数设置</li>
+					<li class="tab">填报设置</li>
+				</ul>
+				<div class="content">
+					<div class="ct on">
+						<div class="dataTrees">
+							<ul id="dataSets" class="ztree"></ul>
+						</div>
+						<div class="dataTrees">
+							<ul id="dataParms" class="ztree"></ul>
+						</div>
+					</div>
+					<div class="ct">
+						<div class="dataTrees">
+							<ul id="fillReports" class="ztree"></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="progress-bg">
+		<div class="progress-body">
+			<div class="progress-line"></div>
+		</div>
+	</div>
+	<input type="file" id="importImage" style="display:none;" />
+	<div class="rdp-cropper">
+		<div class="rdp-cropper-body">
+			<div class="rdp-img-container">
+				<img id="image" src="${request.contextPath}/statics/rdp/common/img/tags/defaultTag.png" alt="Picture">
+			</div>
+			<div class="rdp-img-view">
+				<div class="rdp-img-preview preview-lg"></div>
+
+				<div class="docs-data">
+					<div class="input-group ">
+						<label class="input-group-text" for="dataX">X</label> <input type="number" class="form-control cropper-data" id="dataX" placeholder="x"> <span class="input-group-text">px</span>
+
+					</div>
+					<div class="input-group ">
+						<label class="input-group-text" for="dataY">Y</label> <input type="number" class="form-control cropper-data" id="dataY" placeholder="y"> <span class="input-group-text">px</span>
+
+					</div>
+					<div class="input-group ">
+						<label class="input-group-text" for="dataWidth">宽</label> <input type="number" class="form-control cropper-data" id="dataWidth" placeholder="width"> <span class="input-group-text">px</span>
+
+					</div>
+					<div class="input-group ">
+						<label class="input-group-text" for="dataHeight">高</label> <input type="number" class="form-control cropper-data" id="dataHeight" placeholder="height"> <span class="input-group-text">px</span>
+
+					</div>
+					<div class="input-group ">
+						<label class="input-group-text" for="dataRotate">角度</label> <input type="number" class="form-control cropper-data" id="dataRotate" placeholder="rotate"> <span class="input-group-text">deg</span>
+
+					</div>
+					<div class="input-group ">
+						<label class="input-group-text" for="dataScaleX">水平缩放</label> <input type="number" step="0.1" class="form-control cropper-data no-unit" id="dataScaleX" placeholder="scaleX">
+					</div>
+					<div class="input-group ">
+						<label class="input-group-text" for="dataScaleY">垂直缩放</label> <input type="number" step="0.1" class="form-control cropper-data no-unit" id="dataScaleY" placeholder="scaleY">
+					</div>
+					<fieldset class="fieldset-ratio">
+						<legend>等比缩放</legend>
+						<div class="input-group ">
+							<label class="input-group-text" for="dataWidthRatio">宽</label> <input type="number" class="form-control cropper-ratio" id="dataWidthRatio" placeholder="width"> <span
+								class="input-group-text">px</span>
+
+						</div>
+						<div class="input-group ">
+							<label class="input-group-text" for="dataHeightRatio">高</label> <input type="number" class="form-control cropper-ratio" id="dataHeightRatio" placeholder="height"> <span
+								class="input-group-text">px</span>
+
+						</div>
+					</fieldset>
+
+				</div>
+				<div class="docs-ctrl layui-layer-btn">
+					<a id="save-cropper-image" class="layui-layer-btn0">确认</a> <a id="cancel-cropper-image" class="layui-layer-btn1">取消</a>
+				</div>
+			</div>
+			<div class="rdp-img-toolbars">
+				<ul class="rdp-img-menu">
+					<li class="menu-item menu-before" data-method="zoom" data-option="0.1" title="放大"><span class="fa fa-search-plus"></span></li>
+					<li class="menu-item menu-after" data-method="zoom" data-option="-0.1" title="缩小"><span class="fa fa-search-minus"></span></li>
+					<li class="menu-item menu-before" data-method="move" data-option="-10" data-second-option="0" title="左移"><span class="fa fa-arrow-left"></span></li>
+					<li class="menu-item" data-method="move" data-option="10" data-second-option="0" title="右移"><span class="fa fa-arrow-right"></span></li>
+					<li class="menu-item" data-method="move" data-option="0" data-second-option="-10" title="上移"><span class="fa fa-arrow-up"></span></li>
+					<li class="menu-item menu-after" data-method="move" data-option="0" data-second-option="10" title="下移"><span class="fa fa-arrow-down"></span></li>
+					<li class="menu-item menu-before" data-method="rotate" data-option="-45" title="向左旋转"><span class="fa fa-rotate-left"></span></li>
+					<li class="menu-item" data-method="rotate" data-option="45" title="向右旋转"><span class="fa fa-rotate-right"></span></li>
+					<li class="menu-item" data-method="scaleX" data-option="-1" title="水平翻转"><span class="fa fa-arrows-h"></span></li>
+					<li class="menu-item menu-after" data-method="scaleY" data-option="-1" title="垂直翻转"><span class="fa fa-arrows-v"></span></li>
+					<li class="menu-item menu-before menu-after" data-method="reset" title="重置"><span class="fa fa-refresh"></span></li>
+				</ul>
+				<ul class="rdp-img-menu">
+					<li class="menu-item active menu-before docs-toggles" title="16:9"><label><input type="radio" checked="checked" class="sr-only" name="aspectRatio" value="1.7777777777777777">16:9</label></li>
+					<li class="menu-item docs-toggles" title="4:3"><label><input type="radio" class="sr-only" name="aspectRatio" value="1.3333333333333333">4:3</label></li>
+					<li class="menu-item docs-toggles" title="1:1"><label><input type="radio" class="sr-only" name="aspectRatio" value="1"> 1:1</label></li>
+					<li class="menu-item docs-toggles" title="2:3"><label><input type="radio" class="sr-only" name="aspectRatio" value="0.6666666666666666"> 2:3</label></li>
+					<li class="menu-item menu-after docs-toggles" title="自由裁剪"><label><input type="radio" class="sr-only" name="aspectRatio" value="NaN"> free</label></li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<!-- 
+		<div style="display:none;">
+			<form name="viewform" action="../../rdppub/show/0" method="post" target="_blank">
+				<input type="hidden" name="reportJson" id="reportJson">
+			</form>
+		</div> --> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/handsontable/5.0.1/handsontable.full.min.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/handsontable/ZH.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/colorpicker/spectrum.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/zTree_v3/js/jquery.ztree.all.min.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/layer/layer.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/sql-formatter/sql-formatter.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/highlight/highlight.pack.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/webuploader/webuploader.min.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/drag/drag.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/drag/resizable.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/html2canvas/html2canvas.min.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/cropper/cropper.min.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/select2/js/select2.full.min.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/libs/base64Util.js"></script> 
+		<!-- 		<script type="text/javascript" src="common/all/all.min.js"></script> --> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/common.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/bordersettings.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/hotmain.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/dataSets.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/dataParms.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/dataExpr.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/fillReport.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/dataReport.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/dataLink.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/dataDic.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/undoredo.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/uploadfile.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/overlapping.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/importImage.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/cropperutil.js"></script> 
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/main.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/selectPanel.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/barcode.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/layer_tabs.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/charts.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/chartsProp.js"></script>
+</body>
+<div id="fillReportInfo" style="padding:10px;display: none;">
+	<div class="form-info">
+		<div class="input-items">
+			<label class="input-label">配置名称</label> <input type="text" name="name" id="fillName" title="请输入配置名称" />
+			<input type="hidden" name="dbMode" value="">
+		</div>
+		<div class="input-items">
+			<label class="input-label">提交操作</label>
+			<select name="btnType" id="btnType">
+			<option value="">默认</option>
+			<option value="insert">插入</option>
+			<option value="update">更新</option>
+			<!-- <option value="delete">删除</option> -->
+			<option value="actionurl">自定义地址</option>
+			</select>
+		</div>
+		<div class="input-items actionurl" style="display:none">
+			<label class="input-label">提交地址</label> <input type="text" name="actionurl" id="actionurl" title="请输入提交地址" />
+		</div>
+		<div class="input-items actionbtn">
+			<label class="input-label">数据源</label>
+			<select name="dataSourceName" id="DataSourceName" title="请选择数据源">
+			</select>
+		</div>
+		<div class="input-items actionbtn">
+			<label class="input-label">对应表</label>
+			<select name="tbName" id="tbName" title="请选择表">
+			</select>
+		</div>
+		<fieldset style="width:400px;margin:0 auto;" class="actionbtn">
+		<legend>表元素对应关系</legend>
+		<input type="button" value="智能添加所有列" onclick="addAllFillReportColumn()"> <input type="button" value="删除所有列" onclick="deleteAllFillReportColumn()"> <input type="button" value="添加一列" onclick="addFillReportColumn()"> <input type="button" value="删除选中列" onclick="deleteFillReportColumn()">
+		<table style="width:100%;margin-top:10px;border-collapse: collapse;" border="1">
+		<thead><tr align="center"><td width="40">主键</td><td width="40">外键</td><td>数据列</td><td>控件名称</td><td>备注</td></tr></thead>
+		<tbody id="columu_cell">
+		</tbody>
+		</table>
+		</fieldset>
+	</div>
+</div>
+<div id="dataSetsInfo" style="display: none;">
+	<div class="form-info">
+		<div class="input-items">
+			<label class="input-label">数据源名称</label>
+			<!-- <i class="required fa fa-asterisk"></i> -->
+			<select name="dataSourceName" id="DataSourceName" title="请选择数据源">
+			</select>
+		</div>
+		<div class="input-items">
+			<label class="input-label">数据集名称</label> <input type="text" name="dataSetName" id="DataSetName" title="请输入数据集名称" />
+		</div>
+		<div id="ddslist">
+			<div class="input-items">
+				<label class="input-label">数据字典</label> <input type="checkbox" name="dic" id="dic" value="1" />
+			</div>
+			<div class="input-items">
+				<label class="input-label">数据集类型</label> <select name="dataSetType" id="dataSetType" title="请选择数据集类型">
+					<option value=""></option>
+					<option value="1">查询SQL</option>
+					<option value="2">存储过程</option>
+					<option value="3">函数</option>
+				</select>
+			</div>
+			<div class="input-items">
+				<label class="input-label">执行SQL</label>
+				<!--<textarea cols="38" rows="5" name="commandText" id="CommandText" title="请输入查询SQL"></textarea>-->
+				<div class="ec-scene editor" id="commandText"></div>
+			</div>
+			<div class="input-items">
+				<button type="button" class="formatterBtn">格式化</button>
+			</div>
+			<div class="input-items">
+				<label class="input-label">检验SQL</label> <input type="checkbox" name="isvalid" id="isvalid" value="1" checked="checked" /> 用于修改，取消选中修改不再校验SQL准确性
+			</div>
+			<div class="input-items">
+				<label class="input-label">参数列表</label> <i class="icon icon-insert" onclick="addParmItem()">+</i>
+				<div class="nospace"></div>
+			</div>
+			<div class="parm-list"></div>
+		</div>
+		<div id="jblist" style="display:none;">
+			<div class="input-items">
+				<label class="input-label">实体类</label> <input type="text" name="factoryClass" id="FactoryClass" title="请输入实体类名称" />
+			</div>
+		</div>
+		<div id="jsonlist" style="display:none;">
+			<div class="input-items">
+				<label class="input-label">服务</label> <select name="hostName" id="hostName">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="input-items">
+				<label class="input-label">请求地址</label> <input type="text" name="path" id="path" title="请求地址" />
+			</div>
+			<div class="input-items">
+				<label class="input-label">请求方式</label> <select name="method" id="method">
+					<option value="0" selected>GET</option>
+					<option value="1">POST</option>
+				</select>
+			</div>
+			<div class="input-items">
+				<label class="input-label">属性名称</label> <input type="text" name="node" id="node" title="属性名称" />
+			</div>
+			<!-- <div class="input-items">
+				<label class="input-label">属性类型</label>
+				<select name="cate" id="cate">
+					<option value="0" selected>数组</option>
+					<option value="1">对象</option>
+				</select>
+			</div> -->
+			<div class="input-items">
+				<label class="input-label">是否分页</label> <select name="pageType" id="pageType">
+					<option value="0" selected>否</option>
+					<option value="1">是</option>
+				</select>
+			</div>
+			<div id="pageprop">
+				<div class="input-items">
+					<label class="input-label">分页参数</label> <input type="text" name="pageParam" id="pageParam" title="分页参数" />
+				</div>
+				<div class="input-items">
+					<label class="input-label">页码参数</label> <input type="text" name="pageSizeParam" id="pageSizeParam" title="页码参数" />
+				</div>
+				<div class="input-items">
+					<label class="input-label">记录数属性</label> <input type="text" name="recordName" id="recordName" title="记录数属性" />
+				</div>
+			</div>
+			<div class="input-items">
+				<button type="button" class="jsonFieldBtn" id="jsonFieldBtn">配置字段</button>
+			</div>
+			<div class="input-items">
+				<label class="input-label">参数列表</label> <i class="icon icon-insert" onclick="addParmItem()">+</i>
+				<div class="nospace"></div>
+			</div>
+			<div class="parm-list"></div>
+		</div>
+	</div>
+</div>
+<div id="jsonFieldLayer" style="display: none;">
+	<div class="jsonField-items">
+		<label class="input-label">属性名称</label> <input type="text" name="node" id="node" title="属性名称" />
+		<button type="button" id="GetJsonFieldBtn">通过请求地址获取</button>
+	</div>
+	<div class="jsonField-items" id="jsonFieldParm">
+		<input class="flex-item" name="columnName" id="columnName" title="请输入字段名称" type="text" required /> <select class="flex-item" name="columnType" id="columnType">
+			<option value="">请选择字段类型</option>
+			<option value="string">string</option>
+			<option value="number">number</option>
+			<option value="boolean">boolean</option>
+			<option value="array">array</option>
+			<!-- <option value="other">其他</option> -->
+		</select> <input class="flex-item" name="columnComments" id="columnComments" placeholder="请输入字段注释" type="text" required /> <input class="flex-item" name="isauto" id="isauto" type="hidden" value="1" />
+		<button class="flex-item" type="button" id="EditJsonFieldBtn">
+			<i class="fa fa-plus"></i>
+		</button>
+	</div>
+	<ul class="jsonFieldList">
+		<li class="field-item"><span class="field-name">字段名称</span> <span class="field-type">字段类型</span> <span class="field-comment">字段描述</span> <span class="field-ctrl">操作</span></li>
+	</ul>
+	<ul class="jsonFieldList" id="jsonFieldList">
+		<!-- <li class="field-item">
+			<span class="field-name">www</span>
+			<span class="field-type">eeee</span>
+			<span class="field-comment">tttttt</span>
+			<button class="flex-item" type="button" id="DelJsonFieldBtn"><i class="fa fa-minus-circle"></i></button>
+		</li> -->
+	</ul>
+</div>
+
+<div id="dataParmsInfo" style="display: none;">
+	<div class="input-items">
+		<label class="input-label">参数名称</label> <input name="parmName" id="parmName" title="请输入参数名称，同一报表名称不得重复" placeholder="可使用字母、数字、下划线，需以字母开头" type="text" required />
+	</div>
+	<div class="input-items">
+		<label class="input-label">参数说明</label> <input name="parmCName" id="parmCName" title="请输入参数说明" placeholder="显示在表单控件左侧的文本" type="text" required />
+	</div>
+	<div class="input-items">
+		<label class="input-label">表单类型</label> <select name="showType" id="showType" title="请选择表单类型" class="sel" required>
+			<option value="input">输入框</option>
+			<option value="select">选择框(可选)</option>
+			<option value="select2">选择框</option>
+			<option value="multiple">多选选择器</option>
+			<option value="date">日期选择器</option>
+			<option value="year">年选择器</option>
+			<option value="month">年月选择器</option>
+			<option value="time">时间选择器</option>
+			<option value="datetime">日期时间选择器</option>
+			
+			<option value="render">区域时间</option>
+			<option value="radio">单选</option>
+			<option value="checkbox">复选</option>
+			<option value="radio-pop">单选（弹出式）</option>
+			<option value="checkbox-pop">复选（弹出式）</option>
+			<option value="radio-pop-tree">单选（树形）</option>
+			<option value="checkbox-pop-tree">复选（树形）</option>
+		</select>
+	</div>
+	<div class="input-items" style="display: none;">
+		<label class="input-label">是否可以为空</label> <input type="checkbox" name="isnull" id="isnull" value="1" checked="checked" />
+	</div>
+	<div class="input-items">
+		<label class="input-label">参数类型</label> <select name="parmType" id="parmType" title="请选择参数类型" class="sel" required>
+			<option value="normal">普通参数</option>
+			<option value="dynamic">动态参数（显示为隐藏域）</option>
+		</select>
+	</div>
+	<div class="input-items">
+		<label class="input-label">数据类型</label> <select name="dbType" id="dbType" title="请选择数据类型" required>
+			<option value="string">字符串</option>
+			<option value="date">日期</option>
+			<option value="double">货币</option>
+			<option value="int">整数</option>
+		</select>
+	</div>
+	<div class="input-items">
+		<label class="input-label">初值</label>
+		<input type="text" name="parmvl" id="parmvl" value=""  placeholder="请输入默认值" autocomplete="off"/>
+	</div>
+	<div class="input-items">
+		<label class="input-label">格式</label> <input type="text" name="format" id="format" value="" />
+		<p class="intro">1、表单类型为日期值为日期格式，默认：yyyy-MM-dd；2、表单类型为选择器值为下拉选项，格式：text1:value1,text2:value2</p>
+	</div>
+	<div class="input-items">
+		<label class="input-label">尺寸/选项</label>
+		<input type="text" name="fieldSize" id="fieldSize" value=""  placeholder="数据字典类型（例：KEY_NAME）" autocomplete="off"/>
+	</div>
+</div>
+
+<div class="dataExpr" id="dataExpr" style="display: none;">
+	<ul class="dataExpr-tabs">
+		<li class="current"><a href="#" title="函数及表达式" onclick="dataExprTabs(this);">函数及表达式</a></li>
+		<li><a href="#" title="预警设置" onclick="dataExprTabs(this);">预警设置</a></li>
+		<li><a href="#" title="填报展现设置" onclick="dataExprTabs(this);">填报展现设置</a></li>
+		<li><a href="#" title="条形码设置" onclick="dataExprTabs(this);">条形码设置</a></li>
+	</ul>
+	<div class="tabs-content">
+		<div class="tabs-pages tabs0">
+			<table width="100%" cellpadding="5">
+				<tr>
+					<td>
+						<fieldset>
+							<legend>数据集</legend>
+							<div style="padding:2px 0 1px 0">
+								<select name="ds" id="ds" onchange="changeDataSets(this.value);">
+									<option value=""></option>
+								</select>
+							</div>
+						</fieldset>
+
+					</td>
+					<td valign="top">
+						<fieldset>
+							<legend>文本/字段</legend>
+							<div>
+								<input name="text" id="dsvt" style="width:200px" value="" onblur="setv(this.name,this.value);"> <select name="text" id="dsvs" style="display:none;" onchange="setdv(this);">
+								</select>
+							</div>
+						</fieldset>
+
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" valign="top">
+						<fieldset>
+							<legend>表达式</legend>
+							<div>
+								<textarea name="exptext" id="exptext" cols="35" rows="6" style="width:345px;height:95px;"></textarea>
+							</div>
+						</fieldset>
+					</td>
+					<td valign="top" class="czf">
+						<fieldset>
+							<legend>操作符</legend>
+							<div id="czz" style="padding:17px 0">
+								<input name="btn_jia" type="button" id="btn_jia" value="+" /> <input name="btn_jian" type="button" id="btn_jian" value="-" /> <input name="btn_cheng" type="button" id="btn_cheng" value="*" />
+								<input name="btn_chu" type="button" id="btn_chu" value="/" /> <input name="btn_dayu" type="button" id="btn_dayu" value="&gt;" /> <input name="btn_xiaoyu" type="button" id="btn_xiaoyu"
+									value="&lt;" /> <input name="btn_kuoz" type="button" id="btn_kuoz" value="(" /> <input name="btn_kuoy" type="button" id="btn_kuoy" value=")" /> <input name="btn_and" type="button"
+									id="btn_and" value="AND" /> <input name="btn_or" type="button" id="btn_or" value="OR" /> <input name="btn_not" type="button" id="btn_not" value="NOT" /> <input name="btn_deng"
+									type="button" id="btn_deng" value="=" />
+							</div>
+						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<td valign="top">
+						<fieldset>
+							<legend>名称/字段</legend>
+							<div style="padding-bottom:4px">
+								<select name="aexpr" size="15" multiple="multiple" id="aexpr" onchange="sl(this.value)" style="width:100px;height:250px;"></select> <select name="bexpr" size="15" multiple="multiple"
+									id="bexpr" ondblclick="filld('$F{'+this.value+'}')" style="width:239px;height:250px;margin-left:6px">
+								</select>
+							</div>
+						</fieldset>
+					</td>
+					<td valign="top">
+						<fieldset>
+							<legend>可选函数</legend>
+							<div style="min-height:253px">
+								<ul id="dataExpertree" class="ztree"></ul>
+							</div>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="tabs-pages tabs1 tabs-hiden">
+			<table class="table-warning">
+				<tbody>
+					<tr class="tr-condition_name">
+						<td>
+							<div class="td-attribute">
+								<span class="attr_title" style="width:60px;text-align: center;">条件名称</span>
+								<ul class="condition_name_ul">
+									<li>
+										<div class="attrspan">
+											<lable>条件名称</lable>
+											<input class="text" type="text" name="conditionName" value="">
+										</div>
+									</li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<tr class="tr-attr">
+						<td>
+							<div class="td-attribute">
+								<span class="attr_title">属性</span>
+								<ul class="attr_ul">
+									<li>
+										<div class="attrspan">
+											<lable>字号</lable>
+											<input class="text" type="text" name="tdFontSize" value="">
+										</div>
+										<div class="attrspan">
+											<lable>加粗</lable>
+											<input class="text" type="text" name="tdFontWeight" value="">
+										</div>
+									</li>
+									<li>
+										<div class="attrspan">
+											<lable>颜色</lable>
+											<input class="text" type="text" name="tdFontColor" value=""><span class="selectColor"> <i id="tdchangeColor"
+												style="background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);"></i>
+											</span>
+										</div>
+										<div class="attrspan">
+											<lable>背景色</lable>
+											<input class="text" type="text" name="tdFontBgColor" value=""><span class="selectColor"> <i id="tdchangeBgColor"
+												style="background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);"></i>
+											</span>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<tr class="tr-symbol">
+						<td>
+							<div class="td-attribute">
+								<span class="attr_title">条件</span>
+								<div>
+									<select class="operator" name="operator" style="width: 15%;">
+										<option value="0">等于</option>
+										<option value="1">大于</option>
+										<option value="-1">小于</option>
+										<option value="10">大于等于</option>
+										<option value="-10">小于等于</option>
+										<option value="F">不等于</option>
+										<option value="S">以它为开头</option>
+										<option value="E">以它为结尾</option>
+										<option value="IN">存在于</option>
+									</select> <input class="td-value" type="text" placeholder="填写值" name="tdValue" style="width:80%;">
+								</div>
+								<div>
+									<span> <input type="radio" name="andOr" value="and" checked="checked">与（AND） <input type="radio" name="andOr" value="or">或（OR）
+									</span>
+								</div>
+								<div style="margin-top: 5px;">
+									<span class="explain-text"> 条件说明 </span> 
+									<span class="explain-value"> <textarea class="td-value" name="explain" style="resize: none; width: 100%;height: 30px;"></textarea>
+									</span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr class="tr-button">
+						<td>
+							<div class="btn-attribute">
+								<input class="btn dataExprAttrAdd" type="button" value="新增属性"> <input class="btn dataExprAttrSymbol" type="button" value="新增条件"> <input class="btn dataExprAttrUpdate"
+									type="button" value="更新"> <input class="btn dataExprAttrDel" type="button" value="删除">
+							</div>
+						</td>
+					</tr>
+					<tr class="tr-list">
+						<td>
+							<div class="td-attribute">
+								<span class="attr_title" style="width:60px;text-align: center;">配置条件</span>
+								<div class="list-context">
+									<ul id="condition_tree" class="ztree">
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="tabs-pages tabs2 tabs-hiden" id="filltab">
+			<table class="table-attribute">
+				<tbody>
+					<tr class="tr-condition_name">
+						<td>
+							<div class="td-attribute">
+								<span class="attr_title" style="width:60px;text-align: center;">单元格属性</span>
+								<ul class="condition_name_ul">
+									<li rel="">
+										<div class="attrspan">
+											<label>控件名称</label>
+											<input type="text" name="ctname" placeholder="控件名称不能重复" maxlength="30" style="width:60%">
+										</div>
+									</li>
+									<li rel="">
+										<div class="attrspan">
+											<label>显示控件</label>
+											<select class="control" name="cttype" style="width: 60%;">
+												<option value=""></option>
+												<option value="text">文本</option>
+												<option value="multiline">文本域</option>
+												<option value="hidden">隐藏域</option>
+												<option value="password">密码</option>
+												<option value="checkbox">复选框</option>
+												<option value="radio">单选框</option>
+												<option value="select">下拉框</option>
+												<option value="datepicker">日期框</option>
+												<option value="button">按钮</option>
+											</select>
+										</div>
+									</li>
+									<li rel="text,multiline,datepicker">
+										<div class="attrspan">
+											<label>控件提示</label>
+											<input type="text" name="cttip" style="width:60%">
+										</div>
+									</li>
+									<li rel="button" style="display:none">
+										<div class="attrspan">
+											<label>按钮类型</label>
+											<select class="control" name="btntype" style="width: 60%;">
+												<option value=""></option>
+												<option value="insert">插入行</option>
+												<option value="delete">删除行</option>
+											</select>
+										</div>
+									</li>
+									<li rel="button" style="display:none">
+										<div class="attrspan">
+											<label>按钮内容</label>
+											<input type="text" maxlength="30" name="btntext" style="width:60%">
+										</div>
+									</li>
+									<li rel="checkbox,radio,select" style="display:none">
+										<div class="attrspan">
+											<label>数据字典</label>
+											<input type="text" name="ctdic" style="width:60%">
+										</div>
+									</li>
+									<li rel="datepicker" style="display:none">
+										<div class="attrspan">
+											<label>日期格式</label>
+											<select name="dateformat">
+												<option value=""></option>
+												<option value="dd/MM/yyyy">dd/MM/yyyy</option>
+												<option value="yyyy-MM-dd">yyyy-MM-dd</option>
+												<option value="yyyy/MM/dd">yyyy/MM/dd</option>
+											</select>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="td-attribute">
+								<span class="attr_title" style="width:60px;text-align: center;">验证属性</span>
+								<ul class="condition_name_ul">
+									<li rel="text,multiline,password,checkbox,radio,select,datepicker">
+										<div class="attrspan">
+											<label>允许为空
+											<input type="checkbox" name="isempty" checked="checked"></label>
+										</div>
+									</li>
+									<li rel="text,multiline,password">
+										<div class="attrspan">
+											<label>验证规则</label>
+											<select name="datareg">
+												<option value=""></option>
+												<option value="number">数字</option>
+												<option value="email">邮件</option>
+												<option value="url">网址</option>
+												<option value="idcard">身份证</option>
+												<option value="phone">手机号</option>
+												<option value="customreg">自定义</option>
+											</select>
+										</div>
+									</li>
+									<li rel="customreg" style="display:none">
+										<div class="attrspan">
+											<label>正则表达式</label>
+											<input type="text" name="regexp" value="">
+										</div>
+									</li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="tabs-pages tabs3 tabs-hiden barconfig" id="bartab">
+			<table class="table-attribute">
+				<tbody>
+					<tr class="tr-condition_name">
+						<td>
+							<div class="td-attribute" style="margin-top: 10px;">
+								<span class="attr_title" style="width: 70px;text-align: center;position: relative;background-color: #fff;display:block;top: -14px;">类型配置</span>
+								<ul class="condition_name_ul" style="margin-top: -15px;">
+									<li class="bar_li">
+										<div class="attrspan">
+											<label>条形码类型</label>
+											<select name="barType">
+												<option value=""></option>
+												<option value="QR_CODE">二维码</option>
+												<option value="EAN_13">EAN13</option>
+												<option value="EAN_8">EAN8</option>
+												<option value="CODE_128">CODE128</option>
+												<option value="CODE_93">CODE93</option>
+												<option value="CODE_39">CODE39</option>
+												<option value="CODABAR">CODABAR</option>
+												<option value="UPC_A">UPCA</option>
+												<option value="UPC_E">UPCE</option>
+												<option value="PDF_417">PDF417</option>
+												<option value="DATA_MATRIX">DATAMATRIX</option>
+											</select>
+										</div>
+									</li>
+									<li class="bar_li">
+										<div class="attrspan">
+											<label>宽度</label>
+											<input name="width" type="text" style="width:40px"/>
+										</div>
+									</li>
+									<li class="bar_li">
+										<div class="attrspan">
+											<label>高度</label>
+											<input name="height" type="text" style="width:40px"/>
+										</div>
+									</li>
+									<li class="bar_li" style="width: 95%;">
+										<div class="attrspan">
+											<label>图标图片</label>
+											<span class="explain-value" style="display: block;"> 
+												<textarea class="td-value" name="barImage" style="resize: none; width: 85%;height: 40px; margin-top: 5px;"></textarea>
+												<img class="showBarImage" src="" style="resize: none; width: 45px;height: 45px;"/>
+											</span>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="td-attribute" style="margin-top: 10px;">
+								<span class="attr_title" style="width: 40px;text-align: center;position: relative;background-color: #fff;display:block;top: -14px;">预览</span>
+								<ul class="condition_name_ul">
+									<li>
+										<div class="attrspan">
+											<img class="showImage" src=""/>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div id="cell_setting" class="cell_setting" style="display: none;">
+	<div class="cell_tab">
+		<ul class="tab_menus">
+			<li tab-type="number"><span>数字</span></li>
+			<li tab-type="align"><span>对齐</span></li>
+			<li tab-type="font"><span>字体</span></li>
+			<li tab-type="border"><span>边框</span></li>
+			<li tab-type="fill"><span>填充</span></li>
+		</ul>
+	</div>
+	<div class="cell_context">
+		<ul class="tab_content">
+			<li>
+				<div class="border_setting">
+					<div class="border_set_left">
+						<div class="border_span">
+							<span class="border_span_title">线条</span>
+							<div class="border_style"><!-- border_style start  -->
+								<span class="style_title">样式(<u>S</u>)</span>
+								<ul class="border_style_item">
+									<li border-type="NONE">
+										<span class="style_items active">
+											<span style="display: block;width: inherit;text-align: center">无</span>
+										</span>
+									</li>
+									<li class="type0" border-type="MEDIUM_DASH_DOT_DOT">
+										<span class="style_items">
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:8px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:8px;"></span>
+										</span>
+									</li>
+									<li class="type1" border-type="HAIR">
+										<span class="style_items">
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+										</span>
+									</li>
+									<li class="type2" border-type="SLANTED_DASH_DOT">
+										<span class="style_items">
+											<span class="line_item item0">
+												<span class="s_item" style="width:6px"></span>
+												<span class="s_item" style="width:15px"></span>
+												<span class="s_item" style="width:6px"></span>
+												<span class="s_item" style="width:15px"></span>
+												<span class="s_item" style="width:6px"></span>
+											</span>
+											<span class="line_item item1">
+												<span class="s_item" style="width:6px"></span>
+												<span class="s_item" style="width:15px"></span>
+												<span class="s_item" style="width:6px"></span>
+												<span class="s_item" style="width:15px"></span>
+												<span class="s_item" style="width:6px"></span>
+											</span>
+										</span>
+									</li>
+									<li class="type3" border-type="DOTTED">
+										<span class="style_items">
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+										</span>
+									</li>
+									<li class="type4" border-type="MEDIUM_DASH_DOT">
+										<span class="style_items">
+											<span class="s_item" style="width:5px;"></span>
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:5px;"></span>
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:5px;"></span>
+										</span>
+									</li>
+									<li class="type5" border-type="DASH_DOT_DOT">
+										<span class="style_items">
+											<span class="s_item" style="width:8px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+										</span>
+									</li>
+									<li class="type6" border-type="MEDIUM_DASHED">
+										<span class="style_items">
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:5px;"></span>
+										</span>
+									</li>
+									<li class="type7" border-type="DASH_DOT">
+										<span class="style_items">
+											<span class="s_item" style="width:5px;"></span>
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:4px;"></span>
+											<span class="s_item" style="width:10px;"></span>
+											<span class="s_item" style="width:5px;"></span>
+										</span>
+									</li>
+									<li class="type8" border-type="MEDIUM">
+										<span class="style_items">
+											<span class="s_item" style="width:50px;"></span>
+										</span>
+									</li>
+									<li class="type9" border-type="DASHED">
+										<span class="style_items">
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item"></span>
+											<span class="s_item" style="width:2px;"></span>
+										</span>
+									</li>
+									<li class="type10" border-type="THICK">
+										<span class="style_items">
+											<span class="s_item" style="width:50px;"></span>
+										</span>
+									</li>
+									<li class="type11" border-type="THIN">
+										<span class="style_items">
+											<span class="s_item" style="width:50px;"></span>
+										</span>
+									</li>
+									<li class="type12" border-type="DOUBLE">
+										<span class="style_items">
+											<span class="line_item item0">
+												<span class="s_item" style="width:50px"></span>
+											</span>
+											<span class="line_item item1">
+												<span class="s_item" style="width:50px;margin-top: 1px;"></span>
+											</span>
+										</span>
+									</li>
+								</ul>
+								<span class="style_title">颜色(<u>C</u>)</span>
+								<div>
+									<div class="border_color">
+										<span class="color_item">自动</span>
+										<span class="color_bar"><i class="fa fa-angle-down" style="font-size: 16px;"></i></span>
+									</div>
+								</div>
+							</div>	<!-- border_style end  -->
+						</div>
+					</div>
+					<div class="border_set_right">
+						<div class="border_span">
+							<span class="border_span_title">预置</span>
+							<div class="border_preset">
+								<div class="preset_span">
+									<div class="border_type" oper-type="none-border">
+										<div class="border_square">
+											<span style="border-right: 1px dotted #D9D9D9;border-bottom: 1px dotted #D9D9D9;"></span>
+											<span style="border-bottom: 1px dotted #D9D9D9;"></span>
+											<span style="border-right: 1px dotted #D9D9D9;"></span>
+											<span></span>
+										</div>
+									</div>
+									<div class="bottom_title">
+										<span>无(N)</span>
+									</div>
+								</div>
+								<div class="preset_span">
+									<div class="border_type" oper-type="margin-border">
+										<div class="border_square" style="border: 1px solid #828790">
+											<span style="border-right: 1px dotted #D9D9D9;border-bottom: 1px dotted #D9D9D9;"></span>
+											<span style="border-bottom: 1px dotted #D9D9D9;"></span>
+											<span style="border-right: 1px dotted #D9D9D9;"></span>
+											<span></span>
+										</div>
+									</div>
+									<div class="bottom_title">
+										<span>外边框(O)</span>
+									</div>
+								</div>
+								<div class="preset_span">
+									<div class="border_type" oper-type="inner-border">
+										<div class="border_square">
+											<span style="border-right: 1px solid #828790;border-bottom: 1px solid #828790;"></span>
+											<span style="border-bottom: 1px solid #828790;"></span>
+											<span style="border-right: 1px solid #828790;"></span>
+											<span></span>
+										</div>
+									</div>
+									<div class="bottom_title">
+										<span>内部(I)</span>
+									</div>
+								</div>
+							</div>
+							<span class="border_span_line"></span>
+							<span class="border_span_title">边框</span>
+							<div class="border_show">
+								<div class="border_show_left">
+									<div class="set_border_square" oper-type="border-top">
+										<div class="set_border_inherit">
+											<span style="border-top: 1px solid #828790;"></span>
+											<span style="border-top: 1px solid #828790;"></span>
+											<span></span>
+											<span></span>
+										</div>
+									</div>
+									<div class="set_border_square" oper-type="border-center">
+										<div class="set_border_inherit">
+											<span style="border-bottom: 1px solid #828790;"></span>
+											<span style="border-bottom: 1px solid #828790;"></span>
+											<span></span>
+											<span></span>
+										</div>
+									</div>
+									<div class="set_border_square" oper-type="border-bottom">
+										<div class="set_border_inherit">
+											<span></span>
+											<span></span>
+											<span style="border-bottom: 1px solid #828790;"></span>
+											<span style="border-bottom: 1px solid #828790;"></span>
+										</div>
+									</div>
+								</div>
+								<div class="border_show_right">
+									<div style="margin: 5px;height: 120px;">
+										<div class="show_top">
+											<span class="top_left coordinate"></span>
+											<span class="row_placeholder"></span>
+											<span class="top_center_left coordinate"></span>
+											<span class="top_center_right coordinate"></span>
+											<span class="row_placeholder"></span>
+											<span class="top_right coordinate"></span>
+										</div>
+										<div class="show_center">
+											<div class="center_left">
+												<span class="center_left_top coordinate"></span>
+												<span class="center_left_bottom coordinate"></span>
+											</div>
+											<div class="center_context">
+												<!-- 此部分根据选中单元格动态添加 -->
+												<div class="show_border show_border_style">
+												
+												</div>
+											</div>
+											<div class="center_right">
+												<span class="center_right_top coordinate"></span>
+												<span class="center_right_bottom coordinate"></span>
+											</div>
+										</div>
+										<div class="show_bottom">
+											<span class="bottom_left coordinate"></span>
+											<span class="row_placeholder"></span>
+											<span class="bottom_center_left coordinate"></span>
+											<span class="bottom_center_right coordinate"></span>
+											<span class="row_placeholder coordinate"></span>
+											<span class="bottom_right coordinate"></span>
+										</div>
+									</div>
+								</div>
+								<div  class="border_show_botton">
+									<div class="set_border_square" oper-type="border-left">
+										<div class="set_border_inherit">
+											<span style="border-left: 1px solid #828790;"></span>
+											<span></span>
+											<span style="border-left: 1px solid #828790;"></span>
+											<span></span>
+										</div>
+									</div>
+									<div class="set_border_square" oper-type="border-middle">
+										<div class="set_border_inherit">
+											<span style="border-right: 1px solid #828790;"></span>
+											<span></span>
+											<span style="border-right: 1px solid #828790;"></span>
+											<span></span>
+										</div>
+									</div>
+									<div class="set_border_square"  oper-type="border-right">
+										<div class="set_border_inherit">
+											<span></span>
+											<span style="border-right: 1px solid #828790;"></span>
+											<span></span>
+											<span style="border-right: 1px solid #828790;"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div id="pages_setting" class="pages_setting" style="display: none;">
+	<table class="table-attribute">
+		<tbody>
+		<tr class="tr-condition_name">
+			<td>
+				<div class="td-attribute">
+					<span class="attr_title" style="width:60px;text-align: center;">查询配置</span>
+					<ul class="condition_name_ul">
+						<li>
+							<div class="attrspan">
+								<label>启用默认参数配置
+								<input type="checkbox" id="customQuery" value="1" checked="checked"></label>
+							</div>
+						</li>
+						<li>
+							<div class="attrspan">
+								<label>自动展开查询区域
+								<input type="checkbox" id="customQueryOpen" value="1" checked="checked"></label>
+							</div>
+						</li>
+						<li>
+							<div class="attrspan">
+								<label>查询区域位置
+								<select id="customQueryPosition"><option value="top">上方</option><option value="right">右方</option></select></label>
+							</div>
+						</li>
+						<li>
+							<div class="attrspan">
+								<label>自动加载数据
+								<input type="checkbox" id="autoQuery" value="1" checked="checked"></label>
+							</div>
+						</li>
+					</ul>
+					<em>提示：启用默认参数配置时其它配置才会生效。</em>
+				</div>
+				<div class="td-attribute">
+					<span class="attr_title" style="width:60px;text-align: center;">工具栏配置</span>
+					<ul class="condition_name_ul">
+						<li>
+							<div class="attrspan">
+								<label>启用工具栏
+								<input type="checkbox" id="customToolbar" value="1" checked="checked"></label>
+							</div>
+						</li>
+						<li>
+							<div class="attrspan">
+								<label>允许导出
+								<input type="checkbox" id="customExport" value="1" checked="checked"></label>
+							</div>
+						</li>
+						<li>
+							<div class="attrspan">
+								<label>显示分页
+								<input type="checkbox" id="customPage" value="1" checked="checked"></label>
+							</div>
+						</li>
+						<li>
+							<div class="attrspan">
+								<label>自定义页码（大于0生效）
+								<input type="text" id="customPagesize" maxlength="3" value="0" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></label>
+							</div>
+						</li>
+					</ul>
+					<em>提示：启用工具栏时允许导出和显示分页配置生效，自定义页码不受限制。</em>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<!-- 图表设置 -->
+<div id="charts_setting" class="charts_setting">
+	<div class="setting_title"><span>图形属性</span><span style="float: right; cursor: pointer;"><i class="btn_close fa fa-close"></i></span></div>
+	<div class="setting_context">
+		<div class="left_title">
+			<ul class="title_menu">
+				<li class="selected">数据</li>
+				<li>属性</li>
+			</ul>
+		</div>
+		<div class="right_attr">
+			<ul class="data_context">
+				<li>
+					<div class="charts_data_dimension">
+						<div class="data_tag_title">标签名称</div>
+						<div class="data_tag_input"></div>
+					</div>
+					<div class="charts_data_series">
+						<div class="data_tag_title">值</div>
+						<div class="data_tag_input"></div>
+					</div>
+					<div class="charts_data_classify">
+						<div class="data_tag_title">分类</div>
+						<div class="data_tag_input"></div>
+					</div>
+					<div class="charts_data_orderby">
+						<div class="data_tag_title">排序</div>
+						<div class="data_tag_input"></div>
+					</div>
+					<div class="load_data_btn">
+						<span>确认加载数据</span>
+					</div>
+				</li>
+			</ul>
+			<ul class="attr_context" style="display: none">
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<div class="dataReports" id="dataReports" style="display: none;">
+	<div class="top">
+		<select name="temlist" id="temlist" onchange="setFrameId(this)">
+			<option value=""></option>
+		</select>
+	</div>
+</div>
+<div class="dataLink" id="dataLink" style="display: none;">
+	<div class="top">
+		<p>
+			<select name="temlist" id="temlist"></select> <input type="button" id="padd" onclick="addp('','')" style="display:none" value="添加参数" /><input id="submit" class="button" type="button"
+				value="第一步生成自定义链接" onclick="createlink()" />
+		</p>
+	</div>
+	<div id="plist"></div>
+	<div style="padding:0 20px;">
+		自定义链接：<br>
+		<textarea id="myconfig" rows="5" col="20" style="width:90%;height:50px;"></textarea>
+		<br>说明： <br> 1、自定义链接格式 name1:value1,name2:value2 <br>2、可修改的值为url对应的值即:show/{uuid} <br>3、可附加的参数 param:${r'${paramName}'}
+		(param为参数，${r'${paramName}'}为取参数的值)
+	</div>
+	<!-- <div>
+		<p>
+			<input id="submit" class="button" type="button" value="第一步生成自定义链接" onclick="createlink()" /> <input id="submit" class="button" type="button" value="第二步保存" onclick="savelink()" />
+		</p>
+	</div> -->
+</div>
+<div id="dataSetsDic" style="display: none;">
+	<table width="100%" cellspacing="5">
+		<tr>
+			<td>字典类型</td>
+			<td>字典信息ID</td>
+			<td>字典信息内容</td>
+		</tr>
+		<tr>
+			<td><select name="dicType" id="dicType">
+			</select></td>
+			<td><select name="dicID" id="dicID">
+			</select></td>
+			<td><select name="dicText" id="dicText">
+			</select></td>
+		</tr>
+	</table>
+</div>
+<div id="dataDic" style="display: none;">
+	<table width="60%" cellspacing="5" align="center">
+		<tr>
+			<td width="60">数据集</td>
+			<td><select name="dicds" id="dicds">
+			</select></td>
+		</tr>
+		<tr>
+			<td>字典类型</td>
+			<td valign="top"><input type="text" name="dicTypeVal" id="dicTypeVal" /></td>
+		</tr>
+	</table>
+</div>
+<div id="overlapping" style="display: none;">
+	<fieldset class="overlap-view">
+		<legend>预览</legend>
+		<div id="view-border">
+			<div id="view-td"></div>
+		</div>
+	</fieldset>
+	<fieldset class="overlap-size">
+		<legend>属性</legend>
+		<div class="">
+			<label class="input-label">交叉高度</label> <input id="lineHeight" title="请输入高" type="number" required />
+		</div>
+		<div class="">
+			<label class="input-label">交叉宽度</label> <input id="lineWidth" title="请输入宽" type="number" required />
+		</div>
+		<div class="">
+			<label class="input-label">文字大小</label> <input id="overlapping-fontsize" title="请输入文字大小" type="number" value="12" required />
+		</div>
+		<div class="">
+			<label class="input-label">背景颜色</label> <input class="overlapping-color" id="overlapping-bgcolor" title="背景颜色" type="color" required /> <label class="input-label">文字颜色</label> <input
+				class="overlapping-color" id="overlapping-fontcolor" title="文字颜色" type="color" required />
+		</div>
+		<div class="">
+			<label class="input-label">线条颜色</label> <input class="overlapping-color" id="overlapping-linecolor" title="线颜色" type="color" required />
+		</div>
+	</fieldset>
+	<fieldset class="overlap-config">
+		<div>
+			<label class="input-label">斜线数量</label> <select name="line" id="line" required>
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+			</select>
+			<button type="button" id="viewOverlap">预览</button>
+		</div>
+		<div id="overlap-items"></div>
+	</fieldset>
+
+	<div class="overlap-items"></div>
+</div>
+
+</html>

@@ -1,0 +1,43 @@
+{
+  "data": {
+    "responseData": {
+      "data": [
+        {
+          "level": "A",
+          "appType": "小贷业务",
+          "desc": "风险小，借款多"
+        },
+        {
+          "level": "B",
+          "appType": "增值业务",
+          "desc": "风险小，借款多"
+        },
+        {
+          "level": "C",
+          "appType": "融资租赁业务",
+          "desc": "风险小，借款多"
+        },
+        {
+          "level": "D",
+          "appType": "商业租赁业务",
+          "desc": "风险小，借款多"
+        }
+      ],
+      "totals": 4
+    },
+    "columnData": [
+      {
+        "key": "level",
+        "text": "风险级别"
+      },
+      {
+        "key": "appType",
+        "text": "业务类型"
+      },
+      {
+        "key": "desc",
+        "text": "风险描述"
+      }
+    ]
+  }
+}

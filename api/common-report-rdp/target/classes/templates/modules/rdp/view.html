@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>报表详情页面</title>
+<link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/rdp/lib/reportshow.css" media="print">
+<style type="text/css">
+html, body {
+	height: 100%;
+}
+
+.fy {
+	text-align: center;
+	font-size: 12px;
+}
+
+.page1 {
+	width: 180mm;
+	height: 267mm;
+	padding: 10mm;
+	/* background: #ffffff; */
+	margin: 0 auto;
+	/*overflow:auto;*/
+}
+
+
+.page2 {
+	width: 267mm;
+	height: 180mm;
+	padding: 10mm;
+	/* background: #ffffff; */
+	margin: 0 auto;
+	/*overflow:auto;*/
+}
+
+.page3 {
+	height: 100%;
+	/* background: #ffffff; */
+	margin: 0 auto;
+	/*overflow:auto;*/
+}
+
+body {
+	background: #fff;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-position: bottom;
+}
+
+table {
+	border-collapse: collapse;
+	background: #ffffff;
+	margin: auto;
+}
+
+.normal {
+	padding: 0px;
+}
+<#if cellauto="1">
+.normal td{padding: 0 3px;white-space:pre;width:auto !important;}
+</#if>
+<#if cellauto="0">
+	.normal td{padding-left: 2px;word-break:break-all;}
+</#if>
+
+.dynamic .rtitle td label {
+	vertical-align: middle;
+	/* mso-pattern: auto; */
+	margin: auto;
+}
+
+.dynamic .rhead td label {
+	vertical-align: middle;
+}
+
+.dynamic tbody td label {
+/* 	color: rgb(0, 0, 0);
+	text-decoration: none;
+	text-line-through: none; */
+}
+
+.dynamic label {
+	display: block;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	padding-left: 2px;
+	padding-right: 2px;
+	text-overflow: ellipsis; /* for IE */
+	-moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+}
+
+tfoot td {
+	vertical-align: middle;
+	overflow-y: hidden;
+}
+
+
+table tbody td.link, table tbody td.link label {
+	cursor: pointer !important;
+	color: blue !important;
+}
+
+.dynamic tbody td div {
+	height: auto !important;
+	overflow: hidden !important;
+}
+
+.fy {
+	display: none
+}
+</style>
+<link type="text/css" rel="stylesheet" href="${request.contextPath}/statics/rdp/css/fillreport.css">
+<script src="${request.contextPath}/statics/rdp/common/all/jquery-1.11.0.js"></script>
+<script src="${request.contextPath}/statics/bddp/static/common/echarts/echarts.min.js"></script>
+<script src="${request.contextPath}/statics/rdp/lib/jquery-migrate-1.2.1.min.js"></script>
+<script src="${request.contextPath}/statics/rdp/lib/fixheader.js"></script>
+<script src="${request.contextPath}/statics/rdp/js/fixed-head.js"></script>
+<script src="${request.contextPath}/statics/rdp/js/loadCharts.js"></script>
+<script src="${request.contextPath}/statics/plugins/laydate/laydate.js"></script>
+<script type="text/javascript">
+	function frmChild(bodyhtml, fx, page) {
+		bodyhtml=bodyhtml.replace(/\.\.\/\.\.\//g,'../');
+	if(fx==undefined){fx=3}
+			$('#datalist').empty();
+			if (parent.ispubu) {//瀑布流分页
+				var nextHref = $("#nextpage a").attr("href");
+				// 给浏览器窗口绑定 scroll 事件
+				$(window).bind("scroll", function() {
+					// 判断窗口的滚动条是否接近页面底部
+					if ($(document).scrollTop() + $(window).height() > $(document).height() - 10) {
+						if (nextHref != undefined) {
+							parent.nextp();
+						} else {
+							$("#nextpage").remove();
+						}
+					}
+				});
+			}
+		if($('#pagesize',parent.document).val()!=-2){
+		$('#datalist').empty();
+		}
+		if ($('#page' + page).length == 0) {
+			$('#datalist').append('<div rel="pg" class="page3"><div id="page'+page+'" class="breakable"></div></div><p class="fy">--第' + page + '页--</p>');
+		}
+		$('#page' + page).html(bodyhtml);
+
+		var ddc = (document.documentElement.clientHeight - 70);
+		if (ddc < 200) {
+			ddc = 200;
+		}
+		if($('#page' + page+' .dynamic').size()!=1){
+			$('.dynamic td table').css('border',0).css('width','100%');
+		}
+		var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+		if (isChrome) {
+			$('#page' + page+' .dynamich').css('width', $('.dynamic').width() + 'px');
+		} else {
+			$('#page' + page+' .dynamich').css('width', $('.dynamic').width() + 1 + 'px');
+		}
+		<#if cellauto="0">
+		//修复超宽
+		var _wd=0;
+		var sn=$('.dynamic tbody tr').length;
+		if(sn>0){
+		$.each($('.dynamic thead tr:eq('+(1)+') td'),function(i,n){
+		if($(this).attr('style').indexOf('width:')!=-1){
+		_wd+=parseInt($(this).attr('style').split('width:')[1].split('px')[0]);
+		}
+		});
+		if(_wd>0&&_wd>$('.dynamic').width()){
+		$('.dynamic').css('width',_wd+'px');
+		}
+		}
+		</#if>
+	}
+	function refresh() {
+		window.location.reload();
+	}
+	//调用父页面的初始化方法
+	$(function() {
+		parent.initMain();
+	});
+	
+	//打开链接
+	function openlink(v) {
+		if (v != '' && v.indexOf('url') != -1) {
+			var arr = v.split(',');
+			var url = '';
+			var parm = '';
+			var parms = '';
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i].indexOf('url:') != -1) {//链接地址
+					url = arr[i].split(':')[1];
+				} else if (arr[i].indexOf('parms:') != -1) {//自定义参数
+					parms = $('#' + arr[i].split(':')[1], parent.document).val();
+				} else {//配置参数
+					parm += arr[i].split(':')[0]+'='+encodeURIComponent(arr[i].split(':')[1]) + '&';
+				}
+			}
+			if (url != '' && parm != '') {
+				if (parms == '') {
+					window.open(url + '?' + parm.substring(0, parm.length - 1));
+				} else {
+					window.open(url + '?' + parm + parms);
+				}
+			}else{ 
+				window.open(url);
+			}
+		} else {
+			alert('链接不合法，请重新配置模板！')
+		}
+	}
+	
+	var loadCharts = function(id,option){
+		console.log(option);
+		var dom = $("#"+id).html('<div style="height: 100%;"></div>'); 
+		option = eval('('+option+')');
+		if(!option.theme){
+			option.theme = "westeros";
+		}
+		loadGridCharts(dom,option);
+	}
+	
+	$(function(){
+		registerTheme("westeros");
+	});
+</script>
+<#if RequestParameters["skinType"]?exists>
+<link type="text/css" rel="stylesheet" href='${request.contextPath}/statics/rdp/skin/${RequestParameters["skinType"]}' id="skin">
+</#if>
+</head>
+
+<body>
+	<div id="datalist" class="normal"></div>
+	<div id="nextpage" style="padding-top:60px;display:none">
+		<a href="link_href"></a>
+	</div>
+</body>
+</html>

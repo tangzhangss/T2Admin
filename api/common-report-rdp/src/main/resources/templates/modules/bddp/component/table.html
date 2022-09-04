@@ -1,0 +1,581 @@
+<ul id="tags-table" class="tags-navs">
+
+	<li class="tags-nav" tag-type="table">
+		<i class="fa fa-table"></i>
+		<span>
+			详情列表
+		</span>
+	</li>
+	<li class="tags-nav" tag-type="headtable">
+		<i class="fa fa-table"></i>
+		<span>
+			多级表头列表
+		</span>
+	</li>
+
+
+</ul>
+<script type="text/javascript">
+	$(function () {
+		$("#tags-table li").not(".off").draggable({
+			containment: "#content",
+			cursor: "move",
+			cursorAt: {
+				top: 0,
+				left: 0
+			},
+			helper: function (event) {
+				let zoom = $("#content").data("zoom");
+				let type = $(event.currentTarget).attr("tag-type");
+				let html = $("#tag-table").html();
+				return $(html).css({
+					"transform": "scale(" + zoom + ")",
+					"transform-origin": "left top 0px"
+				});
+			},
+			stop: function (event, ui) {
+				//console.log(event, ui);
+				let zoom = $("#content").data("zoom");
+				let type = $(event.target).attr("tag-type");
+				let html = $($("#tag-" + type).html());
+				var pLeft = $("#content").offset().left;
+				var pTop = $("#content").offset().top;
+				html.css({
+					left: (ui.offset.left - pLeft) / zoom,
+					top: (ui.offset.top - pTop) / zoom
+				});
+				html.appendTo("#content");
+				var tempProp = html.data("prop");
+				var prop = $.extend({}, tempProp, {
+					options: {},
+					type: type,
+					bigType: "tags"
+				});
+				html.data("prop", prop);
+				html.initBox({
+					tagType: type
+				});
+				if (type == "table") {
+					var table = html.find(".tag-" + type)[0];
+					table.setAttribute("grid-manager", "table" + html.data("prop").id);
+					var responseData = {
+						"data": [{
+								"name": "demo1",
+								"info": "演示数据1",
+							},
+							{
+								"name": "demo2",
+								"info": "演示数据2",
+							}
+						],
+						"totals": 2
+					};
+					let gmOptions = {
+						ajax_data: responseData,
+						ajax_type: 'POST',
+						supportCheckbox: false,
+						supportAutoOrder: false,
+						supportDrag: false,
+						height: '100%',
+						width: '100%',
+						columnData: [{
+							key: 'name',
+							text: '名称'
+						}, {
+							key: 'info',
+							text: '参考'
+						}]
+					};
+					html.initScroll(gmOptions);
+					html.data("prop").gmOptions = gmOptions;
+				} else if (type == "headtable") {
+					var table = html.find(".tag-" + type);
+
+
+					$.fn.autoHeader.init({
+						laynum:5,
+						headJson:header_,
+						dataJson:dataer_,
+						tableid:table,
+						needsort:true
+					});
+				}
+
+
+			}
+		});
+		$(".tags-nav.off").each(function () {
+			layx.tip('当前组件未开放！', this, 'top');
+		});
+	})
+
+	var dataer_ = [{
+        "column_001": "99.41",
+        "column_002": "99.74",
+        "column_003": "98.90",
+        "column_004": "99",
+        "column_005": "100",
+        "column_006": "99.29",
+        "column_007": "99.70",
+        "column_008": "97.59",
+        "column_009": "99.10",
+        "column_010": "98.89",
+        "id": 227,
+        "main_id": 214,
+        "rep_org_code": "232",
+        "rep_org_name": "三年一班",
+        "report_id": 5
+    }, {
+        "column_001": "98.91",
+        "column_002": "99.39",
+        "column_003": "97.90",
+        "column_004": "99",
+        "column_005": "100",
+        "column_006": "98.89",
+        "column_007": "99.86",
+        "column_008": "98.01",
+        "column_009": "98.90",
+        "column_010": "99.02",
+        "id": 228,
+        "main_id": 201,
+        "rep_org_code": "240",
+        "rep_org_name": "三年二班",
+        "report_id": 5
+    }, {
+        "column_001": "98.78",
+        "column_002": "99.23",
+        "column_003": "98.30",
+        "column_004": "99",
+        "column_005": "100",
+        "column_006": "98.96",
+        "column_007": "99.88",
+        "column_008": "95.43",
+        "column_009": "98.28",
+        "column_010": "98.06",
+        "id": 229,
+        "main_id": 208,
+        "rep_org_code": "703",
+        "rep_org_name": "三年十一班",
+        "report_id": 5
+    }, {
+        "column_001": "97.98",
+        "column_002": "95.59",
+        "column_003": "98.10",
+        "column_004": "98.50",
+        "column_005": "100",
+        "column_006": "97.66",
+        "column_007": "100",
+        "column_008": "97.81",
+        "column_009": "99.78",
+        "column_010": "99.28",
+        "id": 230,
+        "main_id": 206,
+        "rep_org_code": "701",
+        "rep_org_name": "三年三班",
+        "report_id": 5
+    }, {
+        "column_001": "97.88",
+        "column_002": "96.49",
+        "column_003": "98.80",
+        "column_004": "99",
+        "column_005": "100",
+        "column_006": "98.29",
+        "column_007": "98.79",
+        "column_008": "97.16",
+        "column_009": "91.96",
+        "column_010": "96.25",
+        "id": 231,
+        "main_id": 219,
+        "rep_org_code": "281",
+        "rep_org_name": "三年七班",
+        "report_id": 5
+    }, {
+        "column_001": "97.84",
+        "column_002": "95.61",
+        "column_003": "97.95",
+        "column_004": "100",
+        "column_005": "100",
+        "column_006": "98.07",
+        "column_007": "97.37",
+        "column_008": "97.31",
+        "column_009": "95.89",
+        "column_010": "96.91",
+        "id": 232,
+        "main_id": 205,
+        "rep_org_code": "313",
+        "rep_org_name": "三年九班",
+        "report_id": 5
+    }, {
+        "column_001": "97.54",
+        "column_002": "95.13",
+        "column_003": "97.90",
+        "column_004": "98.50",
+        "column_005": "100",
+        "column_006": "97.46",
+        "column_007": "100",
+        "column_008": "96.28",
+        "column_009": "96.65",
+        "column_010": "97.88",
+        "id": 233,
+        "main_id": 209,
+        "rep_org_code": "704",
+        "rep_org_name": "三年十二班",
+        "report_id": 5
+    }, {
+        "column_001": "97.23",
+        "column_002": "96.17",
+        "column_003": "97",
+        "column_004": "98.50",
+        "column_005": "100",
+        "column_006": "97.50",
+        "column_007": "99.85",
+        "column_008": "95.37",
+        "column_009": "91.94",
+        "column_010": "96.13",
+        "id": 235,
+        "main_id": 215,
+        "rep_org_code": "89",
+        "rep_org_name": "三年四班",
+        "report_id": 5
+    }, {
+        "column_001": "97.01",
+        "column_002": "92.18",
+        "column_003": "97.90",
+        "column_004": "98.50",
+        "column_005": "100",
+        "column_006": "96.57",
+        "column_007": "99.85",
+        "column_008": "97.69",
+        "column_009": "98.41",
+        "column_010": "98.77",
+        "id": 236,
+        "main_id": 202,
+        "rep_org_code": "247",
+        "rep_org_name": "三年五班",
+        "report_id": 5
+    }, {
+        "column_001": "95.36",
+        "column_002": "87.27",
+        "column_003": "98.55",
+        "column_004": "98",
+        "column_005": "100",
+        "column_006": "95.33",
+        "column_007": "98.68",
+        "column_008": "97.85",
+        "column_009": "92.16",
+        "column_010": "96.48",
+        "id": 237,
+        "main_id": 203,
+        "rep_org_code": "262",
+        "rep_org_name": "三年六班",
+        "report_id": 5
+    }, {
+        "column_001": "94.74",
+        "column_002": "83.24",
+        "column_003": "98.35",
+        "column_004": "98.50",
+        "column_005": "100",
+        "column_006": "94.03",
+        "column_007": "97.62",
+        "column_008": "96.81",
+        "column_009": "98.36",
+        "column_010": "97.60",
+        "id": 238,
+        "main_id": 207,
+        "rep_org_code": "702",
+        "rep_org_name": "三年十班",
+        "report_id": 5
+    }, {
+        "column_001": "92.15",
+        "column_002": "75.50",
+        "column_003": "96.50",
+        "column_004": "93.50",
+        "column_005": "100",
+        "column_006": "91.85",
+        "column_007": "97.56",
+        "column_008": "97.21",
+        "column_009": "97.22",
+        "column_010": "97.35",
+        "id": 239,
+        "main_id": 220,
+        "rep_org_code": "294",
+        "rep_org_name": "三年八班",
+        "report_id": 5
+    }
+];
+var header_ = [{
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "三年级综合考试评定分析",
+        "id": 502,
+        "isleaf": "N",
+        "isopen": 0,
+        "level": "0",
+        "name": "三年级综合考试评定分析",
+        "pid": 502,
+        "reportColumnName": "",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "",
+        "id": 503,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "1",
+        "name": "班级",
+        "pid": 502,
+        "reportColumnName": "rep_org_name",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "1210",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "80%A+20%B",
+        "id": 504,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "1",
+        "name": "综合总分",
+        "pid": 502,
+        "reportColumnName": "column_001",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "1211",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "",
+        "id": 505,
+        "isleaf": "N",
+        "isopen": 0,
+        "level": "1",
+        "name": "考核项目",
+        "pid": 502,
+        "reportColumnName": "",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "1212",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "描述",
+        "id": 506,
+        "isleaf": "N",
+        "isopen": 0,
+        "level": "2",
+        "name": "文化课程",
+        "pid": 505,
+        "reportColumnName": "",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "121210",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "语文分数",
+        "id": 507,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "3",
+        "name": "语文",
+        "pid": 506,
+        "reportColumnName": "column_002",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121010",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "数学分数",
+        "id": 508,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "3",
+        "name": "数学",
+        "pid": 506,
+        "reportColumnName": "column_003",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121011",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "综合科目分数",
+        "id": 509,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "3",
+        "name": "综合科目",
+        "pid": 506,
+        "reportColumnName": "column_004",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121012",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "外语",
+        "id": 510,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "3",
+        "name": "外语",
+        "pid": 506,
+        "reportColumnName": "column_005",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121013",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "文化课程综合评估分数",
+        "id": 511,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "3",
+        "name": "文化总体",
+        "pid": 506,
+        "reportColumnName": "column_006",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121001",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "综合素质",
+        "id": 512,
+        "isleaf": "N",
+        "isopen": 0,
+        "level": "2",
+        "name": "综合素质",
+        "pid": 505,
+        "reportColumnName": "",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "121211",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "美术评定",
+        "id": 513,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "3",
+        "name": "美术",
+        "pid": 512,
+        "reportColumnName": "column_007",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121110",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "体育评定",
+        "id": 514,
+        "isleaf": "N",
+        "isopen": 0,
+        "level": "3",
+        "name": "体育",
+        "pid": 512,
+        "reportColumnName": "",
+        "reportColumnType": "String",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121111",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "基本体测评定",
+        "id": 515,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "4",
+        "name": "体能测试",
+        "pid": 514,
+        "reportColumnName": "column_008",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "1212111110",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "体育考试评定",
+        "id": 516,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "4",
+        "name": "体育考试",
+        "pid": 514,
+        "reportColumnName": "column_009",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "1212111111",
+        "type": "org_exam"
+    }, {
+        "checked": 1,
+        "cssstyle": "",
+        "headDesc": "综合总体评定分数",
+        "id": 517,
+        "isleaf": "Y",
+        "isopen": 0,
+        "level": "3",
+        "name": "综合总体",
+        "pid": 512,
+        "reportColumnName": "column_010",
+        "reportColumnType": "Number",
+        "sts": "Y",
+        "transanalyzz": "",
+        "treeCode": "12121101",
+        "type": "org_exam"
+    }
+];
+</script>
+
+<script id="tag-table" type="text/template">
+	<div class="box" style="width: 480px;height: 320px;">
+		<div class="tag-table kgo-scroll-sty " style="width:100%;height:100%;">
+			<div class="kgo-scroll-head">
+			</div>
+			<div class="kgo-scroll-body">
+				<ul class="kgo-scroll-body-ul"></ul>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="tag-headtable" type="text/template">
+	<div class="box" style="width: 780px;height: 420px;">
+		<table class="tag-headtable" style="width:100%;height:100%;margin:0; padding:0;"></table>
+	</div>
+</script>

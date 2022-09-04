@@ -1,0 +1,99 @@
+{
+	"table": {
+		"self": {
+			"style": {
+			"table-layout":"fixed",
+				"margin": "10px auto"
+			},
+			"pseudoClass": {
+				"hover": {},
+				"active": {}
+			}
+		},
+		"clild": {
+			"thead": {
+				"clild":{
+					"tr": {
+						"self": {
+							"style": {
+								"min-width":"0",
+								"box-sizing":"border-box",
+								"text-align":"left",
+								"text-overflow":"ellipsis",
+								"vertical-align":"middle",
+								"border-bottom":"1px solid #e9eaec",
+								"height":"40px",
+								"white-space":"nowrap",
+								"overflow":"hidden",
+								"background-color":"#fff",
+								"transition": "background-color .2s ease-in-out"
+							},
+							"pseudoClass": {
+								"hover": {
+								"background-color":"#ebf7ff"
+								},
+								"active": {}
+							}
+						},
+						"clild": {
+							"td": {
+								"self": {
+									"style": {
+										"border":"none !important"
+									},
+							"pseudoClass": {
+								"hover": {},
+								"active": {},
+								"firstChild":{"border-left":"1px solid #e9eaec !important"},
+								"lastChild":{"border-right":"1px solid #e9eaec !important"}
+							}
+								}
+							}
+						}
+					}
+				}
+			},
+			"tbody": {
+				"clild": {
+					"tr": {
+						"self": {
+							"style": {
+							"background-color":"#fff",
+							"transition": "background-color .2s ease-in-out"
+							},
+							"pseudoClass": {
+								"hover": {"background-color":"#ebf7ff"},
+								"active": {},
+								"odd": {},
+								"even": {}
+							}
+						},
+						"clild": {
+							"self":{
+								"td": {
+									"self": {
+										"style": {
+											"border":"none !important",
+											"border-bottom":"1px solid #e9eaec !important",
+											"min-height":"48px !important"
+										},
+										"pseudoClass": {
+											"hover": {},
+											"active": {},
+											"firstChild":{"border-left":"1px solid #e9eaec !important"},
+											"lastChild":{"border-right":"1px solid #e9eaec !important"}
+										}
+									},
+									"clild": {}
+								}
+							}
+						}
+					}
+				}
+			},
+			"tfoot": {
+
+			}
+		}
+	}
+}

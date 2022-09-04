@@ -1,0 +1,167 @@
+<ul id="tags-detail" class="tags-navs">
+
+    <li class="tags-nav" tag-type="detail-nolabel">
+        <i class="fa fa-newspaper-o"></i>
+        <span>
+            普通表单(无标签)
+        </span>
+    </li>
+    <li class="tags-nav" tag-type="detail">
+        <i class="fa fa-newspaper-o"></i>
+        <span>
+            普通表单
+        </span>
+    </li>
+    <li class="tags-nav" tag-type="detail-icon">
+        <i class="fa fa-newspaper-o"></i>
+        <span>
+            图标表单
+        </span>
+    </li>
+    <li class="tags-nav" tag-type="detail-img">
+        <i class="fa fa-newspaper-o"></i>
+        <span>
+            图片表单
+        </span>
+    </li>
+    <li class="tags-nav" tag-type="detail-h">
+        <i class="fa fa-newspaper-o"></i>
+        <span>
+            垂直表单
+        </span>
+    </li>
+    <li class="tags-nav" tag-type="detail-time">
+        <i class="fa fa-newspaper-o"></i>
+        <span>
+            时间轴
+        </span>
+    </li>
+</ul>
+<script type="text/javascript">
+    $(function () {
+        $("#tags-detail li").not(".off").draggable({
+            containment: "#content",
+            cursor: "move",
+            cursorAt: {
+                top: 0,
+                left: 0
+            },
+            helper: function (event) {
+                let zoom = $("#content").data("zoom");
+                let type = $(event.currentTarget).attr("tag-type");
+                let html = $("#tag-detail").html();
+                return $(html).css({
+                    "transform": "scale(" + zoom + ")",
+                    "transform-origin": "left top 0px"
+                });
+            },
+            stop: function (event, ui) {
+                //console.log(event, ui);
+                let zoom = $("#content").data("zoom");
+                let type = $(event.target).attr("tag-type");
+                let html = $($("#tag-detail").html());
+                var pLeft = $("#content").offset().left;
+                var pTop = $("#content").offset().top;
+                html.css({
+                    left: (ui.offset.left - pLeft) / zoom,
+                    top: (ui.offset.top - pTop) / zoom
+                });
+                html.appendTo("#content");
+                var tempProp = html.data("prop");
+                var prop = $.extend({}, tempProp, {
+                    options: {},
+                    type: type,
+                    bigType: "tags"
+                });
+                if (type == "detail") {
+                    prop.dt = {
+                        "labelwidth": 80,
+                        "descwidth": 80,
+                        "labelbackgroundcolor": "rgb(36, 52, 75)",
+                        "descbackgroundcolor": "rgb(39, 57, 83)",
+                        "desccolor": "rgb(141, 158, 167)",
+                    };
+                } else if (type == "detail-nolabel") {
+                    prop.dt = {
+                        "descwidth": 80,
+                        "descbackgroundcolor": "rgb(39, 57, 83)",
+                        "desccolor": "rgb(141, 158, 167)",
+                    };
+                } else if (type == "detail-icon") {
+                    prop.dt = {
+                        "descwidth": 80,
+                        "descbackgroundcolor": "rgb(39, 57, 83)",
+                        "desccolor": "rgb(141, 158, 167)",
+                        "iconbgcolor": "rgb(7, 55, 99)",
+                        "iconwidth": 46,
+                        "iconheight": 56,
+                        "iconlineheight": 55,
+                        "iconcolor": "rgb(255, 255, 255)",
+                        "iconfontsize": 18
+                    };
+                } else if (type == "detail-img") {
+                    prop.dt = {
+                        "descwidth": 80,
+                        "descbackgroundcolor": "rgb(39, 57, 83)",
+                        "desccolor": "rgb(141, 158, 167)",
+                        "imgwidth": 86,
+                        "imgbgcolor": "rgb(7, 55, 99)",
+                        "imgheight": 56
+                    };
+                } else if (type == "detail-h") {
+                    prop.dt = {
+                        "labelwidth": 80,
+                        "descwidth": 80,
+                        "labelbackgroundcolor": "rgb(36, 52, 75)",
+                        "descbackgroundcolor": "rgb(39, 57, 83)",
+                        "desccolor": "rgb(141, 158, 167)",
+                    };
+                } else if (type == "detail-time") {
+                    prop.dt = {
+                        "itembackgroundcolor": "rgb(7, 55, 99)",
+                        "itemborderradius": 21,
+                        "itempadding": 15,
+                        "timewidth": 50,
+                        "timeheight": 50,
+                        "timelineheight": 41,
+                        "timefontsize": 16,
+                        "timebordersize": 4,
+                        "timebordercolor": "rgb(74, 134, 232)",
+                        "timeborderstyle": "solid",
+                        "timelinesize": 4,
+                        "timelinecolor": "rgb(28, 69, 135)",
+                        "timeborderradius": 100,
+                        "timelineleft": 24,
+                        "timelinestyle": "dotted",
+                        "timelineright": 30,
+                        "timebgcolor": "rgb(243, 243, 243)",
+                        "timecolor": "rgb(0, 0, 0)",
+                        "itemborderstyle": "dotted",
+                        "itemborderwidth": 4,
+                        "itembordercolor": "rgb(17, 85, 204)",
+                        "descfontsize": 16,
+                        "grouppadding": 0,
+                        "timedescmarginleft": 30
+                    };
+                }
+
+
+
+                html.data("prop", prop);
+                html.initBox({
+                    tagType: type
+                });
+            }
+        });
+        $(".tags-nav.off").each(function () {
+            layx.tip('当前组件未开放！', this, 'top');
+        });
+    })
+
+</script>
+
+<script id="tag-detail" type="text/template">
+    <div class="box" style="width: 480px;height: 320px;">
+        未获取到数据！
+	</div>
+</script>

@@ -1,0 +1,205 @@
+[{
+	"name":"基础属性",
+	"sort":false,
+	"props":[
+		{
+			"name": "标题设置",
+			"propType": "title"
+		},
+		{	
+			"name": "主题配置",
+			"prop": "theme",
+			"propType":"radio",
+			"pram": "Dark-dark|Halloween-halloween|Walden-walden|Westeros-westeros|Wonderland-wonderland"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "标题设置",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示标题",
+			"prop": "options.title.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "标题文本",
+			"prop": "options.title.text",
+			"propType": "input"
+		},
+		{
+			"name": "字体颜色",
+			"prop": "options.title.textStyle.color",
+			"propType": "color"
+		},
+		{
+			"name": "字体大小",
+			"prop": "options.title.textStyle.fontSize",
+			"propType": "input"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "图例",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示图例",
+			"prop": "options.legend.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "图例选择模式",
+			"prop": "options.legend.selectedMode",
+			"propType": "radio",
+			"pram": "不可选-true|单选-single|多选-multiple"
+		},
+		{
+			"name": "图例位置",
+			"prop": "options.legend.align",
+			"propType": "radio",
+			"pram": "自动-auto|左-left|右-right"
+		},
+		{
+			"name": "距离左侧",
+			"prop": "options.legend.left",
+			"propType": "radio",
+			"pram": "左-left|中-center|右-right"
+		},
+		{
+			"name": "距离顶部",
+			"prop": "options.legend.top",
+			"propType": "radio",
+			"pram": "上-top|中-middle|下-bottom"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "视区",
+			"propType": "title"
+		},
+		{
+			"name": "距离顶部",
+			"prop": "options.grid.top",
+			"propType": "slider"
+		},
+		{
+			"name": "距离底部",
+			"prop": "options.grid.bottom",
+			"propType": "slider"
+		},
+		{
+			"name": "距离左端",
+			"prop": "options.grid.left",
+			"propType": "slider"
+		},
+		{
+			"name": "距离右端",
+			"prop": "options.grid.right",
+			"propType": "slider"
+		},
+		{
+			"name": "宽度",
+			"prop": "options.grid.width",
+			"propType": "slider"
+		},
+		{
+			"name": "高度",
+			"prop": "options.grid.height",
+			"propType": "slider"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "X轴",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示隔线",
+			"prop": "options.xAxis.splitLine.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		},
+		{
+			"name": "Y轴",
+			"propType": "title"
+		},
+		{
+			"name": "是否显示隔线",
+			"prop": "options.yAxis.splitLine.show",
+			"propType": "radio",
+			"pram": "是-true|否-false"
+		}
+	]
+},
+{
+	"name":"系列",
+	"sort":true,
+	"props":[
+		{
+			"name": "系列",
+			"propType": "title",
+			"subTitle": true
+		}
+		,{
+			"name":"线条类型",
+			"prop": "options.series.type",
+			"propType": "radio",
+			"pram": "折线-line|柱状-bar",
+			"callback":"callback"
+		},
+		{
+			"name": "分割线",
+			"propType": "line",
+			"lineType":"dotted"
+		}
+		,{
+			"name":"线条颜色",
+			"prop": "options.series.lineStyle.color",
+			"propType": "color",
+			"sortType":"line"
+		},{
+			"name":"线条宽度",
+			"prop": "options.series.lineStyle.width",
+			"propType": "slider",
+			"sortType":"line"
+		},{
+			"name":"线条类型",
+			"prop": "options.series.lineStyle.type",
+			"propType": "radio",
+			"pram": "实线-solid|点状线-dashed|虚线-dotted",
+			"sortType":"line"
+		},{
+			"name":"小标志大小",
+			"prop": "options.series.symbolSize",
+			"propType": "slider",
+			"sortType":"line"
+		},{
+			"name":"拐点颜色",
+			"prop": "options.series.itemStyle.color",
+			"propType": "color",
+			"sortType":"line"
+		},
+		{
+			"name": "分割线",
+			"propType": "line"
+		}
+	]
+}
+	
+]

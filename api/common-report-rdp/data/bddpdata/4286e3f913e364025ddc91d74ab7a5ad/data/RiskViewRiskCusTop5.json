@@ -1,0 +1,43 @@
+{
+  "data": {
+    "responseData": {
+      "data": [
+        {
+          "level": "吉林长春制药商*",
+          "appType": "2,000,000.00",
+          "desc": "制药商"
+        },
+        {
+          "level": "吉林长春供货商*",
+          "appType": "1,800,000.00",
+          "desc": "供货商"
+        },
+        {
+          "level": "吉林长春贩卖商*",
+          "appType": "1,000,000.00",
+          "desc": "贩卖商"
+        },
+        {
+          "level": "吉林长春运输商*",
+          "appType": "800,000.00",
+          "desc": "运输商"
+        }
+      ],
+      "totals": 4
+    },
+    "columnData": [
+      {
+        "key": "level",
+        "text": "客户名称"
+      },
+      {
+        "key": "appType",
+        "text": "风险额度"
+      },
+      {
+        "key": "desc",
+        "text": "所属子公司"
+      }
+    ]
+  }
+}

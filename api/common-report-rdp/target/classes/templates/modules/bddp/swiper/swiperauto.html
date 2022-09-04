@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+	<title>综合大屏幕轮播</title>
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/swiper/swiper.min.css">
+	<script src="${request.contextPath}/statics/bddp/static/common/jquery/jquery-1.11.0.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/swiper/swiper.min.js"></script>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+			align-content: flex-start;
+			background-color: #080939;
+		}
+		
+		.bd-header {
+			display: flex;
+			flex-direction: row;
+			align-content: flex-start;
+		}
+		
+		.bd-header>div {
+			width: 200px;
+			color: #ffffff;
+			text-align: center;
+			line-height: 40px;
+		}
+		
+		.view_name {
+			flex-grow: 1;
+			font-size: 24px;
+			font-weight: 700;
+			;
+		}
+		
+		.bd-title {
+			display: inline-block;
+		}
+		
+		.swiper-container {
+			flex-grow: 1;
+			width: 100%;
+		}
+		
+		.swiper-wrapper {
+			height: 100%;
+			width: 100%;
+		}
+		
+		.swiper-slide {
+			border: 0;
+			background-color: transparent;
+			height: 100%;
+			width: 100%;
+		}
+		
+		.swiper-slide-iframe {
+			border: 0;
+			background-color: transparent;
+			height: 100%;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">
+				<iframe class="swiper-slide-iframe"
+					src="../../../bddpshow/show/c99268a7bdf0a8c8dec37f4e5927910d">
+				</iframe>
+			</div>
+			<div class="swiper-slide">
+				<iframe class="swiper-slide"
+					src="../../../bddpshow/show/41284e70ef854b0bc215fe95ec9f6aae">
+				</iframe>
+			</div>
+			<div class="swiper-slide">
+				<iframe class="swiper-slide"
+					src="../../../bddpshow/show/51284e70ef854b0bc215fe95ec9f6aae">
+				</iframe>
+			</div>
+			<div class="swiper-slide">
+				<iframe class="swiper-slide"
+					src="../../../bddpshow/show/d76cbda028bebf896552816e981c3cc2">
+				</iframe>
+			</div>
+		</div>
+		<div class="swiper-button-prev"></div>
+		<!--左箭头-->
+		<div class="swiper-button-next"></div>
+		<!--右箭头-->
+	</div>
+	<script>
+        $(function () {
+			var arr=["首页","农村金融客户分析","农村金融业务分析","农村金融风险分析","农村金融产品分析","农村金融KPI分析","农村金融渠道分析"];
+            var mySwiper = new Swiper('.swiper-container', {
+            	autoplay:true,
+            	autoplay: {
+	           	    delay: 3000,
+	           	    stopOnLastSlide: false,
+	           	    disableOnInteraction: true,
+           	    }
+            });
+            $(window).resize(function () {
+                mySwiper.updateSize();
+            });
+        });
+    </script>
+</body>
+
+</html>

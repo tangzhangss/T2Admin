@@ -1,0 +1,43 @@
+{
+  "data": {
+    "responseData": {
+      "data": [
+        {
+          "level": "客户集中度",
+          "appType": "60",
+          "desc": "10"
+        },
+        {
+          "level": "不良贷款比率*",
+          "appType": "10.12",
+          "desc": "2.00"
+        },
+        {
+          "level": "逾期贷款比率*",
+          "appType": "20.00",
+          "desc": "5.00"
+        },
+        {
+          "level": "资本风险比率*",
+          "appType": "60.00",
+          "desc": "10.o00"
+        }
+      ],
+      "totals": 4
+    },
+    "columnData": [
+      {
+        "key": "level",
+        "text": "名称"
+      },
+      {
+        "key": "appType",
+        "text": "值"
+      },
+      {
+        "key": "desc",
+        "text": "比上月末"
+      }
+    ]
+  }
+}

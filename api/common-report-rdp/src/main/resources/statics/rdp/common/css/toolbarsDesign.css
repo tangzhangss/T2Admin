@@ -1,0 +1,66 @@
+html,
+body {
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+
+.tb-top {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	height: 94px;
+}
+
+.tb-left {
+	position: absolute;
+	top: 94px;
+	left: 0px;
+	bottom: 0px;
+	width: 40px;
+}
+
+.tb-right {
+	position: absolute;
+	top: 94px;
+	right: 0px;
+	bottom: 0px;
+	width: 300px;
+}
+
+.tb-center {
+	position: absolute;
+	top: 94px;
+	left: 40px;
+	right: 300px;
+	bottom: 0px;
+}
+
+.toolbars {
+    height: 82px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0px;
+}
+
+.toolbars .group {
+    height: 80px;
+    width: 100px;
+    min-width:  100px;
+    border-right: 1px solid #ddd;
+}
+
+.tags {}
+
+.tags .tag {
+	background-image: url(../img/tags/defaultTag.png);
+	width: 40px;
+	height: 40px;
+	background-position: center;
+	background-size: 100%;
+}
+
+.showjson {}
+
+.prop {}

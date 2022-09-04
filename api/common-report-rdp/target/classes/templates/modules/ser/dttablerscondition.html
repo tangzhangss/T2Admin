@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数据集表关系表</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("ser:dttablerscondition:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("ser:dttablerscondition:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("ser:dttablerscondition:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">关系类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.cdType" placeholder="关系类型"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">输出名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.rename" placeholder="输出名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">左侧表</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.leftTable" placeholder="左侧表"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">左侧字段</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.leftCol" placeholder="左侧字段"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">操作符</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.operator" placeholder="操作符"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">右侧表</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.rightTable" placeholder="右侧表"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">右侧字段</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.rightCol" placeholder="右侧字段"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.txTime" placeholder="创建时间" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">登记人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dtTableRsCondition.txOp" placeholder="登记人" readonly="readonly"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/ser/dttablerscondition.js?_${.now?long}"></script>
+</body>
+</html>

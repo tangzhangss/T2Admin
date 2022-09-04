@@ -1,0 +1,27 @@
+@page { size:  auto;margin: 0mm;}
+html{ margin: 0px; }
+body{padding: 10mm 15mm 10mm 15mm;}
+*{font-family:"SimSun"}
+.fy{text-align:center;font-size:12px;}
+.page1{width:180mm;height:267mm;padding:10mm;background:#ffffff;margin:8px auto;overflow:auto;}
+.page2{width:267mm;height:180mm;padding:10mm;background:#ffffff;margin:8px auto;overflow:auto;}
+.page3{width:100%;height:100%;background:#ffffff;margin:0px auto;overflow:auto;}
+.page3 div{margin:0 10px;}
+body{margin:10px;background:#fff;}
+table{border-collapse: collapse;background:#ffffff;}
+/*.normal td{padding:0 3px;}*/
+.dynamic .rtitle td label{vertical-align:middle;mso-pattern:auto; }
+
+.dynamic .rhead td label{vertical-align:middle;}
+
+.dynamic tbody td label{color: rgb(0, 0, 0);text-decoration: none;text-line-through: none;}
+.dynamic label{display:block;overflow:hidden;margin:0;padding:0;padding-left:2px;padding-right:2px;
+text-overflow: ellipsis; /* for IE */  
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */  }
+tfoot td{vertical-align:middle;overflow-y:hidden;}
+.confirmbtn{margin:0 5px;border:1px solid #999;background:rgba(0, 0, 0, 0) url('../images/domeBg1.png') repeat-x scroll 0 0;}
+
+table tbody td.link{cursor:pointer;}
+
+.dynamic tbody td div{height: auto !important;overflow: hidden !important;}
+.fy{display:none}

@@ -1,0 +1,246 @@
+<div class="mt-header">
+
+    <span id="mt-group">
+
+    </span>
+</div>
+<div class="mt-body">
+    <div id="mt-items">
+        <!-- <div class="mt-box"><img src="img/01.jpg" alt=""></div> -->
+    </div>
+    <div id="mt-info"></div>
+</div>
+<script>
+    var MT_PAGE = {
+            currPage: 1
+        },
+        MT_GROUP = "";
+    $(function () {
+        // initMaterial();
+        initGroups();
+        $("#mt-items").on("click", ".mt-box", function () {
+            var params = $(this).data();
+            // console.log(params);
+        })
+    });
+
+    function initMaterial() {
+        $("#mt-items").empty();
+        $.ajax({
+            type: "get",
+            url: "../../material/material/list",
+            data: {
+                page: MT_PAGE.currPage,
+                group: MT_GROUP
+            },
+            dataType: "json",
+            success: function (response) {
+                createMtBox(response.page.list);
+                MT_PAGE = response.page;
+                waitImgsLoaded(function () {
+                    initwaterfall();
+                });
+                if (MT_PAGE.currPage == MT_PAGE.totalPage) {
+                    $("#mt-info").html("没有更多了");
+                } else {
+                    $("#mt-info").html("");
+                }
+            }
+        });
+
+
+
+
+    }
+
+    function initGroups() {
+        $.ajax({
+            type: "get",
+            url: "../../material/material/groups",
+            data: {
+                page: MT_PAGE.currPage,
+                group: MT_GROUP
+            },
+            dataType: "json",
+            success: function (response) {
+                createGroups(response.list);
+            }
+        });
+    }
+    var MT_GROUPS = ["背景", "标题", "边框", "静态素材", "动态素材"];
+
+    function createGroups(data) {
+
+        var groups = $.map(data, function (node) {
+            MT_GROUPS.indexOf(node.materialGroup) === -1 ? MT_GROUPS.push(node.materialGroup) : 0;
+            return node.materialGroup
+        });
+        for (let i = 0; i < MT_GROUPS.length; i++) {
+            const materialGroup = MT_GROUPS[i];
+            var radio;
+            if (i == 0) {
+                radio = $('<input value="' + materialGroup + '" type="radio" id="group' + i +
+                    '" name="group"  checked="checked"><label for="group' + i + '" >' + materialGroup + '</label>');
+                MT_GROUP = materialGroup;
+            } else {
+                radio = $('<input value="' + materialGroup + '" type="radio" id="group' + i +
+                    '" name="group"><label for="group' + i + '">' + materialGroup + '</label>');
+            }
+            $("#mt-group").append(radio);
+        }
+
+        $("input[name=group]").checkboxradio({
+            icon: false
+        });
+        $("input[name=group]").on("change", function (e) {
+            var target = $(e.target);
+            var checked = target.is(":checked");
+            // console.log(target, checked);
+            // console.log($(e.target).val());
+            MT_PAGE.currPage = 1;
+            MT_GROUP = $(e.target).val();
+            initMaterial();
+
+
+        });
+        $("#mt-group").controlgroup();
+        initMaterial();
+
+
+    }
+
+    function createMtBox(data) {
+        //     console.log(data);
+        $.each(data, function (i, node) {
+            var box = $(
+                '<div class="mt-box" style="opacity:0;filter:alpha(opacity=0);"><img class="cover" src="../../' +
+                node.materialRelativePath + '" alt=""></div>')
+            box.data(node);
+            $("#mt-items").append(box);
+            box.draggable({
+                containment: "#content",
+                cursor: "move",
+                cursorAt: {
+                    top: 0,
+                    left: 0
+                },
+                helper: function (event) {
+                    let zoom = $("#content").data("zoom");
+                    let html = $(event.currentTarget).clone();
+                    return $(html).css({
+                        "transform": "scale(" + zoom + ")",
+                        "transform-origin": "left top 0px",
+                        "width": $(event.currentTarget).width(),
+                        "height": $(event.currentTarget).height()
+                    });
+                },
+                stop: function (event, ui) {
+                    let zoom = $("#content").data("zoom");
+                    let targetElem = $(event.target);
+                    let type = "image";
+                    let html = $($("#tag-" + type).html());
+                    var pLeft = $("#content").offset().left;
+                    var pTop = $("#content").offset().top;
+                    var imgUrl = "../../" + targetElem.data("materialRelativePath")
+                    html.css({
+                        left: (ui.offset.left - pLeft) / zoom,
+                        top: (ui.offset.top - pTop) / zoom,
+                        width: targetElem.width(),
+                        height: targetElem.height()
+                    });
+                    html.appendTo("#content");
+                    var tempProp = html.data("prop");
+                    var prop = $.extend({}, tempProp, {
+                        options: {},
+                        type: type,
+                        bigType: "tags",
+                        parts: {
+                            imgUrl: imgUrl
+                        }
+                    });
+                    html.find("img").attr("src", imgUrl);
+                    html.data("prop", prop);
+                    html.initBox({
+                        tagType: type
+                    });
+                }
+            });
+        })
+    }
+
+    function initwaterfall() {
+        $("#mt-items").waterfall({
+            itemClass: ".mt-box",
+            minColCount: 2,
+            spacingHeight: 10,
+            resizeable: true,
+            ajaxCallback: function (success, end) {
+                if ((MT_PAGE.currPage + 1) <= MT_PAGE.totalPage) {
+                    $.ajax({
+                        type: "get",
+                        url: "../../material/material/list",
+                        data: {
+                            page: (MT_PAGE.currPage + 1),
+                            group: MT_GROUP
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response);
+                            createMtBox(response.page.list);
+                            MT_PAGE = response.page;
+                            waitImgsLoaded(function () {
+                                success();
+                                end();
+                            });
+                        },
+                        complete: function (response, code) {}
+                    });
+                    $("#mt-info").html("");
+                } else {
+                    $("#mt-info").html("没有更多了");
+                }
+
+            }
+        });
+    }
+
+    function waitImgsLoaded(func) {
+        var t_img; // 定时器
+        var isLoad = true; // 控制变量
+
+        // 判断图片加载状况，加载完成后回调
+        isImgLoad(function () {
+            func();
+        });
+
+        // 判断图片加载的函数
+        function isImgLoad(callback) {
+            // 注意我的图片类名都是cover，因为我只需要处理cover。其它图片可以不管。
+            // 查找所有封面图，迭代处理
+            $('.cover').each(function () {
+                // 找到为0就将isLoad设为false，并退出each
+                if (this.height === 0) {
+                    isLoad = false;
+                    return false;
+                }
+            });
+            // 为true，没有发现为0的。加载完毕
+            if (isLoad) {
+                clearTimeout(t_img); // 清除定时器
+                // 回调函数
+                callback();
+                // 为false，因为找到了没有加载完成的图，将调用定时器递归
+            } else {
+                isLoad = true;
+                t_img = setTimeout(function () {
+                    isImgLoad(callback); // 递归扫描
+                }, 500); // 我这里设置的是500毫秒就扫描一次，可以自己调整
+            }
+        }
+    }
+</script>
+<script id="tag-image" type="text/template">
+    <div class="box" style="width: 100px;height: 66px;">
+		<img class="tag-image" width="100%" height="100%" src="../../statics/bddp/static/img/default.jpg" />
+	</div>
+</script>

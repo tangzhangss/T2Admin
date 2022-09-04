@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数据集表显示字段表</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("ser:dsshowcol:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("ser:dsshowcol:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("ser:dsshowcol:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">数据集编号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.dtId" placeholder="数据集编号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">引用表编号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.useId" placeholder="引用表编号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否显示</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.isShow" placeholder="是否显示"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">数据类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.dataType" placeholder="数据类型"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">别名</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.alias" placeholder="别名"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">描述</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.describe" placeholder="描述"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.txTime" placeholder="创建时间" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">登记人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dsShowcol.txOp" placeholder="登记人" readonly="readonly"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/ser/dsshowcol.js?_${.now?long}"></script>
+</body>
+</html>

@@ -22,8 +22,5 @@ import java.util.regex.Pattern;
  */
 @Service
 public class DomainService extends SysBaseService<DomainEntity,DomainDao>{
-    @Override
-    protected void beforeSaveData(DomainEntity data) {
-        ExceptionUtil.throwException("not_found");
-    }
+
 }

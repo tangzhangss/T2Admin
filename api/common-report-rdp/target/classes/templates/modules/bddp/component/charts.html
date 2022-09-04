@@ -1,0 +1,373 @@
+<ul id="charts" class="tags-navs">
+    <li class="tags-nav" tag-type="line" data-subtype="1">
+        <i class="chart-icon chart-line"></i>
+        <span>
+			Line
+		</span>
+        <ul class="tags-subnavs">
+            <li class="tags-subnav line11" tag-type="line" data-subtype="1">
+                <span>折线图</span>
+            </li>
+            <li class="tags-subnav line3" tag-type="line" data-subtype="2">
+                <span>面积图</span>
+            </li>
+            <li class="tags-subnav line4" tag-type="line" data-subtype="3">
+                <span>面积堆叠图图</span>
+            </li>
+        </ul>
+    </li>
+    <li class="tags-nav" tag-type="bar" data-subtype="1">
+        <i class="chart-icon chart-bar"></i>
+        <span>
+			Bar
+		</span>
+        <ul class="tags-subnavs">
+            <li class="tags-subnav bar1" tag-type="bar" data-subtype="1">
+                <span>柱状图</span>
+            </li>
+            <li class="tags-subnav bar21" tag-type="bar" data-subtype="2">
+                <span>堆积柱状图</span>
+            </li>
+            <li class="tags-subnav bar3" tag-type="bar" data-subtype="3">
+                <span>条形图</span>
+            </li>
+        </ul>
+    </li>
+    <li class="tags-nav" tag-type="pie" data-subtype="1">
+        <i class="chart-icon chart-pie"></i>
+        <span>
+			Pie
+		</span>
+        <ul class="tags-subnavs">
+            <li class="tags-subnav pie1" tag-type="pie" data-subtype="1">
+                <span>饼状图</span>
+            </li>
+            <li class="tags-subnav pie2" tag-type="pie" data-subtype="2">
+                <span>圆环图</span>
+            </li>
+            <li class="tags-subnav pie10" tag-type="pie" data-subtype="3">
+                <span>南丁格尔图</span>
+            </li>
+        </ul>
+    </li>
+
+
+    <li class="tags-nav" tag-type="radar" data-subtype="1">
+        <i class="chart-icon chart-radar"></i>
+        <span>
+			Radar
+		</span>
+    </li>
+
+    <li class="tags-nav" tag-type="tree" data-subtype="1">
+        <i class="chart-icon chart-tree"></i>
+        <span>
+			Tree
+		</span>
+    </li>
+    <li class="tags-nav" tag-type="treemap" data-subtype="1">
+        <i class="chart-icon chart-treemap"></i>
+        <span>
+			Treemap
+		</span>
+    </li>
+    <li class="tags-nav" tag-type="sunburst" data-subtype="1">
+        <i class="chart-icon chart-sunburst"></i>
+        <span>
+			Sunburst
+		</span>
+    </li>
+
+    <li class="tags-nav" tag-type="funnel" data-subtype="1">
+        <i class="chart-icon chart-funnel"></i>
+        <span>
+			Funnel
+		</span>
+    </li>
+    <li class="tags-nav" tag-type="gauge" data-subtype="1">
+        <i class="chart-icon chart-gauge"></i>
+        <span>
+			Gauge
+		</span>
+    </li>
+    <li class="tags-nav" tag-type="map" data-subtype="1">
+        <i class="chart-icon chart-map"></i>
+        <span>
+			Map
+		</span>
+    </li>
+    <li class="tags-nav off" tag-type="boxplot" data-subtype="1">
+        <i class="chart-icon chart-boxplot"></i>
+        <span>
+			Boxplot
+		</span>
+    </li>
+    <li class="tags-nav off" tag-type="heatmap" data-subtype="1">
+        <i class="chart-icon chart-heatmap"></i>
+        <span>
+			Heatmap
+		</span>
+    </li>
+    <li class="tags-nav off" tag-type="graph" data-subtype="1">
+        <i class="chart-icon chart-graph"></i>
+        <span>
+			Graph
+		</span>
+    </li>
+    <li class="tags-nav off" tag-type="parallel" data-subtype="1">
+        <i class="chart-icon chart-parallel"></i>
+        <span>
+			Parallel
+		</span>
+    </li>
+    <li class="tags-nav off" tag-type="sankey" data-subtype="1">
+        <i class="chart-icon chart-sankey"></i>
+        <span>
+			Sankey
+		</span>
+    </li>
+    <li class="tags-nav off" tag-type="scatter" data-subtype="1">
+        <i class="chart-icon chart-scatter"></i>
+        <span>
+			Scatter
+		</span>
+    </li>
+    <li class="tags-nav off" tag-type="candlestick" data-subtype="1">
+        <i class="chart-icon chart-candlestick"></i>
+        <span>
+			Candlestick
+		</span>
+    </li>
+
+</ul>
+<script type="text/javascript">
+    var dragState = false;
+    $(function () {
+        $("#charts li").not(".off").draggable({
+            //containment: "#content",
+            cursor: "move",
+            cursorAt: {
+                top: 0,
+                left: 0
+            },
+            helper: function (event) {
+                dragState = true;
+                let zoom = $("#content").data("zoom");
+                let type = $(event.currentTarget).attr("tag-type");
+                let html = $("#charts-tag").html();
+                return $(html).css({
+                    "background-image": "url('../../statics/bddp/static/img/charts/" + type + ".png')",
+                    "transform": "scale(" + zoom + ")",
+                    "transform-origin": "left top 0px"
+                });
+            },
+            stop: function (event, ui) {
+                $(".tags-subnavs").fadeOut();
+                dragState = false;
+                //console.log(event, ui);
+                let type = $(event.target).attr("tag-type");
+                let subtype = $(event.target).attr("data-subtype");
+                let zoom = $("#content").data("zoom");
+                let html = $($("#charts-tag").html());
+                var pLeft = $("#content").offset().left;
+                var pTop = $("#content").offset().top;
+                html.css({
+                    left: (ui.offset.left - pLeft) / zoom,
+                    top: (ui.offset.top - pTop) / zoom
+                });
+                html.appendTo("#content");
+                html.attr("data-subtype", subtype);
+                html.initBox({
+                    tagType: type
+                });
+                if (type == "map") {
+                    layx.iframe('localsiteformap', '选择地图文件', './component/BddpMapPage.html', {
+                        event: {
+                            ondestroy: {
+                                before: function (layxWindow, winform, params, inside, escKey) {
+                                    let mappath = params.path;
+                                    if (!mappath){
+                                        return true
+                                    }
+                                    if (mappath.indexOf('geographic') > -1) {
+                                        mappath = mappath.substring(mappath.indexOf('geographic') + 'geographic'.length, mappath.length);
+                                    }
+                                    getAjaxMapData({
+                                        mappath: mappath
+                                    }, function (result) {
+                                        if (result.code == 0) {
+                                            data = result.res;
+                                            console.log(result);
+                                            var md5Value = hex_md5(JSON.stringify(data));
+                                            console.log(md5Value);
+                                            var mapjson = data;
+                                            echarts.registerMap(md5Value, mapjson);
+                                            //html.width(window.innerWidth/2).height(window.innerHeight/2);
+                                            creatMapChart(html, md5Value, mappath);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    createCharts(type, html);
+                }
+
+            }
+        });
+
+    });
+
+    function createCharts(type, elem) {
+        if (!globalChartTheme) {
+            globalChartTheme = 'default';
+        }
+        var file = "../../statics/bddp/static/charts-config/" + type + ".json";
+        var themeFile = "../../statics/bddp/static/charts-theme/" + globalChartTheme + ".json";
+        getJSONFileData(themeFile, function (themedata) {
+            var theme = themedata;
+            echarts.registerTheme(globalChartTheme, theme);
+
+            getJSONFileData(file, function (data) {
+                var tempProp = elem.data("prop");
+                let subtype = elem.data("subtype");
+                var options = data;
+                setSubTypeChartsOption(type, subtype, options, tempProp);
+                if (!tempProp.other) {
+                    tempProp.other = {};
+                }
+                tempProp.other["theme"] = globalChartTheme;
+                var dom = elem.find(".tag-charts")[0];
+                var myChart = echarts.init(dom, globalChartTheme);
+                myChart.setOption(options, true);
+                var prop = $.extend({}, tempProp, {
+                    options: options,
+                    myChart: myChart,
+                    type: type,
+                    bigType: "chart",
+                    subtype: subtype,
+                })
+                elem.data("prop", prop);
+                elem.initdata();
+                $(".box").removeClass("box-selected");
+            });
+
+        });
+    }
+
+    function creatMapChart(elem, md5, mappath) {
+        var options = {
+            geo: {
+                show: true,
+                map: md5,
+                label: {
+                    normal: {
+                        show: true,
+                        color: "#ffffff"
+                    },
+                    emphasis: {
+                        show: true,
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: 'transparent',
+                        borderColor: '#3fdaff',
+                        borderWidth: 2,
+                    },
+                    emphasis: {
+                        areaColor: '#2B91B7',
+                    }
+                }
+            }
+        };
+        var dom = elem.find(".tag-charts")[0];
+        var myChart = echarts.init(dom);
+        myChart.setOption(options, true);
+        var tempProp = elem.data("prop");
+        var prop = $.extend({}, tempProp, {
+            options: options,
+            myChart: myChart,
+            type: "map",
+            other: {
+                mappath: mappath
+            }
+        })
+        elem.data("prop", prop);
+        elem.initdata();
+        $(".box").removeClass("box-selected");
+    }
+
+    function setSubTypeChartsOption(type, subtype, options, prop) {
+        if (type == "line") {
+            $.each(options.series, function (i, series) {
+                if (subtype == 2) {
+                    series.areaStyle = {};
+                } else if (subtype == 3) {
+                    series.areaStyle = {};
+                    series.stack = '堆叠标识';
+                }
+            });
+        } else if (type == "bar") {
+            if (subtype == 2) {
+                $.each(options.series, function (i, series) {
+                    series.stack = '堆叠标识';
+                });
+            } else if (subtype == 3) {
+                prop.other = {
+                    axis: true
+                };
+                let other = prop.other;
+                other.sXAxis = options.xAxis;
+                other.sYAxis = options.yAxis;
+                if (other.axis) {
+                    options.xAxis = other.sYAxis;
+                    options.yAxis = other.sXAxis;
+                } else {
+                    options.xAxis = other.sXAxis;
+                    options.yAxis = other.sYAxis;
+                }
+            }
+        } else if (type == "pie") {
+            if (subtype == 2) {
+                $.each(options.series, function (i, series) {
+                    series.radius = ['50%', '70%'];
+                });
+            } else if (subtype == 3) {
+                $.each(options.series, function (i, series) {
+                    series.roseType = 'radius';
+                });
+            }
+        }
+    }
+
+
+    $("#charts li").hover(function () {
+        let l = $(this).offset().left + $(this).width();
+        let t = $(this).position().top;
+        $(this).find(".tags-subnavs").css({
+            "left": l + "px",
+            "top": t + "px"
+        }).show();
+    }, function () {
+        if (!dragState) {
+            $(this).find(".tags-subnavs").hide();
+        }
+    });
+
+    $(".tags-nav.off").each(function () {
+        layx.tip('当前图表未开放！', this, 'top');
+    });
+</script>
+<script id="charts-line" type="text/template">
+    <div class="box" style="width: 480px;height: 320px;">
+        <div class="tag-charts" style="height:100%;width:100%"></div>
+    </div>
+</script>
+<script id="charts-tag" type="text/template">
+    <div class="box" style="width: 480px;height: 320px;">
+        <div class="tag-charts" style="height:100%;width:100%"></div>
+    </div>
+</script>

@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "productName": "个人客户",
+      "count": 61
+    },
+    {
+      "productName": "企业客户",
+      "count": 52
+    },
+    {
+      "productName": "核心企业",
+      "count": 42
+    },
+    {
+      "productName": "担保客户",
+      "count": 41
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+    "config": [{
+        "text": "基础",
+        "type": "base",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"通用",
+                "type":"base"
+            },
+            {
+                "text":"高级",
+                "type":"advanced"
+            },
+            {
+                "text":"系列",
+                "type":"seriesTabKey"
+            }
+        ]
+    },{
+        "text": "标题",
+        "type": "title",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"内容",
+                "type":"content"
+            },
+            {
+                "text":"样式",
+                "type":"style"
+            }
+        ]
+    },{
+        "text": "视区",
+        "type": "grid",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"位置",
+                "type":"position"
+            },
+            {
+                "text":"外观",
+                "type":"base"
+            }
+        ]
+    },{
+        "text": "x轴",
+        "type": "xAxis0",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"基础",
+                "type":"base"
+            },
+            {
+                "text":"轴线",
+                "type":"axisLine"
+            },
+            {
+                "text":"标签",
+                "type":"axisLabel"
+            },
+            {
+                "text":"刻度",
+                "type":"axisTick"
+            },
+            {
+                "text":"隔线",
+                "type":"splitLine"
+            },
+            {
+                "text":"隔区",
+                "type":"splitArea"
+            }
+        ]
+    },{
+        "text": "y轴",
+        "type": "yAxis0",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"基础",
+                "type":"base"
+            },
+            {
+                "text":"轴线",
+                "type":"axisLine"
+            },
+            {
+                "text":"标签",
+                "type":"axisLabel"
+            },
+            {
+                "text":"刻度",
+                "type":"axisTick"
+            },
+            {
+                "text":"隔线",
+                "type":"splitLine"
+            },
+            {
+                "text":"隔区",
+                "type":"splitArea"
+            }
+        ]
+    },{
+        "text": "图例",
+        "type": "legend",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"基础",
+                "type":"base"
+            }
+        ]
+    },{
+        "text": "提示",
+        "type": "tooltip",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"通用",
+                "type":"all"
+            },
+            {
+                "text":"系列",
+                "type":"seriesTabKey"
+            }
+        ]
+    },{
+        "text": "工具",
+        "type": "toolbox",
+        "charts":["line"],
+        "prop":[
+            {
+                "text":"基础",
+                "type":"base"
+            }
+        ]
+    },{
+        "text": "缩放",
+        "type": "roamController",
+        "charts":[]
+    },{
+        "text": "值域",
+        "type": "dataRange",
+        "charts":[]
+    }]
+}

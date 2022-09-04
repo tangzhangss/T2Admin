@@ -1,0 +1,99 @@
+[
+	{
+		"name": "分割线",
+		"propType": "line"
+	},
+	{
+		"name": "标题设置",
+		"propType": "title"
+	},
+	{
+		"name": "是否显示标题",
+		"prop": "options.title.show",
+		"propType": "radio",
+		"pram": "是-true|否-false"
+	},
+	{
+		"name": "标题文本",
+		"prop": "options.title.text",
+		"propType": "input"
+	},
+	{
+		"name": "字体颜色",
+		"prop": "options.title.textStyle.color",
+		"propType": "color"
+	},
+	{
+		"name": "字体大小",
+		"prop": "options.title.textStyle.fontSize",
+		"propType": "input"
+	},
+	{
+		"name": "分割线",
+		"propType": "line"
+	},
+	{
+		"name": "视区",
+		"propType": "title"
+	},
+	{
+		"name": "距离顶部",
+		"prop": "options.grid.top",
+		"propType": "slider"
+	},
+	{
+		"name": "距离底部",
+		"prop": "options.grid.bottom",
+		"propType": "slider"
+	},
+	{
+		"name": "距离左端",
+		"prop": "options.grid.left",
+		"propType": "slider"
+	},
+	{
+		"name": "距离右端",
+		"prop": "options.grid.right",
+		"propType": "slider"
+	},
+	{
+		"name": "宽度",
+		"prop": "options.grid.width",
+		"propType": "slider"
+	},
+	{
+		"name": "高度",
+		"prop": "options.grid.height",
+		"propType": "slider"
+	},
+	{
+		"name": "分割线",
+		"propType": "line"
+	},
+	{
+		"name": "系列",
+		"propType": "title"
+	}
+	,{
+		"name":"线条颜色",
+		"prop": "options.series.lineStyle.color",
+		"propType": "color"
+	},{
+		"name":"线条宽度",
+		"prop": "options.series.lineStyle.width",
+		"propType": "slider"
+	},{
+		"name":"线条类型",
+		"prop": "options.series.lineStyle.type",
+		"propType": "radio",
+		"pram": "实线-solid|点状线-dashed|虚线-dotted"
+	},{
+		"name":"小标志大小",
+		"prop": "options.series.symbolSize",
+		"propType": "slider"
+	},{
+		"name":"拐点颜色",
+		"prop": "options.series.itemStyle.color",
+		"propType": "color"
+	}
+]

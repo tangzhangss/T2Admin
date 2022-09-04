@@ -1,0 +1,82 @@
+@charset "utf-8";
+
+body {
+  color: #333;
+  text-align: center;
+  font: 12px "微软雅黑";
+}
+
+ul,
+ol,
+li {
+  list-style-type: none;
+  vertical-align: 0
+}
+
+a {
+  outline-style: none;
+  color: #535353;
+  text-decoration: none
+}
+
+a:hover {
+  color: #D40000;
+  text-decoration: none
+}
+
+.clear {
+  height: 0;
+  overflow: hidden;
+  clear: both
+}
+
+.datouwang {
+  height: 100px;
+  line-height: 100px;
+  font-size: 30px;
+  font-family: '微软雅黑';
+  text-align: center;
+  font-weight: normal
+}
+
+#chenkbox {
+  margin: 0px auto;
+  width: 800px;
+  position: relative;
+}
+
+th {
+  background: #ebf3f0;
+  font-size: 13px;
+  color: #000002;
+  height: 25px;
+  cursor: pointer;
+}
+
+th,
+td {
+  text-align: center;
+  border: 1px solid #dcdbdb;
+}
+
+#box {
+  position: absolute;
+  display: none;
+  text-align: center;
+  top: 0;
+  background-color: white;
+  cursor: move;
+  -moz-box-shadow:2px 0px 14px #333333; -webkit-box-shadow:2px 0px 14px #333333; box-shadow:2px 0px 14px #333333;
+}
+
+#box p {
+  line-height: 34px;
+}
+
+.checkbox_item{position:relative;display:inline-block;margin-right:10px;height:16px;}
+.checkbox_item input{position:absolute;top:-9999px;left:-9999px;}
+.checkbox_item .check_label{display:inline-block;cursor:default;}
+.checkbox_icon{display:block;float:left;margin-right:5px;width:16px;height:16px;background:url(../images/checkbox_icon.png) 0 0;}
+.check_label.on .checkbox_icon{background-position:-16px 0;}
+.checkbox_text{float:left;height:16px;line-height:16px;}
+.check_label em{font-style: normal;}

@@ -1,0 +1,80 @@
+<ul id="diyTagsNav" class="tags-navs">
+
+</ul>
+
+
+<script type="text/javascript">
+    $(function () {
+        getJSONFileData("../../bddp/getDiyTags", function (res) {
+            console.log(res);
+            if (res.code == 0) {
+                createDiytags(res.res);
+            } else {
+                $("#diyTagsNav").html("自定义组件加载失败！")
+            }
+        })
+    });
+
+    function createDiytags(data) {
+        var $ul = $("#diyTagsNav");
+        $.each(data, function (i, tagNode) {
+            var $li = $('<li class="tags-list"><i></i><span></span></li>');
+            $li.find("i").addClass(tagNode.icon);
+            $li.find("span").html(tagNode.name);
+            $li.data(tagNode);
+            $li.attr("title", tagNode.name);
+            $li.bind("click", function () {
+                var boxs = JSON.parse($(this).data("boxs"));
+                appendDiyTags(boxs);
+            });
+            $li.hover(function (e) {
+                var boxs = JSON.parse($(this).data("boxs"));
+                var tooltip = $('<div id="tooltip"></div>');
+                var y = e.pageY;
+                tooltip.css({
+                    position: 'absolute',
+                    height: '300px',
+                    width: '600px',
+                    top: y + 'px',
+                    left: '160px',
+                    "z-index": 10001
+                }).appendTo('body');
+                var nodes = [];
+                $.each(boxs, function (i, node) {
+                    var box = createTagsBox(node);
+                    nodes.push(box);
+                    tooltip.append(box);
+                });
+                var groupTags = createGroupBoxByDiyTags(nodes);
+                groupTags.dragBox("setBoxProp", {
+                    x: 0,
+                    y: 0
+                }, true);
+                tooltip.css({
+                    width:groupTags.width(),
+                    height:groupTags.height()
+                });
+                tooltip.append(groupTags);
+            }, function (e) {
+                $('#tooltip .box').each(function(){
+                    $("#sm-" + $(this).attr("id")).remove();
+                });
+                $('#tooltip').remove();
+            });
+            $ul.append($li);
+        });
+    }
+
+    function appendDiyTags(boxs) {
+        var nodes = [];
+        $.each(boxs, function (i, node) {
+            var box = createTagsBox(node);
+            nodes.push(box);
+        });
+        var groupTags = createGroupBoxByDiyTags(nodes);
+        groupTags.dragBox("setBoxProp", {
+            x: 0,
+            y: 0
+        }, true);
+    }
+</script>

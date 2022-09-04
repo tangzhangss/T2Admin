@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>数据文件</title>
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/reset.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/plugins/webuploader/webuploader.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.css">
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.min.css" />
+<script src="${request.contextPath}/statics/bddp/static/common/jquery/jquery-1.11.0.js"></script>
+<script src="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/webuploader/webuploader.js"></script>
+<script src="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.js"></script>
+
+<script src="${request.contextPath}/statics/bddp/web/dataTools.js"></script>
+<style type="text/css">
+.list-group-item .btn {
+	float: right;
+	margin-right: 20px;
+}
+
+.list-group-item img {
+	width: 200px;
+	margin-right: 10px;
+}
+
+#tooltip {
+	position: fixed;
+	top: 135px;
+	left: 240px;
+	border: 1px solid #ccc;
+	background: rgb(30, 37, 77);
+	padding: 2px;
+	display: none;
+	color: #fff;
+	z-index: 999999;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="card">
+		<div class="card-body">
+			<ul class="list-group" id="data-list">
+				<li class="list-group-item" id="first-item">
+					<div id="picker">选择文件</div>
+					<div style="display: none;" class="progress" id="progress">
+						<div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">25%</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var url = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = top.window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		};
+		$(function() {
+			var id = url("uuid");
+			getAjaxData("../../../bddp/getBddpFolderImgsData", {
+				id : id
+			}, function(result) {
+				if (result.code == 0) {
+					$.each(result.res, function(i, item) {
+						var li = $('<li class="list-group-item" data-name="' + item.name + '" data-path="' + item.path +
+							'"><img src="../../../bddpConfig/'+id+'/images/' + item.name + '" class="rounded float-left" alt="' + item.name +
+							'">' + item.name + '<button type="button" class="btn btn-primary selected">选择</button><button type="button" class="btn btn-danger delete">删除</button></li>');
+
+						$("#data-list").append(li);
+					})
+				}
+			});
+			var x = 10;
+			var y = 20;
+			$("#data-list").on("mouseover", ".list-group-item img", function(e) {
+				var tooltip = "<div id='tooltip'><img src='" + this.src + "' alt='预览图'/><\/div>"; //创建 div 元素
+				$("body").append(tooltip); //把它追加到文档中						 
+				$("#tooltip").show("fast"); //设置x坐标和y坐标，并且显示
+			});
+			$("#data-list").on("mouseout", ".list-group-item img", function(e) {
+				$("#tooltip").remove(); //移除 
+			});
+			$("#data-list").on("mousemove", ".list-group-item img", function(e) {
+			});
+
+			$("#data-list").on("click", ".selected", function() {
+				var params = $(this).parent().data();
+				params.id = id;
+				top.layx.destroy("localsiteforImage", params);
+			});
+			$("#data-list").on("click", ".delete", function() {
+				var _this = $(this).parent();
+				var path = _this.data().path;
+				getAjaxData("../../../bddp/deleteBddpImgsData", {
+					path : path
+				}, function(result) {
+					if (result.code == 0) {
+						layx.msg('删除成功', {
+							dialogIcon : 'success'
+						});
+						_this.remove();
+					}
+				});
+			});
+
+			var uploader = WebUploader.create({
+				server : '../../../bddp/uploadBddpFolderImgsData',
+				pick : '#picker',
+				resize : false,
+				auto : true
+			});
+			uploader.on('uploadBeforeSend', function(block, data) {
+				data.bddpId = id; // 将存在file对象中的md5数据携带发送过去。  
+			});
+			// 文件上传过程中创建进度条实时显示。
+			uploader.on('uploadProgress', function(file, percentage) {
+				$("#progress").show().find(".progress-bar").css("width", percentage * 100 + '%').attr("aria-valuenow", percentage * 100).html(percentage * 100 + '%');
+			});
+			uploader.on('uploadSuccess', function(file, response) {
+				if (response.code == 0) {
+					layx.msg('上传成功', {
+						dialogIcon : 'success'
+					});
+					var item = response.res;
+					var li = $('<li class="list-group-item" data-name="' + item.name + '" data-path="' + item.path +
+						'"><img src="../../../bddpConfig/'+id+'/images/' + item.name + '" class="rounded float-left" alt="' + item.name +
+						'">' + item.name + '<button type="button" class="btn btn-primary selected">选择</button><button type="button" class="btn btn-danger delete">删除</button></li>');
+
+					$("#first-item").after(li);
+					console.log('已上传');
+				} else {
+					layx.msg(response.info, {
+						dialogIcon : 'error'
+					});
+				}
+			});
+
+			uploader.on('uploadError', function(file, reason) {
+				layx.msg('上传失败', {
+					dialogIcon : 'error'
+				});
+				console.log('上传出错');
+			});
+
+			uploader.on('uploadComplete', function(file) {
+				console.log("完成");
+				setTimeout(function() {
+					$("#progress").hide().find(".progress-bar").css("width", '0%').attr("aria-valuenow", 0).html('0%');
+				}, 2000)
+			});
+
+		});
+	</script>
+</body>
+
+</html>

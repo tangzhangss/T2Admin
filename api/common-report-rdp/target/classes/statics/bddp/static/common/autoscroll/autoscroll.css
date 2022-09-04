@@ -1,0 +1,66 @@
+.kgo-scroll-sty {
+    margin: 0 auto;
+    line-height: 26px;
+    font-size: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    border: 1px solid #457bb5;
+}
+
+.kgo-scroll-body {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.kgo-scroll-body-ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    flex-grow: 1;
+}
+
+.kgo-scroll-body>ul>li {
+    color: #393939;
+}
+
+.kgo-scroll-head {
+    height: 40px;
+    background-color: transparent;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 800;
+    z-index: 999;
+    border-bottom: 1px solid #457bb5;
+}
+
+.baseStyle {
+    display: inline-block;
+    height: 100%;
+    text-align: center;
+    color: #fff;
+    line-height: 40px;
+}
+
+.baseStyle-data {
+    text-align: center;
+    color: #fff;
+    height: 26px;
+    font-size: 14px;
+}
+
+.kgo-scroll-body li {
+    display: flex;
+    align-content: center;
+    border-bottom: 1px solid #457bb5;
+    align-items: center;
+    height: 68px;
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>自定义皮肤配置</title>
+<meta name="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/layer/theme/default/layer.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/rdp/common/lib/zTree_v3/css/metroStyle/metroStyle.css" />
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/rdp/common/css/skinCustom.css" />
+<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/all/jquery-1.11.0.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/zTree_v3/js/jquery.ztree.all.min.js"></script> 
+<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/lib/layer/layer.js"></script> 
+<script type="text/javascript" src="${request.contextPath}/statics/rdp/common/sourcejs/skinCustom.js"></script>
+<script type="text/javascript" src="${request.contextPath}/statics/rdp/js/jscolor.js"></script>
+<script>
+	$(function() {
+		init();
+	});
+</script>
+<style type="text/css" id="skincss">
+</style>
+</head>
+
+<body>
+	<!-- 自定义皮肤 -->
+	<div id="skinCustomInfo" class="skinCustomInfo">
+		<table width="100%" cellpadding="5">
+			<tr>
+				<td valign="top" rowspan="2" width="260">
+					<div class="skinTrees">
+						<select id="skinCustomTree" class="ztree"><option value="">请选择皮肤</option></select>
+						<button type="button" class="tb_btn" id="addNodeBtn" onclick="checkAddNode()">新增</button>
+						<button type="button" class="tb_btn" id="delNodeBtn" onclick="removeNode()">删除</button>
+						<ul class="current">
+						<li cate="thead">报表头</li>
+						<li cate="tbody">数据区</li>
+						<li cate="tbody-hover">数据区鼠标划过</li>
+						<li cate="tbody-odd">数据区奇行</li>
+						<li cate="tbody-even">数据区偶行</li>
+						<li cate="tfoot">报表尾</li>
+						</ul>
+					</div>
+				</td>
+				<td valign="top"><fieldset>
+						<legend>样式配置</legend>
+						<div class="skincss">
+							<label>边框：<select id="cur_border"><option value="">无</option>
+									<option value="1px solid #000000">有</option></select></label>
+									<label>字体大小：<select id="cur_fontsize"><option value=""></option>
+									<option value="9px">9px</option><option value="10px">10px</option><option value="12px">12px</option><option value="14px">14px</option>
+									<option value="16px">16px</option><option value="18px">18px</option><option value="20px">20px</option><option value="30px">30px</option><option value="40px">40px</option></select>
+									</label><label>内边距：<select id="cur_padding"><option value=""></option>
+									<option value="1px">1px</option>
+									<option value="2px">2px</option>
+									<option value="3px">3px</option>
+									<option value="4px">4px</option>
+									<option value="5px">5px</option>
+									<option value="6px">6px</option>
+									<option value="7px">7px</option>
+									<option value="8px">8px</option>
+									<option value="9px">9px</option>
+									<option value="10px">10px</option></select></label> 
+									<label>字体粗细：<select id="cur_fontweight"><option value="100">正常</option>
+									<option value="700">加粗</option></select></label>
+									<label>垂直位置：<select id="cur_verticalalign"><option value=""></option>
+									<option value="top">上</option>
+									<option value="middle">中</option>
+									<option value="bottom">下</option></select></label> 
+									<label>水平位置：<select id="cur_textalign"><option value=""></option>
+									<option value="left">左</option>
+									<option value="center">中</option>
+									<option value="right">右</option></select></label>
+						</div>
+						<div class="skincss">
+							<label>背景颜色：<input type="text" id="cur_backgroundcolor" class="jscolor" value="ffffff" /></label><label>字体颜色：<input type="text" id="cur_color" class="jscolor" value="000000" /></label>
+						</div>
+					</fieldset></td>
+			</tr>
+			<tr>
+				<td valign="top"><fieldset>
+						<legend>实时预览</legend>
+						<div class="skinPreview">
+							<table width="100%" cellpadding="5">
+								<thead>
+									<tr>
+										<td>报表头</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>数据区奇数行</td>
+									</tr>
+									<tr>
+										<td>数据区偶数行</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td>报表尾</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</fieldset></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

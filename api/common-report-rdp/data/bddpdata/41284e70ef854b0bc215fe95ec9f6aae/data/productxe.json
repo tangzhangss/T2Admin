@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "name": "产品限额",
+      "data": [
+        {
+          "indicator": "5万以下",
+          "value": 33
+        },
+        {
+          "indicator": "5万-20万",
+          "value": 34
+        },
+        {
+          "indicator": "20万-100万",
+          "value": 29
+        },
+        {
+          "indicator": "100万-300万",
+          "value": 4
+        },
+        {
+          "indicator": "300万以上",
+          "value": 5
+        }
+      ]
+    }
+  ]
+}

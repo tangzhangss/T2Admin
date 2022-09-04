@@ -1,0 +1,64 @@
+{
+	"data": {
+		"datasourceProviders": [
+			{
+				"name": "Csv",
+				"displayName": "Csv",
+				"category": "File"
+			}, {
+				"name": "Excel",
+				"displayName": "Excel",
+				"category": "File"
+			}, {
+				"name": "Json",
+				"displayName": "Json",
+				"category": "File"
+			}, {
+				"name": "MongoDB",
+				"displayName": "MongoDB",
+				"category": "NoSqlDB"
+			}, {
+				"name": "MySql",
+				"displayName": "MySql",
+				"category": "RDBMS"
+			}, {
+				"name": "OData",
+				"displayName": "OData",
+				"category": "Web"
+			}, {
+				"name": "ODBC",
+				"displayName": "ODBC",
+				"category": "ODBC"
+			}, {
+				"name": "Oracle",
+				"displayName": "Oracle",
+				"category": "RDBMS"
+			}, {
+				"name": "Postgres",
+				"displayName": "Postgres",
+				"category": "RDBMS"
+			}, {
+				"name": "PostgresAdapter",
+				"displayName": "PostgresAdapter",
+				"category": "Adapter"
+			}, {
+				"name": "Salesforce",
+				"displayName": "Salesforce",
+				"category": "Web"
+			}, {
+				"name": "SQLite",
+				"displayName": "SQLite",
+				"category": "RDBMS"
+			}, {
+				"name": "SqlServer",
+				"displayName": "SqlServer",
+				"category": "RDBMS"
+			}, {
+				"name": "Xml",
+				"displayName": "Xml",
+				"category": "File"
+			}
+		]
+	},
+	"errors": null
+}

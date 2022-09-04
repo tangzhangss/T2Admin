@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DEMO</title>
+    <#include "/header.html">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/intro/introjs.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/jquery-easyui/themes/default/easyui.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/jquery-easyui/themes/icon.css">
+        <script src="${request.contextPath}/statics/plugins/jquery-easyui/jquery.easyui.min.js"></script>
+        <script src="${request.contextPath}/statics/plugins/intro/intro.js"></script>
+
+
+
+        <style>
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                text-align: center;
+            }
+
+            .tipsBtn {
+                width: 32px;
+                height: 32px;
+                background-color: #f0ec16;
+                border-radius: 100%;
+                color: #ffffff;
+                border: 0;
+                font-size: 20px;
+                outline: 0;
+                float: left;
+                text-align: center;
+                line-height: 32px;
+                position: absolute
+            }
+
+            .tipsBtn:hover {
+                background-color: #03c45a;
+                color: #ffffff;
+            }
+
+            .tipsBtn1 {
+                left: 100px;
+                top: 100px;
+            }
+
+            .tipsBtn2 {
+                left: 100px;
+                top: 300px;
+            }
+
+            .tipsBtn3 {
+                left: 300px;
+                top: 300px;
+            }
+
+            .tipsBtn4 {
+                left: 300px;
+                top: 100px;
+            }
+
+            table  tr  td {
+                text-align: left;
+                padding: 5px;
+                height: 22px;
+            }
+            .td-label{
+                width: 80px;
+            }
+            .td-item{
+                width: 150px;
+            }
+        </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="page-header">
+            <table cellpadding="5">
+                <tr>
+                    <td class="td-label">查询类型：</td>
+                    <td class="td-item">
+                        <select class="easyui-combobox" name="language" style="width:140px;height: 22px;">
+                            <option value="ar">能耗</option>
+                            <option value="ar">能耗1</option>
+                            <option value="ar">能耗2</option>
+                            <option value="ar">能耗3</option>
+                            <option value="ar">能耗4</option>
+                            <option value="ar">能耗5</option>
+                            <option value="ar">能耗6</option>
+                            <option value="ar">能耗7</option>
+
+                        </select>
+                    </td>
+
+                    <td class="td-label">查询方式：</td>
+                    <td class="td-item">
+                        <select class="easyui-combobox" name="language" style="width:140px;height: 22px;">
+                            <option value="ar">趋势</option>
+                            <option value="ar">趋势1</option>
+                            <option value="ar">趋势2</option>
+                            <option value="ar">趋势3</option>
+                            <option value="ar">趋势4</option>
+                            <option value="ar">趋势5</option>
+                            <option value="ar">趋势6</option>
+                        </select>
+                    </td>
+
+                    <td class="td-label">能源介质：</td>
+                    <td class="td-item">
+                        <select class="easyui-combobox" name="language" style="width:140px;height: 22px;">
+                            <option value="ar">电力</option>
+                            <option value="ar">电力1</option>
+                            <option value="ar">电力2</option>
+                            <option value="ar">电力3</option>
+                            <option value="ar">电力4</option>
+                            <option value="ar">电力5</option>
+                        </select>
+                    </td>
+
+                    <td class="td-label"> 范围类型：</td>
+                    <td class="td-item">
+                        <select class="easyui-combobox" name="language" style="width:140px;height: 22px;">
+                            <option value="ar">工序</option>
+                            <option value="ar">工序1</option>
+                            <option value="ar">工序2</option>
+                            <option value="ar">工序3</option>
+                            <option value="ar">工序4</option>
+                            <option value="ar">工序5</option>
+                            <option value="ar">工序6</option>
+                        </select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="td-label">选择工序：</td>
+                    <td class="td-item">
+                        <select class="easyui-combobox" name="language" style="width:140px;height: 22px;">
+                            <option value="ar">熟料工序</option>
+                            <option value="ar">熟料工序1</option>
+                            <option value="ar">熟料工序2</option>
+                            <option value="ar">熟料工序3</option>
+                            <option value="ar">熟料工序4</option>
+                            <option value="ar">熟料工序5</option>
+                        </select>
+                    </td>
+                    <td class="td-label">能耗单元：</td>
+                    <td class="td-item">
+                        <select class="easyui-combotree" data-options="url:'../../../statics/rdp/common/file/city_data.json',method:'get'"  multiple name="city"  style="width:140px;height: 22px;"/>
+                    </td>
+
+                    <td class="td-label">报表类型：</td>
+                    <td class="td-item">
+                        <select class="easyui-combobox" name="language"  style="width:140px;height: 22px;">
+                            <option value="ar">年度</option>
+                            <option value="ar">季度</option>
+                            <option value="ar">周</option>
+                        </select>
+                    </td>
+
+                    <td class="td-label">选择时间：</td>
+                    <td class="td-item">
+                        <input class="easyui-datebox" style="width:140px;height: 22px;"/>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-excel'">导出</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-back'">返回</a>
+                    </td>
+                </tr>
+            </table>
+
+             <form style="display:none;" class="form-inline" id="btnSearch" action="/RDP-SERVER/rdppage/show/c5913481563309808c929e53b9a7b9e0"
+                method="post" target="ifmreport">
+                <div class="form-group">
+                    <label for="exampleInputName2">客户编号</label>
+                    <input type="text" class="form-control" name="cif_no" placeholder="客户编号" value="50">
+                </div>
+
+                <a class="btn btn-default" onclick="query()">查询</a>
+            </form> 
+        </div>
+    </div>
+
+
+    <!-- 
+    <div type="button" class="tipsBtn tipsBtn1" data-toggle="tooltip" data-placement="left" title="Tooltip on left"><i
+            class="fa fa-question"></i></div>
+
+    <div type="button" class="tipsBtn tipsBtn2" data-toggle="tooltip" data-placement="top" title="Tooltip on top"><i
+            class="fa fa-question"></i></div>
+
+    <div type="button" class="tipsBtn tipsBtn3" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"><i
+            class="fa fa-question"></i></div>
+
+    <div type="button" class="tipsBtn tipsBtn4" data-toggle="tooltip" data-placement="right" title="Tooltip on right"><i
+            class="fa fa-question"></i></div> -->
+
+
+    <iframe id="ifmreport" name="ifmreport" src="about:blank" frameborder="0" style="width:  90%;height: calc(100% - 130px);margin: 0 auto;"></iframe>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            query();
+
+            var intro = introJs();
+            intro.setOptions({
+                steps: [{
+                        element: '#btnSearch',
+                        intro: '自定义查询条件结合',
+                        position: 'bottom'
+                    },
+                    {
+                        element: '#ifmreport',
+                        intro: "报表结合展示区域",
+                        position: 'top'
+                    }
+                ]
+            });
+
+            intro.setOptions({
+                nextLabel: '下一步 &rarr;',
+                prevLabel: '&larr; 上一步',
+                skipLabel: '跳过',
+                doneLabel: "完成",
+                exitOnOverlayClick: false,
+                exitOnEsc: false,
+                showBullets: false
+            }).start();
+        });
+
+        function query() {
+            $("#btnSearch").submit();
+        }
+    </script>
+</body>
+
+</html>

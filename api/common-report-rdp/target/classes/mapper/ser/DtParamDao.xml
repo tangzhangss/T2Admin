@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.report.modules.ser.dao.DtParamDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.report.modules.ser.entity.DtParamEntity" id="dtParamMap">
+        <result property="paramId" column="param_id"/>
+        <result property="paramName" column="param_name"/>
+        <result property="dtId" column="dt_id"/>
+        <result property="paramType" column="param_type"/>
+        <result property="dataType" column="data_type"/>
+        <result property="ifValues" column="if_values"/>
+        <result property="txTime" column="tx_time"/>
+        <result property="upTime" column="up_time"/>
+        <result property="txOp" column="tx_op"/>
+        <result property="upOp" column="up_op"/>
+    </resultMap>
+
+
+</mapper>

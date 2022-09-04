@@ -1,0 +1,24 @@
+.tag-progress {
+    width: 100%;
+    height: 100%;
+    background-color: #415b7e;
+    position: relative;
+}
+
+.tag-progress-bar {
+    height: 100%;
+    background-color: #dceafd;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 8;
+    transition: 0.3s all;
+}
+.tag-progress-percent {
+    right: 10px;
+    color: #dceafd;
+    position: absolute;
+    top: 50%;
+    z-index: 9;
+    transform: translateY(-50%);
+}

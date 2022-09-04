@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "yyyyMM": "9月",
+      "value1": 7549,
+      "value4": 26595
+    },
+    {
+      "yyyyMM": "10月",
+      "value1": 5934,
+      "value4": 17337
+    },
+    {
+      "yyyyMM": "11月",
+      "value1": 7634,
+      "value4": 17826
+    },
+    {
+      "yyyyMM": "12月",
+      "value1": 5300,
+      "value4": 16205
+    },
+    {
+      "yyyyMM": "1月",
+      "value1": 5879,
+      "value4": 17947
+    },
+    {
+      "yyyyMM": "2月",
+      "value1": 5349,
+      "value4": 20350
+    },
+    {
+      "yyyyMM": "3月",
+      "value1": 6177,
+      "value4": 16307
+    }
+  ]
+}

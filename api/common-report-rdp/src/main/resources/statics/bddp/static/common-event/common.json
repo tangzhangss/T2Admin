@@ -1,0 +1,62 @@
+{
+    "events": [{
+            "name": "引用其他页面",
+            "type": "all",
+            "desc": "引用其他页面，一般配合“隐藏引用的页面”函数使用",
+            "fun": "showOtherBddp({url:'请求链接',\nwidth:'宽度',\nheight:'高度',\nfromTop:'起始Y坐标',\nfromLeft:'起始X坐标',\ntranslateX:'X轴偏移',\ntranslateY:'Y轴偏移',\ntranslateZ:'Z轴偏移',\nrotateX:'X轴旋转',\nrotateY:'Y轴旋转',\nrotateZ:'Z轴旋转',\ntoWidth:'最终宽度',\ntoHeight:'最终高度',\ntoTop:'终点Y坐标',\ntoLeft:'终点X坐标'})"
+        },
+        {
+            "name": "隐藏引用的页面",
+            "type": "all",
+            "desc": "隐藏引用的页面",
+            "fun": "hideOtherBddp({width:'宽度',\nheight:'高度',\nfromTop:'终点Y坐标',\nfromLeft:'终点X坐标',\ntranslateX:'X轴偏移',\ntranslateY:'Y轴偏移',\ntranslateZ:'Z轴偏移',\nrotateX:'X轴旋转',\nrotateY:'Y轴旋转',\nrotateZ:'Z轴旋转',\ntoWidth:'起始宽度',\ntoHeight:'起始高度',\ntoTop:'起始Y坐标',\ntoLeft:'起始X坐标'})"
+        },
+        {
+            "name": "获取当前组件JQuery对象",
+            "type": "all",
+            "desc": "获取当前组件JQuery对象",
+            "param":"id",
+            "fun": "var jqTag =  $('#tag-${id}')"
+        },
+        {
+            "name": "获取当前组件echarts实例",
+            "type": "chart",
+            "desc": "获取当前组件echarts实例",
+            "param":"id",
+            "fun": "var chart =  echarts.getInstanceByDom($('#tag-${id}')[0])"
+        }, {
+            "name": "单个组件点击放大",
+            "type": "all",
+            "desc": "单个组件点击放大",
+            "param":"id",
+            "fun": "enlargeTag('${id}')"
+        }, {
+            "name": "多个组件点击放大",
+            "type": "all",
+            "desc": "多个组件点击放大",
+            "param":"id",
+            "fun": "enlargeTags(['${id}'])"
+        },
+        {
+            "name": "点击动态列表行事件",
+            "type": "table",
+            "desc": "点击动态列表行事件",
+            "param":"id",
+            "fun": "$('#tag-${id}').rowOnclick(function(values){\nconsole.log(values)//行包含的值\n})"
+        },
+        {
+            "name": "双击动态列表行事件",
+            "type": "table",
+            "desc": "双击动态列表行事件",
+            "param":"id",
+            "fun": "$('#tag-${id}').rowOnDbclick(function(values){\nconsole.log(values)//行包含的值\n})"
+        },
+        {
+            "name": "文字组件滚动",
+            "type": "text",
+            "desc": "文字组件滚动",
+            "param":"id",
+            "fun": "textScroll(['#tag-${id}'],function(){\n  return [new Date().getTime()];//返回值必须是数组与需要滚动的组件索引对应\n},3000)"
+        }
+    ]
+}

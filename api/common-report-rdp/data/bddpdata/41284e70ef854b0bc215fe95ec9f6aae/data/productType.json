@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "productName": "涉农类产品",
+      "count": 6
+    },
+    {
+      "productName": "双创类产品",
+      "count": 8
+    },
+    {
+      "productName": "小微类产品",
+      "count": 10
+    },
+    {
+      "productName": "信用类产品",
+      "count": 24
+    },
+    {
+      "productName": "其他",
+      "count": 63
+    }
+  ]
+}

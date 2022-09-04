@@ -1,0 +1,12 @@
+body{margin:0;font-size:12px;}
+.skinTrees .current{padding:5px 10px;margin:15px;list-style:none;}
+.skinTrees .current li{font-size:14px;cursor:pointer;margin-top:2px;line-height:28px;}
+.skinTrees .current li:hover{background:#DDF4FF;}
+.skinTrees .current li.cur{background:#5BC8FF;}
+.skinCustomInfo .skincss{
+	padding:5px;
+}
+.skinCustomInfo .jscolor {
+	width: 70px;
+	height: 20px;
+}

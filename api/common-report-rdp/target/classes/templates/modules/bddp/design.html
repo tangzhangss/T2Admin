@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>大屏幕设计器</title>
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/reset.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/contextjs/context.standalone.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/spectrum/spectrum.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/json-viewer/jquery.jsonview.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/ruler/css/ruler.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/loading.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/ledtime/digital-clock.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/intro/introjs.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/select2/css/select2.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/swiper/swiper-3.4.2.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/autoscroll/autoscroll.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/detailTag/detailTag.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/tabs/tab.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/tags.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/design/design.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/design/box.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/design/prop.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/design/phoneview.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/design/bg.css">
+	<script>
+		if (typeof module === 'object') {
+			window.module = module;
+			module = undefined;
+		}
+	</script>
+	<script src="${request.contextPath}/statics/bddp/static/common/jquery/jquery-1.11.0.js"></script>
+	<script>
+	if (window.module) module = window.module;
+	</script>
+	<script src="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/UnloadConfirm.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/echarts/echarts.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/pandyle/pandyle.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/mousewheel/jquery.mousewheel.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/mousetrap/mousetrap.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/html2canvas/html2canvas.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/contextjs/context.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/scale.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/transform.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/canvas2image/canvas2image.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/spectrum/spectrum.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/json-viewer/jquery.jsonview.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/ruler/js/jquery.zxxPageRuler.1.1.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/clipboard/clipboard.min.js"></script>
+	<!-- <script src="${request.contextPath}/statics/bddp/static/common/jsoneditor/jsoneditor.min.js"></script> -->
+	<script src="${request.contextPath}/statics/bddp/static/common/md5/md5.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/ledtime/digital-clock.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/intro/intro.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/select2/js/select2.full.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/swiper/swiper-3.4.2.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/autoscroll/autoscroll.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/undo/undo.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/boxSelect/boxSelect.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/cache/jquery.cache.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/laydate/laydate.js"></script>
+
+	<script src="${request.contextPath}/statics/bddp/static/common/autoHeader/jquery.autoHeader.all.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/detailTag/detailTag.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/tabs/jqtab.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/tagConfig/tagStyle.js"></script>
+
+	<script src="${request.contextPath}/statics/plugins/waterfall/jquery.waterfall.js"></script>
+
+	<script src="${request.contextPath}/statics/bddp/web/dataTools.js"></script>
+	<script src="${request.contextPath}/statics/bddp/web/base64.js"></script>
+	<script src="${request.contextPath}/statics/bddp/web/MD5.js"></script>
+	<script src="${request.contextPath}/statics/bddp/web/SHA1.js"></script>
+	<script src="${request.contextPath}/statics/libs/base64Util.js"></script>
+
+	<script src="${request.contextPath}/statics/bddp/static/designv2/js/common.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/design.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/box.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/prop.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/param.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/bulidTags.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/tagEdit.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/groupboxs.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/getConfig.js"></script>
+	<!-- <script src="${request.contextPath}/statics/bddp/static/design/fileUtils.js"></script> -->
+	<script src="${request.contextPath}/statics/bddp/static/design/diyTags.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/editEvent.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/effect.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/import.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/hidepanel.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/design/phoneview.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/export/export.js"></script>
+	<!-- <script src="${request.contextPath}/statics/bddp/static/design/shell.js"></script> -->
+
+	<script src="${request.contextPath}/statics/bddp/static/common/ace/ace.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/ace/ext-error_marker.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/ace/ext-spellcheck.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/ace/ext-options.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/ace/mode-javascript.js"></script>
+	<script>
+		$(document).ready(() => {
+
+			/**
+			 * 加载JS函数
+			 * @param  {String}   js js地址
+			 * @return {Promise}     返回Promise操作对象
+			 */
+			function loadJS(js) {
+				loadingFile(js);
+				return new Promise((res, rej) => {
+					let script = document.createElement('script');
+					script.src = js;
+					script.onload = res;
+					document.head.appendChild(script);
+				});
+			}
+
+			/**
+			 * 加载CSS函数
+			 * @param  {String}   css css地址
+			 * @return {Promise}      返回Promise操作对象
+			 */
+			function loadCSS(css) {
+				loadingFile(css);
+				return new Promise((res, rej) => {
+					let style = document.createElement('link');
+					style.rel = 'stylesheet';
+					style.href = css;
+					style.onload = res;
+					document.head.appendChild(style);
+				});
+			}
+
+
+			$("#tabs").tabs({
+				beforeLoad: function (event, ui) {
+					if (ui.ajaxSettings.url == "component/material.html") {
+						$(".layout-Sider").css({
+							"width": "500px"
+						});
+						$("#tabs.ui-tabs .ui-tabs-panel").css({
+							"width": "470px"
+						});
+					} else {
+						$(".layout-Sider").css({
+							"width": "160px"
+						});
+						$("#tabs.ui-tabs .ui-tabs-panel").css({
+							"width": "130px"
+						});
+
+					}
+					ui.jqXHR.error(function () {
+						ui.panel.html(
+							"不能加载该标签页。如果这不是一个演示。" +
+							"我们会尽快修复这个问题。");
+					});
+				}
+			}).addClass("ui-tabs-vertical ui-helper-clearfix");
+			$("#tabs li").removeClass("ui-corner-top").addClass("ui-corner-left");
+
+			$(document).on("click", "#design-config", function () {});
+
+			window.onload = function () {
+				/*setTimeout(function(){
+				resizeContent();
+				initSeniorConfig();
+				$(".loading-body").fadeOut(function () {
+	
+				});
+			}, 1000); */
+				setTimeout(function () {
+					resizeContent();
+					initSeniorConfig();
+					$(".bg").fadeOut();
+				}, 1000);
+			}
+		});
+	</script>
+
+</head>
+
+<body>
+	<!-- <div class="loading-body">
+		<div class="loading-container">
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="loading-logo"></div>
+		</div>
+
+	</div> -->
+
+	<div class="bg">
+		<div class="spinner">
+			<div class="rect1"></div>
+			<div class="rect2"></div>
+			<div class="rect3"></div>
+			<div class="rect4"></div>
+			<div class="rect5"></div>
+		</div>
+	</div>
+
+
+	<div class="layout layout-Header">
+		<div class="logo">大屏幕设计器</div>
+		<ul class="tools tools-left" data-step="1" data-intro="在这里新建、打开、保存当前模版">
+			<li class="tools-item" id="tools-new"><i title="新建" class="fa fa-file-o"></i></li>
+			<li class="tools-item" id="tools-open"><i title="资源库" class="fa fa-folder-open-o"></i></li>
+			<li class="tools-item" style="display:none;" id="tools-open-old"><i title="资源库(旧)"
+					class="fa fa-folder-open-o"></i></li>
+			<li class="tools-item" id="tools-save"><i title="保存" class="fa fa-save"></i></li>
+			<!-- <li class="tools-item" id="tools-test"><i title="测试" class="fa fa-legal"></i></li> -->
+		</ul>
+		<!-- <span class="title">大屏幕数据设计器</span> -->
+		<!-- <div class="dragHandle">
+
+		</div> -->
+		<ul class="tools" data-step="5" data-intro="整个场景的配置属性都在这里了">
+
+			<li class="tools-item" id="tools-scene"><i title="页面配置" class="fa fa-television"></i></li>
+			<li class="tools-item" id="tags-props"><i title="组件属性配置" class="fa fa-sliders"></i></li>
+			<!-- <li class="tools-item" id="tools-prop">
+				<i title="属性配置" class="fa fa-sliders"></i>
+			</li> -->
+			<li class="tools-item" id="tools-database"><i title="数据配置" class="fa fa-database"></i></li>
+			<li class="tools-item" id="tools-dataSetsConfig"><i title="数据集配置" class="fa fa-cubes"></i></li>
+			<li class="tools-item" id="tools-sitemap"><i title="资源树" class="fa fa-sitemap"></i></li>
+			<li class="tools-item" id="tools-hidepanel"><i title="图表显隐设置" class="fa fa-list-alt"></i></li>
+
+			<!-- <li class="tools-item" id="tools-view">
+				<i title="预览" class="fa fa-eye"></i>
+			</li> -->
+			<li class="tools-item" id="tools-view"><i title="预览" class="fa fa-eye"></i></li>
+			<li class="tools-item" id="tools-phoneview"><i title="移动端布局" class="fa fa-mobile"></i></li>
+			<!-- <li class="tools-item" id="tools-publish" data-step="6" data-intro="发布功能在这里，配置完的报表，发布一下"><i title="发布" class="fa fa-send"></i></li> -->
+			<li style="display: none;" class="tools-item" id="design-config"><i title="设置" class="fa fa-cog"></i></li>
+			<li class="tools-item" id="tools-shortcutkey" data-step="7" data-intro="快捷键说明在这里，熟悉快捷键，事半功倍哦"><i title="快捷键"
+					class="fa fa-keyboard-o"></i></li>
+			<!-- <li class="tools-item" id="tools-about">
+				<i title="关于" class="fa fa-question-circle-o"></i>
+			</li> -->
+			<!-- <li class="tools-item" id="prop-config">
+				<i title="属性设置" class="fa fa-cog"></i>
+			</li>  -->
+			<!-- 		<li class="tools-item driver"></li>
+			<li class="tools-item min" title="最小化"></li>
+			<li class="tools-item max on" title="最大化"></li>
+			<li class="tools-item close" title="关闭"></li> -->
+			<li class="tools-item" id="tools-clearCache" title="清理本地缓存"><i title="清理本地缓存" class="fa fa-recycle"></i>
+			</li>
+		</ul>
+	</div>
+	<div class="layout layout-Sider" data-step="2" data-intro="拖拽控件到场景中，创建图形">
+		<div id="tabs">
+			<ul>
+				<li><a href="component/charts.html">图表</a></li>
+				<li><a href="component/tags.html">组件</a></li>
+				<li><a href="component/table.html">列表</a></li>
+				<li><a href="component/detail.html">详情</a></li>
+				<li><a href="component/filter.html">筛选</a></li>
+
+				<li><a href="component/material.html">素材</a></li>
+				<li><a href="component/diyTags.html">自定义组件</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="layout layout-Content">
+		<div id="content" style="width: 1920px; height: 1080px;" data-step="3" data-intro="场景图形展示区，配置好的图形会在这里展示">
+			<div id="contentHandle"></div>
+			<!--拖动辅助线-->
+
+			<div id="guide-h" class="guide"></div>
+			<div id="guide-v" class="guide"></div>
+		</div>
+
+	</div>
+	<div id="rightnav" data-step="4" data-intro="控件属性数据配置区，在这里首先配置好控件的数据，然后修改控件的属性。">
+		<i class="rightnav-close fa fa-angle-double-right"></i>
+		<ul class="rightnav-tabs-ul">
+			<li class="rightnav-tab"><a href="#data-box">数据</a></li>
+			<li class="rightnav-tab"><a href="#config-box">属性</a></li>
+			<li class="rightnav-tab"><a href="#senior-box">扩展</a></li>
+			<li class="rightnav-tab"><a href="#param-box">参数</a></li>
+
+		</ul>
+		<div id="data-box" class="layout layout-Rightnav">
+			<div class="container" style="padding: 10px;">
+				<div class="row">
+					<div class="col-md-12">
+						<label for="" class="input-title">数据来源</label> <label for="dataFromRadio-1">全局数据源</label> <input
+							type="radio" value="1" name="dataFromRadio" id="dataFromRadio-1"> <label
+							for="dataFromRadio-2">请求链接</label> <input type="radio" value="2" name="dataFromRadio"
+							id="dataFromRadio-2"> <label for="dataFromRadio-3">JSON文件</label> <input type="radio"
+							value="3" name="dataFromRadio" id="dataFromRadio-3">
+						<label for="dataFromRadio-4">数据集</label>
+						<input type="radio" value="4" name="dataFromRadio" id="dataFromRadio-4">
+					</div>
+
+				</div>
+				<div class="row" id="datalinkRow">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="datalink">链接地址</label> <input type="text" class="form-control" id="datalink"
+								value="" />
+							<button type="button" id="selectJSONFile"
+								class="btn btn-primary btn-block">选择JSON文件</button>
+						</div>
+						<button type="submit" id="datalinkBtn" class="btn btn-primary btn-sm">获取数据格式</button>
+					</div>
+
+				</div>
+				<div class="row" id="dataSetsRow" style="display: none;">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="datalink">可用数据集</label> <select name="" id="dataSetsSelect"
+								style="width: 340px;"></select>
+							<button type="button" id="refreshDataSetsListBtn" class="btn btn-secondary">
+								<i class="fa fa-refresh"></i>
+							</button>
+							<!-- <input type="text" class="form-control" id="datalink" value="" /> -->
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<div class="row" id="server-dimension">
+								<div class="col-md-12">
+									<p class="lead">X轴</p>
+									<div class="data-dimension data-dimension-sets"></div>
+								</div>
+							</div>
+							<div class="row" id="server-series">
+								<div class="col-md-12">
+									<p class="lead">Y轴</p>
+									<div class="data-series data-series-sets"></div>
+								</div>
+							</div>
+							<div class="row" id="server-classify" style="display: none">
+								<div class="col-md-12">
+									<p class="lead">分类</p>
+									<div class="data-classify data-classify-sets"></div>
+								</div>
+							</div>
+
+						</div>
+
+						<!-- <div class="row">
+								<div class="col-md-12">
+									<p class="lead">图例<input type="text" class="form-control" id="inputLegend" value=""><i id="addLegendBtn" class="fa fa-plus"></i></p>
+									
+									<div class="data-legend data-legend-sets"></div>
+								</div>
+							</div> -->
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p id="data-show"></p>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<button type="button" id="datalinkSaveBtn" class="btn btn-primary btn-sm">确认</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- <div id="data-panel">
+				<div class="">链接地址</div>
+				<input type="text" id="datalink">
+				<button type="button" id="datalinkBtn">测试连接</button>
+				<div class="data-show" id="data-show">
+	
+				</div>
+			</div> -->
+
+		</div>
+		<div id="config-box" class="layout layout-Rightnav">
+			<div id="config-panel"></div>
+
+
+		</div>
+		<div id="senior-box" class="layout layout-Rightnav">
+			<div id="senior-panel"></div>
+			<button id="jsoneditorSaveBtn" type="button">确认</button>
+		</div>
+		<div id="param-box" class="layout layout-Rightnav">
+			<div class="param-btns">
+				<button id="add-param" class="param-btn" type="button">添加</button>
+				<button id="save-param" class="param-btn" type="button">确认</button>
+			</div>
+			<div id="param-panel">
+
+			</div>
+		</div>
+
+
+	</div>
+	<div class="hide-panel">
+		<!-- <button type="button" class="addpanel"><i class="fa fa-plus" aria-hidden="true"></i></button> -->
+		<ul id="hide-boxs">
+
+		</ul>
+	</div>
+
+	<div class="stiemap">
+		<i id="sitemapSwitch" class="fa fa-close"></i>
+		<ul id="sitemap">
+
+		</ul>
+	</div>
+	<div class="scene" id="scene">
+		<h4>场景设置</h4>
+		<div class="inputGroup">
+			<label for="" class="input-title">场景名称</label> <input type="text" style="width: 284px;" id="sceneName"
+				class="input-item">
+		</div>
+		<div class="inputGroup">
+			<label for="" class="input-title">推荐尺寸</label>
+			<label for="sceneSizeRadio-1">1920*1080</label>
+			<input type="radio" value="1920*1080" name="sceneSizeRadio" id="sceneSizeRadio-1">
+			<label for="sceneSizeRadio-2">2560*1440</label>
+			<input type="radio" value="2560*1440" name="sceneSizeRadio" id="sceneSizeRadio-2">
+			<label for="sceneSizeRadio-3">3840*1600</label>
+			<input type="radio" value="3840*1600" name="sceneSizeRadio" id="sceneSizeRadio-3">
+			<label for="sceneSizeRadio-4">4096*2160</label>
+			<input type="radio" value="4096*2160" name="sceneSizeRadio" id="sceneSizeRadio-4">
+		</div>
+		<div class="inputGroup">
+			<label for="" class="input-title">自定义</label> <input type="text" id="sceneW" placeholder="宽"
+				class="input-item">
+			<span class="input-unit">px</span> <span>*</span> <input type="text" id="sceneH" placeholder="高"
+				class="input-item">
+			<span class="input-unit">px</span>
+		</div>
+		<div class="inputGroup">
+			<label for="" class="input-title">背景颜色</label> <input id="scenebgcolor" />
+		</div>
+		<div class="inputGroup">
+			<label for="" class="input-title">全局主题</label>
+			<label for="globalThemeRadio-1">默认</label>
+			<input type="radio" value="default" name="globalTheme" id="globalThemeRadio-1">
+			<label for="globalThemeRadio-2">Dark</label>
+			<input type="radio" value="dark" name="globalTheme" id="globalThemeRadio-2">
+			<label for="globalThemeRadio-3">Halloween</label>
+			<input type="radio" value="halloween" name="globalTheme" id="globalThemeRadio-3">
+			<label for="globalThemeRadio-4">Walden</label>
+			<input type="radio" value="walden" name="globalTheme" id="globalThemeRadio-4">
+			<label for="globalThemeRadio-5">Westeros</label>
+			<input type="radio" value="westeros" name="globalTheme" id="globalThemeRadio-5">
+			<label for="globalThemeRadio-6">Wonderland</label>
+			<input type="radio" value="Wonderland" name="globalTheme" id="globalThemeRadio-6">
+
+			<!-- <ul>
+					<li></li>
+				</ul> -->
+		</div>
+		<div class="inputGroup">
+			<label for="" class="input-title">缩放方式</label>
+			<label for="globalZoomRadio-0">默认</label>
+			<input type="radio" value="0" name="globalZoom" id="globalZoomRadio-0">
+			<label for="globalZoomRadio-1">宽度</label>
+			<input type="radio" value="1" name="globalZoom" id="globalZoomRadio-1">
+			<label for="globalZoomRadio-2">高度</label>
+			<input type="radio" value="2" name="globalZoom" id="globalZoomRadio-2">
+			<label for="globalZoomRadio-3">不缩放</label>
+			<input type="radio" value="3" name="globalZoom" id="globalZoomRadio-3">
+		</div>
+
+		<div class="inputGroup">
+			<label for="" class="input-title">背景图片</label> <input type="text" style="width: 284px;" id="bdbgPath"
+				class="input-item">
+			<button class="scene-addBgBtn" type="button">
+				<i class="fa fa-plus"></i>添加图片
+			</button>
+			<button class="scene-selectBgBtn" type="button">
+				<i class="fa fa-object-group"></i>从素材库中选择
+			</button>
+
+		</div>
+		<div class="inputGroup">
+			<label for="" class="input-title">过滤方式</label>
+			<label for="filterWayRadio-1">局部刷新</label>
+			<input type="radio" value="1" name="filterWayRadio" id="filterWayRadio-1">
+			<label for="filterWayRadio-2">全局刷新</label>
+			<input type="radio" value="2" name="filterWayRadio" id="filterWayRadio-2">
+
+		</div>
+		<!-- <ul class="bgimglist">
+			<li style="background-image: url(../../statics/bddp/static/img/bg/1.jpg)"></li>
+			<li style="background-image: url(../../statics/bddp/static/img/bg/2.jpg)"></li>
+			<li style="background-image: url(../../statics/bddp/static/img/bg/3.jpg)"></li>
+			<li style="background-image: url(../../statics/bddp/static/img/bg/4.jpg)"></li>
+			<li style="background-image: url(../../statics/bddp/static/img/bg/5.png)"></li>
+			<li style="background-image: url(../../statics/bddp/static/img/bg/6.jpg)"></li>
+		</ul> -->
+		<button type="button" id="sceneBtn" class="bd-btn scene-btn fa fa-angle-double-up"></button>
+	</div>
+	<div class="system" id="system"></div>
+	<div class="file-content">
+		<i class="close-file fa fa-close"></i>
+		<ul id="file-list">
+		</ul>
+	</div>
+	<div class="database-content scene">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-group">
+					<label for="" class="input-title">数据类型</label> <label for="globalDataFrom-1">请求链接</label> <input
+						type="radio" value="1" name="globalDataFrom" id="globalDataFrom-1" checked> <label
+						for="globalDataFrom-2">JSON文件</label>
+					<input type="radio" value="2" name="globalDataFrom" id="globalDataFrom-2">
+				</div>
+				<div class="form-group">
+					<div id="globalDataFromDiv-1" class="globalDataFromDiv">
+						<label for="globalDataUrl">请求链接:</label>
+						<textarea class="form-control" id="globalDataUrl" rows="3"></textarea>
+					</div>
+					<div id="globalDataFromDiv-2" class="globalDataFromDiv" style="display: none;">
+						<button type="button" id="selectGlobalJSONFile"
+							class="btn btn-primary btn-block">选择JSON文件</button>
+					</div>
+					<button type="button" id="getGlobalDataBtn" class="btn btn-primary btn-block">获取数据</button>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-body">
+				<div id="globalJSONShow"></div>
+
+			</div>
+		</div>
+
+		<button type="button" id="databaseBtn" class="bd-btn scene-btn fa fa-angle-double-up"></button>
+	</div>
+	<div class="global-config scene">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-group">
+					<label for="globalDataUrl">服务地址:</label> <input class="form-control" id="rdpserver"
+						name="rdpserver" />
+
+				</div>
+				<div class="form-group">
+					<label for="globalDataUrl">服务运行jar:</label> <input class="form-control" id="jarpath"
+						name="jarpath" /> <label for="globalDataUrl">服务端口号:</label>
+					<input class="form-control" id="serverport" name="serverport" />
+
+				</div>
+				<div class="form-group">
+					<button type="button" style="color: #ffffff;" id="runServerBtn"
+						class="btn btn-outline-primary btn-block">
+						<i style="color: #ffffff;" class="fa fa-play"></i>启动服务
+					</button>
+					<!-- <button type="button" id="stopServerBtn">停止服务</button> -->
+				</div>
+				<div class="form-group">
+					<label for="globalDataUrl">数据库链接:</label> <input class="form-control" id="dbpath" name="dbpath" />
+					<label for="globalDataUrl">数据库用户名:</label>
+					<input class="form-control" id="dbusername" name="dbusername" /> <label
+						for="globalDataUrl">数据库密码:</label> <input class="form-control" id="dbpassword"
+						name="dbpassword" />
+
+				</div>
+				<div class="form-group">
+					<button type="button" class="btn btn-block btn-secondary" id="saveGlobalConfigBtn">保存配置</button>
+				</div>
+			</div>
+		</div>
+
+		<button type="button" id="globalConfigBtn" class="bd-btn scene-btn fa fa-angle-double-up"></button>
+	</div>
+	<div id="diyTagsForm" style="display:none;">
+		<div class="card" style="background-color: #263954;">
+			<div class="card-body">
+				<form>
+					<div class="form-group">
+						<label for="exampleInputEmail1">组件名称</label>
+						<input type="text" class="form-control" id="groupName" name="groupName" placeholder="组件名称">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">组件图标</label>
+						<input type="text" class="form-control" id="groupIcon" name="groupIcon" placeholder="组件图标">
+						<small class="form-text text-muted">参考：http://fontawesome.dashgame.com</small>
+					</div>
+					<button type="button" class="btn btn-dark" id="saveDiyTagsBtn" style="float: right;">保存</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

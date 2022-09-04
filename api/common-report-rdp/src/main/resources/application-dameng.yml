@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: dm.jdbc.driver.DmDriver
+    druid:
+      first:  #数据源1
+        url: jdbc:dm://127.0.0.1:5236/RDP_SERVER
+        username: RDP_SERVER
+        password: RDP_SERVER
+        connection-error-retry-attempts: 1
+        break-after-acquire-failure: true
+      second:  #数据源2
+        url: jdbc:dm://127.0.0.1:5236/RDP_SERVER
+        username: RDP_SERVER
+        password: RDP_SERVER
+        connection-error-retry-attempts: 0
+        break-after-acquire-failure: true
+      initial-size: 10
+      max-active: 100
+      min-idle: 1
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        #login-username: admin
+        #login-password: admin
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true

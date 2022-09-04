@@ -1,0 +1,36 @@
+body{margin:0}
+.bottom{position:fixed;bottom:0;}
+#toolbar{width:100%;min-width:1000px;height:32px;background:#e6e5e5;font-size:12px;border-top:1px solid #ccc;border-bottom:1px solid #ccc;display:none;overflow:hidden}
+#toolbar li,#toolbar ul{list-style:none;margin:0;padding:0}
+#toolbar li{display:inline-block}
+#toolbar .operate{float:left;width:30%;padding:5px 10px;text-align:left}
+#toolbar .pagination{float:right;width:60%;padding:5px 10px;text-align:right}
+#toolbar .operate a{display:inline-block;text-indent:25px;color:#000;text-decoration:none;margin-right:15px}
+#toolbar .operate a:hover{color:#00a3ff}
+#toolbar .operate a.print{background:url(../../images/pageImg2.png) no-repeat}
+#toolbar .operate a.export{background:url(../../images/pageImg1.png) no-repeat}
+#toolbar .operate p{width:70px;padding:10px;border:1px solid #ccc;position:absolute;background:#f6f6f5;z-index:10;margin-left:-15px;margin-top:-22px;visibility:hidden}
+#toolbar .operate p a{padding:5px 0}
+#toolbar .operate p a.excel{background:url(../../images/excel.png) left center no-repeat}
+#toolbar .operate p a.word{background:url(../../images/word.png) left center no-repeat}
+#toolbar .operate p a.pdf{background:url(../../images/pdf.png) left center no-repeat}
+#toolbar .operate li.exp:hover p{visibility:visible}
+#toolbar .operate a.save{background:url(../../images/pageImg5.png) no-repeat}
+#toolbar .pagination input{background:0 0;border:none}
+#toolbar .pagination input[type="button"]{cursor:pointer}
+#toolbar .pagination input[type="button"]:disabled {cursor:default}
+#toolbar .pagination #pagefirst{width:45px;margin-left:10px;padding-left:20px;background:url(../../images/first.png) left center no-repeat}
+#toolbar .pagination #pageprev{width:60px;padding-left:15px;background:url(../../images/previous.png) left center no-repeat}
+#toolbar .pagination #pageindex{width:30px;border:1px solid #666}
+#toolbar .pagination #pagenext{width:60px;padding-left:15px;background:url(../../images/next.png) left center no-repeat}
+#toolbar .pagination #pagelast{width:45px;padding-left:20px;background:url(../../images/last.png) left center no-repeat}
+table{border-collapse:collapse;background:#fff;margin:auto}
+.normal{padding:0;margin:0;width:100%;min-width:1000px;height: calc(100% - 34px);}
+.normal>div{padding: 0px 0px 10px 0px;position: relative;width: 100%;height:calc(100% + 10px);overflow: auto;}
+.dynamic .rtitle td label{vertical-align:middle;margin:auto}
+.dynamic .rhead td label{vertical-align:middle}
+.dynamic label{display:block;overflow:hidden;margin:0;padding:0 2px;text-overflow:ellipsis;-moz-text-overflow:ellipsis}
+tfoot td{vertical-align:middle;overflow-y:hidden}
+table tbody td.link,table tbody td.link label{cursor:pointer!important;color:#00f!important}
+.dynamic tbody td div{height:auto!important;overflow:hidden!important}
+.normal td {padding-left: 2px;word-break: break-all;}

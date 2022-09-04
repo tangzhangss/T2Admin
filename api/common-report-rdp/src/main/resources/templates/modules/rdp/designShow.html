@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>预览</title>
+    <link rel="stylesheet" href="${request.contextPath}/statics/rdp/css/preview.css" />
+    <script type="text/javascript" src="${request.contextPath}/statics/rdp/common/all/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/statics/plugins/laydate/laydate.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/statics/plugins/popupSelection/popupSelection.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/statics/libs/base64Util.js"></script>
+    <style type="text/css">
+	    #searchaddition {height: auto;}
+	    input#searchlist { float: right;height: 38px;line-height: 30px;position: absolute;bottom: 40px;right: 53px;}
+    </style>
+    <script>
+    var flag=true;//重复执行标志
+        function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) {
+			return unescape(r[2]);
+		}
+		return null;
+	}
+
+	var jsonStr = '';
+	if (window.opener && window.opener['getTabelData']) {
+		jsonStr = window.opener.getTabelData();
+	}
+
+
+	//获取查询条件
+	function initParm(autosub) {
+		if (jsonStr != '') {
+			if(flag){
+			initSearchParm(jsonStr,autosub);
+            if(autosub==0){
+            flag=false;
+            }
+            }
+		} else {
+			alert('非法请求')
+		}
+	}
+
+
+	function initSearchParm(jsonStr,autosub) {
+		var surl = '../rdppub/showparam';
+		var sdata = {
+			reportJson : Base64Util.encode64(JSON.stringify(jsonStr))
+		};
+		$.ajax({
+			url : surl,
+			cache : false,
+			data : sdata,
+			type : "post",
+			success : function(res) {
+				//console.log(data.searchParmJson);
+				var data = res.data;
+				if (data.searchParmJson.length <= 0) {
+					$("#parmlist").hide();
+				} else {
+					createParmHtml(data.searchParmJson);
+					$("#btnSearch").append('<input type="submit" value="查询" id="searchlist" />')
+				}
+				if(autosub==1){
+				$("#btnSearch").submit();
+				}
+			}
+		});
+	}
+
+	function createParmHtml(jsonarr) {
+		var dataTags = [];
+		var multSelectTags = [];
+		$("#searchaddition").empty();
+		$.each(jsonarr, function(index, node) {
+			var html = $('<div class="form-group"></div>');
+			var label = $('<label class="form-label"></label>');
+			if (node.cname) {
+				label.text(node.cname);
+			} else {
+				label.text(node.key);
+			}
+			html.append(label);
+			if ("dynamic" == node.ptype) {
+				html.hide();
+            }
+			if (node.showtype && (node.showtype == "select"||node.showtype=="multiple")) {
+                console.log(node);
+				var select = $('<select name="' + node.key + '" id="' + node.key +
+					'" class="form-select"></select>');
+				if (!node.keylist || node.keylist.indexOf(":") == -1) {
+					select.append("<option value=''></option>");
+					select.append("<option value='" + node.value + "'>" + node.value + "</option>");
+				} else {
+					if (node.keylist.indexOf(",") != -1) {
+						var keys = node.keylist.split(",");
+						select.append("<option value=''></option>");
+						for (var i = 0; i < keys.length; i++) {
+							select.append("<option value='" + keys[i].split(":")[1] + "'>" + keys[i].split(
+									":")[0] + "</option>");
+						}
+					} else {
+						select.append("<option value='" + keylist.split(":")[1] + "'>" + keylist.split(":")[
+								0] + "</option>");
+					}
+				}
+				html.append(select);
+                if (node.showtype=="multiple") {
+                    multSelectTags.push(node);
+                }
+			} else if (node.showtype && (node.showtype == "date" || node.showtype == "year" || node.showtype == "month" || node.showtype == "time" || node.showtype == "datetime")) {
+				var input = $('<input name="' + node.key + '" id="' + node.key + '" value="' + node.value +
+					'" class="form-input" type="text"/>');
+				html.append(input);
+				dataTags.push(node);
+
+			} else {
+				var input = $('<input name="' + node.key + '" id="' + node.key + '" value="' + node.value +
+					'" class="form-input" type="text"/>');
+				html.append(input);
+			}
+			html.appendTo($("#searchaddition"));
+			if(node.value!=''&&node.showtype &&node.showtype == "select"){
+			$('#'+node.key).val(node.value);
+			}
+		});
+		for (var i = 0; i < dataTags.length; i++) {
+			var format = dataTags[i].format ? dataTags[i].format : "yyyy-MM-dd";
+			laydate.render({
+				elem : '#' + dataTags[i].key,
+				format : format,
+				type : dataTags[i].showtype
+			});
+		}
+		for (var i = 0; i < multSelectTags.length; i++) {
+            $('#'+multSelectTags[i].key).popupSelection({
+					searchOn: true, //启用搜索
+					inline: true, //弹出层
+					multiple: true, //多选
+					title:multSelectTags[i].cname,
+					cellCount: 4, //每行选项个数
+					labelShow:true //是否在选择区域显示label标签
+				});
+		}
+	}
+
+	$(function() {
+		initParm(1);
+		$(".rt-swicth").bind("click", function() {
+			if ($(".rt-parmlist").hasClass("on")) {
+				$(".rt-parmlist").removeClass("on");
+			} else {
+				$(".rt-parmlist").addClass("on");
+			}
+
+		});
+	})
+</script>
+</head>
+
+<body>
+    <div class="rt-parmlist" id="parmlist">
+        <div class="rt-side">
+            <i class="rt-swicth"></i>
+        </div>
+        <!--数据请求表单开始 -->
+        <form id="btnSearch" action="${request.contextPath}/rdppage/show" method="post" target="ifmreport">
+            <div id="searchaddition">
+                <!-- post参数放这里 -->
+                <#list hideitems as item> <input type="hidden" name="${item.name}" id="${item.name}" value="${item.value}">
+                </#list>
+            </div>
+        </form>
+        <!--数据请求表单结束 -->
+    </div>
+    <table class="rt-view" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td valign="top" height="100%">
+                    <div style="width:100%;height:100%;z-index:-1;">
+                        <iframe id="ifmreport" name="ifmreport" src="about:blank" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

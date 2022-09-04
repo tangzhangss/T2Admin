@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "productName": "信用贷",
+      "productCount": 0.2
+    },
+    {
+      "productName": "快速贷",
+      "productCount": 0.3
+    },
+    {
+      "productName": "置业贷",
+      "productCount": 0.8
+    },
+    {
+      "productName": "重组",
+      "productCount": 1
+    },
+    {
+      "productName": "再融资",
+      "productCount": 2
+    }
+  ]
+}

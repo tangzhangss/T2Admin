@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>数据文件</title>
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/reset.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/plugins/webuploader/webuploader.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.css">
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.min.css" />
+<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/ztree/metroStyle/metroStyle.css">
+<script src="${request.contextPath}/statics/bddp/static/common/jquery/jquery-1.11.0.js"></script>
+<script src="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.min.js"></script>
+<script src="${request.contextPath}/statics/plugins/webuploader/webuploader.js"></script>
+<script src="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.js"></script>
+<script src="${request.contextPath}/statics/bddp/static/common/ztree/jquery.ztree.all.min.js"></script>
+
+<script src="${request.contextPath}/statics/bddp/web/dataTools.js"></script>
+<style type="text/css">
+.list-group-item .btn {
+	float: right;
+	margin-right: 20px;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="card">
+		<div class="card-body">
+			<ul class="ztree" id="mapTree">
+
+
+			</ul>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var url = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = top.window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		};
+		$(function() {
+			var id = url("uuid");
+			var setting = {
+				data : {
+					simpleData : {
+						enable : true
+					}
+				},
+				callback : {
+					beforeClick : beforeClick,
+					onClick : onClick
+				}
+
+			};
+
+			function beforeClick(treeId, treeNode, clickFlag) {
+				return treeNode.click;
+			}
+
+			function onClick(event, treeId, treeNode, clickFlag) {
+				top.layx.destroy("localsiteformap", treeNode);
+			}
+			getAjaxData("../../../bddp/getBddpMapFilesTree", {}, function(result) {
+				if (result.code == 0) {
+					console.log(result);
+					$.fn.zTree.init($("#mapTree"), setting, result.res);
+
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>

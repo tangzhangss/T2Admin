@@ -1,0 +1,203 @@
+<ul id="tags" class="tags-navs">
+	<li class="tags-nav" tag-type="text">
+		<i class="fa fa-text-width"></i>
+		<span>
+			文字
+		</span>
+	</li>
+	<li class="tags-nav" tag-type="image">
+		<i class="fa fa-image"></i>
+		<span>
+			图片
+		</span>
+	</li>
+	<li class="tags-nav" tag-type="rect">
+		<i class="fa fa-square-o"></i>
+		<span>
+			矩形
+		</span>
+	</li>
+	<li class="tags-nav" tag-type="circle">
+		<i class="fa fa-circle-o"></i>
+		<span>
+			圆形
+		</span>
+	</li>
+
+	<li class="tags-nav" tag-type="iframe">
+		<i class="fa fa-chain"></i>
+		<span>
+			ifram框架
+		</span>
+	</li>
+
+	<li class="tags-nav" tag-type="time">
+		<i class="fa fa-clock-o"></i>
+		<span>
+			时间
+		</span>
+	</li>
+	<li class="tags-nav" tag-type="swiper">
+		<i class="fa fa-question-circle"></i>
+		<span>
+			轮播
+		</span>
+	</li>
+	<li class="tags-nav off" tag-type="number">
+		<i class="fa fa-sort-numeric-asc"></i>
+		<span>
+			数值
+		</span>
+	</li>
+	<li class="tags-nav off" tag-type="triangle">
+		<i class="fa fa-play"></i>
+		<span>
+			三角
+		</span>
+	</li>
+	<li class="tags-nav off" tag-type="triangle">
+		<i class="fa fa-question-circle"></i>
+		<span>
+			进度条
+		</span>
+	</li>
+	<li class="tags-nav off" tag-type="triangle">
+		<i class="fa fa-question-circle"></i>
+		<span>
+			Tab页签
+		</span>
+	</li>
+	<li class="tags-nav off" tag-type="triangle">
+		<i class="fa fa-question-circle"></i>
+		<span>
+			直线
+		</span>
+	</li>
+	<li class="tags-nav off" tag-type="triangle">
+		<i class="fa fa-question-circle"></i>
+		<span>
+			下拉选择
+		</span>
+	</li>
+	<li class="tags-nav off" tag-type="triangle">
+		<i class="fa fa-calendar"></i>
+		<span>
+			日历
+		</span>
+	</li>
+</ul>
+<script type="text/javascript">
+	$(function () {
+		$("#tags li").not(".off").draggable({
+			containment: "#content",
+			cursor: "move",
+			cursorAt: {
+				top: 0,
+				left: 0
+			},
+			helper: function (event) {
+				let zoom = $("#content").data("zoom");
+				let type = $(event.currentTarget).attr("tag-type");
+				let html = $("#tag-" + type).html();
+				return $(html).css({
+					"transform": "scale(" + zoom + ")",
+					"transform-origin": "left top 0px"
+				});
+			},
+			stop: function (event, ui) {
+				//console.log(event, ui);
+				let zoom = $("#content").data("zoom");
+				let type = $(event.target).attr("tag-type");
+				let html = $($("#tag-" + type).html());
+				var pLeft = $("#content").offset().left;
+				var pTop = $("#content").offset().top;
+				html.css({
+					left: (ui.offset.left - pLeft) / zoom,
+					top: (ui.offset.top - pTop) / zoom
+				});
+				html.appendTo("#content");
+				var tempProp = html.data("prop");
+				var prop = $.extend({}, tempProp, {
+					options: {},
+					type: type,
+					bigType: "tags"
+				});
+				html.data("prop", prop);
+				html.initBox({
+					tagType: type
+				});
+				if (type == "time") {
+					var tatimeble = html.find(".tag-" + type).ledTime();
+				} else if (type == "swiper") {
+					var swiperOption = {
+						autoplay: 5000,
+						autoplayDisableOnInteraction: false,
+						autoplayStopOnLast: false,
+						pagination: '.swiper-pagination'
+					};
+					var mySwiper = new Swiper(html.find(".tag-" + type), swiperOption);
+					html.data("prop").mySwiper = mySwiper;
+					html.data("prop").swiper = swiperOption;
+					html.find(".fa.fa-plus").bind("click", function () {
+						addSlide(html, $(this));
+					})
+				}
+
+
+			}
+		});
+		$(".tags-nav.off").each(function () {
+			layx.tip('当前组件未开放！', this, 'top');
+		});
+	})
+</script>
+<script id="tag-text" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<div class="tag-text"  style="width: 100%;height: 100%;">
+			请输入文字
+		</div>
+	</div>
+</script>
+<script id="tag-rect" type="text/template">
+	<div class="box" style="width: 100px;height: 40px;">
+		<div class="tag-rect" style="width:100%;height:100%;background-color:#ffffff;"></div>
+	</div>
+</script>
+<script id="tag-circle" type="text/template">
+	<div class="box" style="width: 100px;height: 100px;">
+		<div class="tag-circle" style="width:100%;height:100%;border-radius: 100%;background-color:#ffffff"></div>
+	</div>
+</script>
+<script id="tag-image" type="text/template">
+	<div class="box" style="width: 100px;height: 66px;">
+		<img class="tag-image" width="100%" height="100%" src="../../statics/bddp/static/img/default.jpg" />
+	</div>
+</script>
+<script id="tag-iframe" type="text/template">
+	<div class="box" style="width: 480px;height: 320px;">
+		<iframe class="tag-iframe" style="width:100%;height:100%;" src="./component/error/404.html"></iframe>
+	</div>
+</script>
+
+<script id="tag-time" type="text/template">
+	<div class="box" style="width: 360px;height: 120px;">
+		<div class="clock tag-time">
+
+		</div>
+	</div>
+</script>
+<script id="tag-swiper" type="text/template">
+	<div class="box" style="width: 480px;height: 320px;">
+		<div class="tag-swiper swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<div class="fa fa-plus">1</div>
+				</div>
+				<div class="swiper-slide">
+					<div class="fa fa-plus">2</div>
+				</div>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+</script>

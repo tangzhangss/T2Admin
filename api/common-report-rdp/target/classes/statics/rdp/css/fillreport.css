@@ -1,0 +1,22 @@
+@charset "UTF-8";
+form input[type="text"],form select,form textarea{width:90%;height:90%;border:none;}
+form .btn_insert{height: 20px;
+    line-height: 20px;
+    background: #3a76d2;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    padding: 0 10px;
+    outline: none;}
+form .btn_delete{height: 20px;
+    line-height: 20px;
+    background: #c54645;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    padding: 0 10px;
+    outline: none;}

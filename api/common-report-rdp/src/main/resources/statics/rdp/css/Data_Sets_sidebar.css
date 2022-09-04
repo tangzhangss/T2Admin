@@ -1,0 +1,185 @@
+html, body {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0;
+    height: 100%;
+}
+
+#top {
+    display: block;
+    height: 40px;
+    width: 400px;
+}
+
+.left {
+    width: 400px;
+    height: 100%;
+    float: left;
+    overflow: auto;
+    margin-top: 10px;
+}
+
+.ztree li span.button.home_ico_open, .ztree li span.button.home_ico_close {
+    margin-right: 2px;
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/1.png) no-repeat scroll 0 0 transparent;
+    vertical-align: top;
+    * vertical-align: middle;
+}
+
+.ztree li span.button.ico_close {
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/4.png) no-repeat scroll 0 0 transparent;
+}
+
+.ztree li span.button.ico_open {
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/3.png) no-repeat scroll 0 0 transparent;
+}
+
+.ztree li span.button.ico_docu {
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/2.png) no-repeat scroll 0 0 transparent;
+}
+
+.ztree li a.curSelectedNode {
+    background-color: #fff;
+    border: 1px #b2b4b9 solid;
+}
+.ztree li span.button.edit{
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/9.png) no-repeat scroll 0 0 transparent;
+}
+.ztree li span.button.remove{
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/8.png) no-repeat scroll 0 0 transparent;
+	
+}
+.ztree li span.button.center_close{
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/6.png) no-repeat scroll 0 0 transparent;
+}
+.ztree li span.button.center_open{
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/7.png) no-repeat scroll 0 0 transparent;
+}
+.ztree li span.button.bottom_open{
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/7.png) no-repeat scroll 0 0 transparent;
+}
+.ztree li span.button.bottom_close{
+    background: url(../../lib/ztree/css/zTreeStyle/img/my/6.png) no-repeat scroll 0 0 transparent;
+}
+.ztree li span.button.root_open{
+	background: url(../../lib/ztree/css/zTreeStyle/img/my/7.png) no-repeat scroll 0 0 transparent;
+}
+.ztree li span.button.root_close{
+	background: url(../../lib/ztree/css/zTreeStyle/img/my/6.png) no-repeat scroll 0 0 transparent;
+}
+.right {
+    width: 78%;
+    float: right;
+}
+
+.ui-button {
+    width: 100px;
+    height: 20px;
+    line-height: 20px;
+    background: transparent;
+    color: #000000;
+}
+
+/*  .del{background:#de5567;}
+        .edit{background:#ed9b61;} */
+.ui-button.add {
+    float: right;
+    height: 20px;
+    line-height: 20px;
+    width: 120px;
+    border: 1px solid #ddd;
+    padding: 0px !important;
+    position: absolute;
+    font-size: 12px;
+    left: 116px;
+    top: 15px;
+}
+
+.dsform {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    line-height: 1.8;
+    font-size: 12px;
+}
+
+.dsform p {
+    marign: 0;
+    padding: 0;
+    border: 0;
+}
+
+.dsform legend {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.dsform label.p {
+    display: inline-block;
+    float: left;
+    width: 70px;
+    padding: 0 10px;
+}
+
+.dsform label.error {
+    display: inline-block;
+    color: red;
+    padding-left: 10px;
+}
+
+.dsform .txt {
+    width: 200px;
+    border: 1px solid #ccc;
+    height: 26px;
+}
+
+.dsform .txtp {
+    width: 100px;
+    border: 1px solid #ccc;
+    height: 26px;
+}
+
+.dsform .sel {
+    width: 204px;
+    border: 1px solid #ccc;
+    height: 31px;
+}
+
+.dsform .selp {
+    width: 104px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    height: 31px;
+}
+
+.dsform textarea {
+    width: 75%;
+    height: 80px;
+    border: 1px solid #ccc;
+}
+
+.dsform .submit {
+    margin-left: 100px;
+    width: auto;
+    padding: 5px 15px;
+    background: none repeat scroll 0 0 #277b9d;
+    border: 1px solid #ccc;
+    color: #fff;
+    height: 30px;
+}
+
+.dsform .padd {
+    width: 50px;
+    height: 25px;
+    border: 0;
+    cursor: pointer;
+    background: transparent url(../images/plusmin.png) top center no-repeat;
+}
+
+.dsform .pdel {
+    width: 50px;
+    height: 25px;
+    border: 0;
+    cursor: pointer;
+    background: transparent url(../images/plusmin.png) 12px -25px no-repeat;
+}

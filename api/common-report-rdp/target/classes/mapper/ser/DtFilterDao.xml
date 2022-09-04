@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.report.modules.ser.dao.DtFilterDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.report.modules.ser.entity.DtFilterEntity" id="dtFilterMap">
+        <result property="filterId" column="filter_id"/>
+        <result property="dtId" column="dt_id"/>
+        <result property="tableName" column="table_name"/>
+        <result property="column" column="column"/>
+        <result property="colType" column="col_type"/>
+        <result property="operator" column="operator"/>
+        <result property="paramType" column="param_type"/>
+        <result property="param" column="param"/>
+        <result property="txTime" column="tx_time"/>
+        <result property="upTime" column="up_time"/>
+        <result property="txOp" column="tx_op"/>
+        <result property="upOp" column="up_op"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "productName": "融资2号",
+      "productCount": 10
+    },
+    {
+      "productName": "融资1号",
+      "productCount": 15
+    },
+    {
+      "productName": "农地信",
+      "productCount": 20
+    },
+    {
+      "productName": "保理1号",
+      "productCount": 27
+    },
+    {
+      "productName": "种植贷",
+      "productCount": 34
+    }
+  ]
+}

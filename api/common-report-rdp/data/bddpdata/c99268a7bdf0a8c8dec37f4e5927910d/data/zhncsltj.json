@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "yyyyMM": "9月",
+      "value1": 100,
+      "value4": 1625
+    },
+    {
+      "yyyyMM": "10月",
+      "value1": 155,
+      "value4": 2813
+    },
+    {
+      "yyyyMM": "11月",
+      "value1": 426,
+      "value4": 2681
+    },
+    {
+      "yyyyMM": "12月",
+      "value1": 184,
+      "value4": 1721
+    },
+    {
+      "yyyyMM": "1月",
+      "value1": 492,
+      "value4": 2590
+    },
+    {
+      "yyyyMM": "2月",
+      "value1": 457,
+      "value4": 2706
+    },
+    {
+      "yyyyMM": "3月",
+      "value1": 386,
+      "value4": 1840
+    }
+  ]
+}

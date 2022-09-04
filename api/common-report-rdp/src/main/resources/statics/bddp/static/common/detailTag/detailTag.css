@@ -1,0 +1,80 @@
+.dt-body {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    text-align: center;
+    color: #8d9ea7;
+}
+
+.dt-group {
+    /* border: 1px solid; */
+    width: auto;
+    display: inline-block;
+    margin: 0px 2px;
+    overflow: hidden;
+}
+
+.dt-group-l {
+    display: inline-block;
+    float: left;
+}
+
+.dt-group-r {
+    display: inline-block;
+    float: right;
+}
+
+.dt-item {
+    display: block;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.dt-item-h {
+    display: inline-block;
+}
+
+.dt-item-label {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 0px;
+}
+
+.dt-item-desc {
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+.dt-item-h .dt-item-label {
+    display: block;
+}
+
+.dt-item-h .dt-item-desc {
+    display: block;
+}
+
+.dt-time {
+    display: block;
+}
+
+.dt-time .dt-group-l {
+    display: block;
+    float: unset;
+}
+
+.dt-time .dt-group-r {
+    float: left;
+}
+
+.dt-time-info {
+}
+
+.dt-time .dt-item {
+    white-space: normal;
+    text-align: left;
+}
+.dt-group-l img{
+    width: 100%;
+    height: 100%;
+}

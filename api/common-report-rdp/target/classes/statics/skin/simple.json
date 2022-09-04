@@ -1,0 +1,70 @@
+{
+	"table": {
+		"self": {
+			"style": {
+			},
+			"pseudoClass": {
+				"hover": {},
+				"active": {}
+			}
+		},
+		"clild": {
+			"thead": {
+				"clild":{
+					"tr": {
+						"self": {
+							"style": {
+							}
+						},
+						"clild": {
+							"td": {
+								"self": {
+									"style": {
+									"padding": "5px 10px"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"tbody": {
+				"clild":{
+					"tr": {
+					"self": {
+						"style": {
+						},
+						"pseudoClass": {
+							"hover": {},
+							"active": {},
+							"odd": {
+								"background-color": "rgba(246, 247, 250, 1)"
+							},
+							"even": {
+								
+							}
+						}
+					},
+					"clild": {
+						"td": {
+							"self": {
+								"style": {
+									"padding": "5px 10px;"
+								},
+								"pseudoClass": {
+									"hover": {},
+									"active": {}
+								}
+							},
+							"clild": {}
+						}
+					}
+				}
+				}
+			},
+			"tfoot": {
+
+			}
+		}
+	}
+}

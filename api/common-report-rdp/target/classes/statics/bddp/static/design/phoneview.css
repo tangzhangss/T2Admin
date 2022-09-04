@@ -1,0 +1,76 @@
+.phone-panel {
+    background-color: #273953;
+    height: 100%;
+    width: 100%;
+}
+
+.ph-left {
+    width: 350px;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    padding: 10px;
+}
+
+.ph-right {
+    width: calc(100% - 350px);
+    height: 100%;
+    display: inline-block;
+    float: left;
+    padding: 10px;
+}
+
+.ph-body {
+    border: 3px solid #5d7390;
+    height: 100%;
+    width: 260px;
+    margin: 0 auto;
+    border-radius: 30px;
+}
+
+.ph-body .ph-content {
+    width: 100%;
+    display: block;
+    height: calc(100% - 90px);
+    border-top: 3px solid #5d7390;
+    border-bottom: 3px solid #5d7390;
+    margin-top: 36px;
+    overflow-y: auto;
+}
+
+.ph-body .ph-home-btn {
+    width: 90px;
+    height: 30px;
+    border: 3px solid #5d7390;
+    margin: 13px auto 0 auto;
+    border-radius: 20px;
+}
+
+.ph-title {
+    background-color: #212529;
+    padding: 0 10px;
+    font-size: 14px;
+    height: 26px;
+    line-height: 26px;
+}
+
+.ph-hide-items {
+    height: calc(100% - 32px);
+    width: 100%;
+    overflow-y: auto;
+    background-color: #1c1b1b;
+}
+
+.ph-hide-view {
+    width: 235px;
+    height: 140px;
+    display: inline-block;
+    float: left;
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    margin: 10px 0 0 10px;
+    box-shadow: 0 0 2px 0px #ffffff;
+    font-size: 14px;
+    text-align: center;
+}

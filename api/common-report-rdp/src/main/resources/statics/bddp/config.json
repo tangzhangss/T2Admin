@@ -1,0 +1,8 @@
+{
+    "rdpserver": "http://127.0.0.1:8080/RDP-SERVER/",
+    "jarpath": "G:\\workspace\\stsWorkspace\\renren\\RDPServer\\report-admin\\target\\report-admin.jar",
+    "serverport": "8090",
+    "dbpath": "jdbc:mysql://128.1.13.24:3306/rdp_server?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8",
+    "dbusername": "root",
+    "dbpassword": "dhccpass"
+}

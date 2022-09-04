@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>数据源配置</title>
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/dataSetsConfig/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/dataSetsConfig/css/buttons.css" />
+	<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/bddp/static/dataSetsConfig/css/ds.css" />
+	<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/jquery-1.11.0.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/pandyle.min.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/statics/plugins/layer/layer.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/getConfig.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/data.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/dataConfig.js"></script>
+</head>
+
+<body>
+	<div class="ds-layout ds-layout-center data-config">
+		<div class="dsc-content ">
+			<div class="datasource-group-name">数据源</div>
+			<div class="dataSource-group-container" id="datasoucre-items">
+				<div class="dataSource-group-addbtn" id="addbtn-datasource">+</div>
+			</div>
+		</div>
+		<div class="dsc-content ">
+			<div class="datasource-group-name">数据集</div>
+			<div class="dataSource-group-container" id="datasets-items">
+				<div class="dataSource-group-addbtn" id="addbtn-datasets">+</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<div id="dataSourceForm" class="container-fluid" style="display:none;padding: 45px 60px 0px 20px;">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="name" placeholder="名称" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">驱动</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="driver" placeholder="驱动" readonly/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">连接地址</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="addr" placeholder="连接地址" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">用户名</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="usr" placeholder="用户名" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">密码</div>
+				<div class="col-sm-10">
+					<input type="password" class="form-control" name="password" placeholder="密码" />
+				</div>
+			</div>
+			<input type="hidden" class="form-control" name="model" />
+			<input type="hidden" class="form-control" name="type" />
+			<input type="hidden" class="form-control" name="sts" value="1" />
+			<input type="hidden" class="form-control" name="icon" />
+			<input type="hidden" class="form-control" name="id" />
+		</form>
+	</div>
+</body>
+
+</html>

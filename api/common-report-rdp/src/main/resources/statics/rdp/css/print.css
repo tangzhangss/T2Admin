@@ -1,0 +1,22 @@
+html{ margin: 0px}
+body{background:#fff;padding:10mm 15mm;margin:10px}
+*{font-family:"SimSun"}
+#parmlist,#searchaddition,#toolbar,.operate,.pagination{display:none;border:none}
+.normal table{border-collapse: collapse;background:#ffffff;}
+.normal .rtitle td label{vertical-align:middle;mso-pattern:auto; }
+.normal .rhead td label{vertical-align:middle;}
+.normal tbody td label{color: rgb(0, 0, 0);text-decoration: none;text-line-through: none;}
+.normal label{display:block;overflow:hidden;margin:0;padding:0;padding-left:2px;padding-right:2px;
+    text-overflow: ellipsis; /* for IE */
+    -moz-text-overflow: ellipsis; /* for Firefox,mozilla */  }
+.normal tfoot td{vertical-align:middle;overflow-y:hidden;}
+@media print{
+	#toolbar{display:none !important;}
+	.normal{height: auto !important;}
+	.normal>div{overflow-x: hidden;height: auto !important;overflow:hidden;}  
+	.normal table td{-webkit-print-color-adjust: exact; }
+	.normal tfoot td{vertical-align:middle;overflow-y:hidden;}
+    .fixedCol-body{display:none !important;}
+    .fixedCol-head{display:none !important;}
+    .fixedHead{display:none !important;}
+}

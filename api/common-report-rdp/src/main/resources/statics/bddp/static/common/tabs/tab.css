@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+ul li {
+    list-style: none;
+}
+
+main {
+    width: 960px;
+    height: 500px;
+    border-radius: 10px;
+    margin: 50px auto;
+}
+
+main h4 {
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+}
+
+.tabsbox {
+    width: 100%;
+    margin: 0 auto;
+    height: 100%;
+    border: 0;
+    position: relative;
+}
+
+nav ul {
+    overflow: hidden;
+    background-color: #111a25;
+    margin: 0;
+}
+
+nav ul li {
+    float: left;
+    /* width: 100px; */
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    /* border-right: 1px solid #ccc; */
+    position: relative;
+    background-color: #111a25;
+    padding: 0 10px;
+}
+
+nav ul li.liactive {
+    /* border-bottom: 2px solid #fff; */
+    z-index: 9;
+    background-color: #293c55;
+}
+
+#tab input {
+    width: 80%;
+    height: 60%;
+}
+
+nav ul li span:last-child {
+    /* position: absolute; */
+    user-select: none;
+    font-size: 16px;
+    /* top: -18px; */
+    /* right: 0; */
+    display: inline-block;
+    height: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.tabadd {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+
+.tabadd span {
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+    text-align: center;
+    border: 1px solid #ccc;
+    float: right;
+    margin: 10px;
+    user-select: none;
+    font-size: 24px;
+    border-radius: 50%;
+}
+
+.tabscon {
+    width: 100%;
+    position: absolute;
+    padding: 0;
+    top: 50px;
+    left: 0px;
+    box-sizing: border-box;
+    /* border-top: 1px solid #ccc; */
+    bottom: 0px;
+}
+
+.tabscon section {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.tabscon section.conactive {
+    display: block;
+}
+
+.tag-tabpage .fa.fa-plus {
+    width: 100px;
+    height: 100px;
+    font-size: 72px;
+    line-height: 100px;
+    text-align: center;
+    margin: auto;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}

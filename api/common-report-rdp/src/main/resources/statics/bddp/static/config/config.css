@@ -1,0 +1,132 @@
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+button {
+    border: none;
+    outline: 0;
+    background-color: #333;
+    color: #ffffff;
+    width: 100%;
+    padding: 5px;
+}
+
+.left {
+    display: block;
+    width: 119px;
+    position: absolute;
+    border-right: 1px solid #dddddd;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+}
+
+.center {
+    display: block;
+    width: 224px;
+    overflow: auto;
+    position: absolute;
+    border-right: 1px solid #dddddd;
+    left: 120px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.right {
+    display: block;
+    width: 129px;
+    position: absolute;
+    overflow: auto;
+    border-right: 1px solid #dddddd;
+    left: 345px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.itemform {
+    display: none;
+    border-right: 1px solid #ddd;
+    overflow: auto;
+    position: absolute;
+    left: 475px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+.tag-items {
+    width: 100%;
+    padding: 2px 5px;
+    cursor: pointer;
+}
+
+.tag-items:hover, .tag-items.on {
+    background-color: #585956;
+    color: #ffffff;
+}
+
+#accordion {
+}
+
+#saveBtn {
+    /* position: absolute; */
+    width: 100%;
+    bottom: 10px;
+}
+
+#saveItemBtn {
+    position: absolute;
+    bottom: 10px;
+}
+
+.ui-state-active {
+    background-color: #585956;
+    border: none;
+}
+
+.ui-accordion .ui-accordion-header {
+    padding: 0px 0px 0px 22px;
+    border: none;
+    z-index: 10;
+    outline: 0;
+    background-color: #ddd;
+}
+
+.ui-accordion .ui-accordion-content {
+    padding: 0px;
+    border: none;
+}
+
+.item-tag {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.item-tag:hover {
+    background-color: #585956;
+    color: #ffffff;
+}
+
+.item-tag.on {
+    background-color: #585956;
+    color: #ffffff;
+}
+
+.input-group {
+    margin-top: 10px;
+    padding-left: 5px;
+}
+
+.input-group label {
+    width: 120px;
+    display: inline-block;
+}
+
+.input-group select {
+    width: 240px;
+}
+
+.input-group input {
+    width: 240px;
+}

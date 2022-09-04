@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "yyyyMM": "201803",
+      "value1": 76,
+      "value2": 35,
+      "value3": 80,
+      "value4": 61
+    },
+    {
+      "yyyyMM": "201804",
+      "value1": 52,
+      "value2": 78,
+      "value3": 36,
+      "value4": 93
+    },
+    {
+      "yyyyMM": "201805",
+      "value1": 42,
+      "value2": 47,
+      "value3": 84,
+      "value4": 65
+    },
+    {
+      "yyyyMM": "201806",
+      "value1": 60,
+      "value2": 44,
+      "value3": 84,
+      "value4": 44
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>数据库支持类型</title>
+	<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("ser:dbtype:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("ser:dbtype:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("ser:dbtype:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">类型名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dbType.name" placeholder="类型名称"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">数据库大类</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dbType.model" placeholder="数据库大类"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">支持类型</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dbType.type" placeholder="支持类型"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">数据库驱动</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dbType.driver" placeholder="数据库驱动"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">数据库地址例子</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dbType.addrDemo" placeholder="数据库地址例子"/>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">状态</div>
+                        <div class="col-sm-10">
+                             <select class="form-control" name="sts" v-model="dbType.sts">
+							  <option value="0" >未启用</option>
+							  <option value="1">启用</option>
+							</select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">数据库图标</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dbType.icon" placeholder="数据库图标"/>
+                        </div>
+                    </div>
+			     <div class="form-group">
+                	<div class="col-sm-2 control-label"></div>
+               		<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/ser/dbtype.js?_${.now?long}"></script>
+</body>
+</html>

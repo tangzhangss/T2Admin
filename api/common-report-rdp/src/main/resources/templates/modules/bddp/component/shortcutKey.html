@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>大屏幕设计器</title>
+    <link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/reset.css" />
+    <link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.min.css" />
+    <script src="${request.contextPath}/statics/bddp/static/common/jquery/jquery-1.11.0.js"></script>
+    <script src="${request.contextPath}/statics/bddp/static/common/bootstrap4/bootstrap.min.js"></script>
+    <style>
+        .badge{
+            width: 100px;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">空格键</span> 按住空格键，可以点击拖动场景
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">滚轮</span> 滑动滚轮，可以缩放场景
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">ALT+R</span>显示或者隐藏标尺
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">ALT+;</span>显示或者隐藏参考线
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">ALT+ESC</span>隐藏整个标尺与参考线
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">ALT</span>按住ALT键拖动，可以对齐线参考线
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">Shift</span>按住Shift键拖动，可以框选组件
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">Ctrl+Z</span>撤销
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">Ctrl+Y</span>重做
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge badge-dark">ESC</span>退出全屏预览
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

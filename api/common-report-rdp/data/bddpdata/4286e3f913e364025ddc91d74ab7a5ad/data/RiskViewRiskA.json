@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "yyyyMM": "201804",
+      "value1": 20,
+      "value2": 16,
+      "value3": 12,
+      "value4": 11,
+      "value5": 5
+    },
+    {
+      "yyyyMM": "201805",
+      "value1": 20,
+      "value2": 20,
+      "value3": 18,
+      "value4": 16,
+      "value5": 12
+    },
+    {
+      "yyyyMM": "201806",
+      "value1": 28,
+      "value2": 16,
+      "value3": 10,
+      "value4": 10,
+      "value5": 5
+    },
+    {
+      "yyyyMM": "201807",
+      "value1": 29,
+      "value2": 24,
+      "value3": 10,
+      "value4": 16,
+      "value5": 2
+    }
+  ]
+}

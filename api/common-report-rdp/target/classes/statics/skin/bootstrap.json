@@ -1,0 +1,75 @@
+{
+	"table": {
+		"self": {
+			"style": {
+			"border-spacing":"0",
+			"border-collapse":"collapse",
+			"margin":"10px auto",
+			"background-color":"transparent"
+			},
+			"pseudoClass": {
+				"hover": {},
+				"active": {}
+			}
+		},
+		"clild": {
+			"thead": {
+				"clild":{
+					"tr": {
+						"self": {
+							"style": {
+							}
+						},
+						"clild": {
+							"td": {
+								"self": {
+									"style": {
+									"padding":"8px",
+									"line-height":"20px",
+									"vertical-align":"bottom",
+									"border-bottom":"2px solid #ddd"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"tbody": {
+				"clild":{
+					"tr": {
+					"self": {
+						"style": {
+						},
+						"pseudoClass": {
+							"hover": {},
+							"active": {},
+							"odd":{"background-color":"rgba(246, 247, 250, 1)"}
+						}
+					},
+					"clild": {
+						"td": {
+							"self": {
+								"style": {
+									"padding":"8px",
+									"line-height":"20px",
+									"vertical-align":"top",
+									"border-top":"1px solid #ddd"
+								},
+								"pseudoClass": {
+									"hover": {},
+									"active": {}
+								}
+							},
+							"clild": {}
+						}
+					}
+				}
+				}
+			},
+			"tfoot": {
+
+			}
+		}
+	}
+}

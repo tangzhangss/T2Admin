@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>大屏幕设计器</title>
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/reset.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/plugins/webuploader/webuploader.css" />
+	<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/designv2/css/home.css">
+	
+	<script src="${request.contextPath}/statics/bddp/static/common/jquery/jquery-1.11.0.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/jquery-ui/jquery-ui.min.js"></script>
+	<script src="${request.contextPath}/statics/plugins/webuploader/webuploader.js"></script>
+	<script src="${request.contextPath}/statics/bddp/web/dataTools.js"></script>
+	<script src="${request.contextPath}/statics/bddp/web/base64.js"></script>
+	<script src="${request.contextPath}/statics/bddp/web/MD5.js"></script>
+	<script src="${request.contextPath}/statics/bddp/web/SHA1.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/LayX/layx.min.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/common/cache/jquery.cache.js"></script>
+	<script type="text/javascript" src="${request.contextPath}/statics/libs/base64Util.js"></script> 
+	<script src="${request.contextPath}/statics/bddp/static/designv2/js/common.js"></script>
+	<script src="${request.contextPath}/statics/bddp/static/designv2/js/home.js"></script>
+
+</head>
+
+<body>
+	<div class="bddp-home">
+		<div class="home-left">
+			<div class="hl-btns">
+				<button type="button" id="newBddpBtn">新建</button>
+				<button type="button" id="importBddpBtn">导入</button>
+			</div>
+		</div>
+		<div class="home-right">
+			<div class="hl-header">
+				<div class="hl-btns">
+					<i class="fa fa-th"></i>
+					<i class="fa fa-list-ul on"></i>
+					<input type="text" class="hl-search" placeholder="请输入关键字搜索...">
+				</div>
+			</div>
+			<div class="hl-body">
+				<ul class="lt-th">
+					<li class="lt-td uuid">UUID</li>
+					<li class="lt-td filename">名称</li>
+					<li class="lt-td lasttime">创建时间</li>
+					<li class="lt-td ctrls">操作</li>
+				</ul>
+				<!-- <ul class="lt-tr">
+					<li class="lt-td uuid">c5913481563309808c929e53b9a7b9e0</li>
+					<li class="lt-td filename">综合业务模版三</li>
+					<li class="lt-td lasttime">2018-11-16 10:45:59</li>
+					<li class="lt-td ctrls"><span class="ctrl ctrl-edit">修改</span><span class="ctrl ctrl-del">删除</span></li>
+				</ul> -->
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

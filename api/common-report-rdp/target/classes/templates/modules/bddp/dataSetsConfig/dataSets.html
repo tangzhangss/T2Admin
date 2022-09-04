@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>数据源配置</title>
+		<link href="${request.contextPath}/statics/plugins/jqueryui/jquery-ui.min.css" rel="stylesheet">
+		<link href="${request.contextPath}/statics/plugins/ztree/css/metroStyle/metroStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="${request.contextPath}/statics/bddp/static/dataSetsConfig/css/buttons.css" />
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/ser/css/ds.css" />
+		<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/jquery-1.11.0.js"></script>
+		<script src="${request.contextPath}/statics/plugins/jqueryui/jquery-ui.min.js"></script>
+		<script src="${request.contextPath}/statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/svg.min.js" ></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/Tdrag.js" ></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/data.js"></script>
+		<script type="text/javascript" src="${request.contextPath}/statics/bddp/static/dataSetsConfig/js/dsDesign.js"></script>
+
+	</head>
+
+	<body>
+		<div class="ds-layout ds-layout-top">
+			<div class="ds-title">数据集设计器</div>
+			<div class="ds-tools">
+				<button type="button" class="button button-primary ">
+					保存
+				</button>
+				<button type="button" class="button button-primary ">
+					预览
+				</button>
+			</div>
+			<div class="ds-tablename">
+				数据集名称
+			</div>
+			<div class="ds-quit">
+				<button type="button" id="goBack"  class="button button-primary">返回</button>
+			</div>
+		</div>
+		<div class="ds-layout ds-layout-left">
+			<div class="dsl-datasources-list">
+				<button class="dsl-btn button button-border  button-primary button-small">数据源列表</button>
+			</div>
+			<div class="dsl-datasource-tree">
+				<ul class="ztree" id="dsl-tables"></ul>
+			</div>
+			<!-- <div class="dsl-datasource-define">自定义数据集</div> -->
+		</div>
+		<div class="ds-layout ds-layout-center">
+			<div class="dsc-content edit-content">
+				<div id="dsc-tabs" class="ec-tabs">
+					<ul>
+						<li>
+							<a href="#tabs-1">关联关系</a>
+						</li>
+						<li>
+							<a href="#tabs-2">字段列表</a>
+						</li>
+						<li>
+							<a href="#tabs-3">参数设置</a>
+						</li>
+						<li>
+							<a href="#tabs-4">数据过滤</a>
+						</li>
+					</ul>
+					<div id="tabs-1">
+						<div class="ec-scene" id="drawing">
+							<ul class="ztree tableTree" id="tableTree"></ul>
+						</div>
+					</div>
+					<div id="tabs-2">
+						字段列表
+					</div>
+					<div id="tabs-3">
+						参数设置
+					</div>
+					<div id="tabs-4">
+						数据过滤
+					</div>
+				</div>
+
+			</div>
+			<div class="dsc-content view-content">
+				<div class="view-header"></div>
+				<div class="view-boldy"></div>
+			</div>
+		</div>
+	</body>
+
+</html>

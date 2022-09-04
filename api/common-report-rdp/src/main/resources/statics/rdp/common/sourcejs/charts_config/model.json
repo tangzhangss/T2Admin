@@ -1,0 +1,425 @@
+{
+	"line":{
+		"default":{
+			"type":"1",
+			"option":{
+		    "xAxis": {
+		        "type": "category",
+		        "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+		    },
+		    "yAxis": {
+		        "type": "value"
+		    },
+		    "series": [{
+		        "data": [820, 932, 901, 934, 1290, 1330, 1320],
+		        "type": "line"
+		    }]
+		}},
+		"areaStyle":{
+			"type":"2",
+			"option":{
+			    "xAxis": {
+			        "type": "category",
+			        "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+			    },
+			    "yAxis": {
+			        "type": "value"
+			    },
+			    "series": [{
+			        "data": [820, 932, 901, 934, 1290, 1330, 1320],
+			        "type": "line",
+			        "areaStyle": {}
+			    }]
+			 }
+		},"stack":{
+			"type":"3",
+			"option":{
+			    "xAxis": {
+			        "type": "category",
+			        "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+			    },
+			    "yAxis": {
+			        "type": "value"
+			    },
+			    "series": [{
+			        "data": [820, 932, 901, 934, 1290, 1330, 1320],
+			        "type": "line",
+			        "areaStyle": {},
+			        "stack": "堆叠标识"
+			    }]
+			 }
+		}
+	},
+	"bar":{
+		"default":{
+			"type":"1",
+			"option":{
+				"color": ["#3398DB"],
+				"xAxis" : 
+					{
+						"type": "category",
+						"data" : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+					},
+					"yAxis" : {"type" : "value"},
+					"series" :[
+							{
+								"name":"直接访问",
+								"type":"bar",
+								"data":[10, 52, 200, 334, 390, 330, 220]
+							}
+					]
+			}
+		},
+		"stack":{
+			"type":"2",
+			"option":{
+			    "xAxis": {
+			        "type": "category",
+			        "data": [
+			            "Mon",
+			            "Tue",
+			            "Wed",
+			            "Thu",
+			            "Fri",
+			            "Sat",
+			            "Sun"
+			        ]
+			    },
+			    "yAxis": {
+			        "type": "value"
+			    },
+			    "series": [
+			        {
+			            "data": [
+			                120,
+			                200,
+			                150,
+			                80,
+			                70,
+			                110,
+			                130
+			            ],
+			            "type": "bar",
+			            "stack": "堆叠标识"
+			        },
+			        {
+			            "data": [
+			                100,
+			                210,
+			                160,
+			                60,
+			                30,
+			                150,
+			                100
+			            ],
+			            "type": "bar",
+			            "stack": "堆叠标识"
+			        }
+			    ]
+			}
+		},
+		"switch":{
+			"type":"3",
+			"option":{
+			    "xAxis": {
+			        "type": "value"
+			    },
+			    "yAxis": {
+			        "type": "category",
+			        "data": [
+			            "Mon",
+			            "Tue",
+			            "Wed",
+			            "Thu",
+			            "Fri",
+			            "Sat",
+			            "Sun"
+			        ]
+			    },
+			    "series": [
+			        {
+			            "data": [
+			                120,
+			                200,
+			                150,
+			                80,
+			                70,
+			                110,
+			                130
+			            ],
+			            "type": "bar"
+			        },
+			        {
+			            "data": [
+			                100,
+			                210,
+			                160,
+			                60,
+			                30,
+			                150,
+			                100
+			            ],
+			            "type": "bar"
+			        }
+			    ]
+			}
+		}
+	},
+	"pie":{
+		"default":{
+			"type":"1",
+			"option":{
+			    "series": [
+			        {
+			            "type": "pie",
+			            "data": [
+			                {
+			                    "value": 335,
+			                    "name": "直接访问"
+			                },
+			                {
+			                    "value": 310,
+			                    "name": "邮件营销"
+			                },
+			                {
+			                    "value": 234,
+			                    "name": "联盟广告"
+			                },
+			                {
+			                    "value": 135,
+			                    "name": "视频广告"
+			                },
+			                {
+			                    "value": 1548,
+			                    "name": "搜索引擎"
+			                }
+			            ]
+			        }
+			    ]
+			}
+		},
+		"annular":{
+			"type":"2",
+			"option":{
+			    "series": [
+			        {
+			            "name": "访问来源",
+			            "type": "pie",
+			            "radius": [
+			                "50%",
+			                "70%"
+			            ],
+			            "center": [
+			                "50%",
+			                "60%"
+			            ],
+		            "data": [
+		                {
+		                    "value": 335,
+		                    "name": "直接访问"
+		                },
+		                {
+		                    "value": 310,
+		                    "name": "邮件营销"
+		                },
+		                {
+		                    "value": 234,
+		                    "name": "联盟广告"
+		                },
+		                {
+		                    "value": 135,
+		                    "name": "视频广告"
+		                },
+		                {
+		                    "value": 1548,
+		                    "name": "搜索引擎"
+		                }]
+		        	}
+		   		]
+		    }
+		},
+		"radius":{
+			"type":"3",
+			"option":{
+			    "series": [
+			        {
+			            "name": "访问来源",
+			            "type": "pie",
+			            "radius": "55%",
+			            "center": [
+			                "50%",
+			                "60%"
+			            ],
+			            "data": [
+			                {
+			                    "value": 335,
+			                    "name": "直接访问"
+			                },
+			                {
+			                    "value": 310,
+			                    "name": "邮件营销"
+			                },
+			                {
+			                    "value": 234,
+			                    "name": "联盟广告"
+			                },
+			                {
+			                    "value": 135,
+			                    "name": "视频广告"
+			                },
+			                {
+			                    "value": 1548,
+			                    "name": "搜索引擎"
+			                }
+			            ],
+			            "roseType": "radius"
+			        }
+			    ]
+			}
+		}
+	},
+	"radar":{
+		"default":{
+			"type":"1",
+			"option":{
+			    "radar": {
+			        "name": {
+			            "textStyle": {
+			                "color": "#fff",
+			                "backgroundColor": "#999",
+			                "borderRadius": 3,
+			                "padding": [3, 5]
+			           }
+			        },
+			        "indicator": [
+			           { "name": "销售", "max": 6500},
+			           { "name": "管理", "max": 16000},
+			           { "name": "信息技术", "max": 30000},
+			           { "name": "客服", "max": 38000},
+			           { "name": "研发", "max": 52000},
+			           { "name": "市场", "max": 25000}
+			        ]
+			    },
+			    "series": [{
+			        "name": "预算 vs 开销（Budget vs spending）",
+			        "type": "radar",
+			        "data" : [
+			        	{
+			                "value" : [4300, 10000, 28000, 35000, 50000, 19000],
+			                "name" : "预算分配（Allocated Budget）"
+			            },
+			            {
+			                "value" : [5000, 14000, 28000, 31000, 42000, 21000],
+			                "name" : "实际开销（Actual Spending）"
+			            }
+			        ]
+			    }]
+			}
+		}
+	},"gauge":{
+		"default":{
+			"type":"1",
+			"option":{
+			    "series": [
+			        {
+			            "name": "业务指标",
+			            "type": "gauge",
+			            "data": [{"value":50,"name":"完成率"}],
+			            "axisLine": {
+							"lineStyle": {
+							 "color": [
+									[0.2, "#516b91"],
+									[0.8, "#59c4e6"],
+									[1, "#edafda"]
+								]
+							}
+						}
+			        }
+			    ]
+			}
+		}
+	},"barline":{
+		"default":{
+			"type":"barline",
+			"option":{
+			    "tooltip": {
+			        "trigger": "axis",
+			        "axisPointer": {
+			            "type": "cross",
+			            "label": {
+			                "backgroundColor": "#283b56"
+			            }
+			        }
+			    },
+			    "dataZoom": {
+			        "show": false,
+			        "start": 0,
+			        "end": 100
+			    },
+			    "xAxis": [
+			        {
+			            "type": "category",
+			            "boundaryGap": true,
+			            "data": ["2:46:58", "2:47:00", "2:47:02", "2:47:04", "2:47:06", "2:47:08", "2:47:10", "2:47:12", "2:47:14", "2:47:16"]
+			        },
+			        {
+			            "type": "category",
+			            "boundaryGap": true,
+			            "data": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+			        }
+			    ],
+			    "yAxis": [
+			        {
+			            "type": "value",
+			            "scale": true,
+			            "boundaryGap": [0.2, 0.2]
+			        },
+			        {
+			            "type": "value",
+			            "scale": true,
+			            "boundaryGap": [0.2, 0.2]
+			        }
+			    ],
+			    "series": [
+			        {
+			            "name":"预购队列",
+			            "type":"bar",
+			            "xAxisIndex": 1,
+			            "yAxisIndex": 1,
+			            "data":[421, 262, 347, 810, 480, 519, 475, 80, 875, 534]
+			        },
+			        {
+			            "name":"最新成交价",
+			            "type":"line",
+			            "data":[9.7, 8, 13.2, 14.2, 8.5, 11.7, 8.7, 14.2, 8.5, 13.3]
+			        }
+			    ]
+			}
+		}
+	},"scatter":{
+		"default":{
+			"type":"1",
+			"option":{
+				"xAxis": {},
+				"yAxis": {},
+				"series": [{
+				    "symbolSize": 20,
+				        "data": [
+				            [10.0, 8.04],
+				            [8.0, 6.95],
+				            [13.0, 7.58],
+				            [9.0, 8.81],
+				            [11.0, 8.33],
+				            [14.0, 9.96],
+				            [6.0, 7.24],
+				            [4.0, 4.26],
+				            [12.0, 10.84],
+				            [7.0, 4.82],
+				            [5.0, 5.68]
+				        ],
+				        "type": "scatter"
+				    }]
+			}
+		}
+	}
+}

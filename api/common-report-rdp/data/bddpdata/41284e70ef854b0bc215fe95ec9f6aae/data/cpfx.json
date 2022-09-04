@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "name": "产品分析",
+      "data": [
+        {
+          "indicator": "还款额度",
+          "value": 12
+        },
+        {
+          "indicator": "预算额度",
+          "value": 22
+        },
+        {
+          "indicator": "利率",
+          "value": 14
+        },
+        {
+          "indicator": "期限",
+          "value": 30
+        },
+        {
+          "indicator": "放款额度",
+          "value": 13
+        }
+      ]
+    }
+  ]
+  }
