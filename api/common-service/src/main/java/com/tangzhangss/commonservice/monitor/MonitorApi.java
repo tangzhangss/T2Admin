@@ -40,9 +40,10 @@ public class MonitorApi {
         JSONArray serviceStatusArr = new JSONArray();
         if(dictEntityList!=null){
             serviceStatusArr = JSONUtil.parseArray(dictEntityList.getData());
-            String cmd = "ps aux|grep -v 'grep'|grep ${service}";
-            if(OSInfo.isWindows())cmd="tasklist|findstr ${service}";
             for (Object service : serviceStatusArr) {
+                String cmd = "ps aux|grep -v 'grep'|grep ${service}";
+                if(OSInfo.isWindows())cmd="tasklist|findstr ${service}";
+
                 JSONObject obj = (JSONObject) service;
                 cmd = cmd.replace("${service}", obj.getStr("label"));
                 String s = RuntimeUtil.executeRuntimeCommand(cmd);
