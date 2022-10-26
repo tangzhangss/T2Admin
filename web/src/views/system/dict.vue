@@ -43,7 +43,7 @@
                     {prop: "user", label: "使用者", iType: 'select',options:[{value:"用户"},{value:"开发"},{value:"运维"}],selectKey:"value",selectValue:"value",required: true, iSpan: 12},
                     {prop: "name", label: "字典名称", iType: 'text', required: true, iSpan: 12},
                     {prop: "type", label: "字典类型", iType: 'text', iSpan: 12, required: true},
-                    {prop: "data", label: "字典值", iType: 'textarea',style:"height:600px", required: true, iSpan: 24,},
+                    {prop: "data", label: "字典值", iType: 'textarea',style:"height:500px;min-width:400px", required: true, iSpan: 24, },
                     {prop: "usable", label: "是否启用", iType: 'switch', iSpan: 24},
                     {prop: "remark", label: "备注", iType: 'text', iSpan: 24}
                 ]

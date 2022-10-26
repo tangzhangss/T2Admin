@@ -191,7 +191,7 @@ function parseRoute(item,isRoot){
         if(item.domainId && item.domain){
           route.component=require('@/views/iFrame.vue').default;
           let addr = item.domain.devAddress;
-          if(process.env.IS_PROD){
+          if(process.env.NODE_ENV == "production"){
             addr=item.domain.proAddress;
           }
           store.commit('permission/UPDATE_EXTERNAL_SERVICE',
@@ -221,7 +221,7 @@ function parseRoute(item,isRoot){
 function handleUrl(domain,path){
   if(!/.*?\/$/.test(domain))domain += "/";
   if(!/^\/.*/.test(path))path="/"+path;
-  return domain+"#"+path;
+  return domain+path;
 }
 function arrayToTreeAssist(res,array,key){
   //没有元素了

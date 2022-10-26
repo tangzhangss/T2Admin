@@ -108,8 +108,12 @@
       .el-tooltip {
         padding: 0 !important;
 
-        .svg-icon {
-          margin-left: 20px;
+        display: flex;
+        justify-content: center;
+        .el-icon {
+          .svg-icon {
+            margin-right: 0px;
+          }
         }
 
         .sub-el-icon {
@@ -123,9 +127,12 @@
 
       &>.el-sub-menu__title {
         padding: 0 !important;
-
-        .svg-icon {
-          margin-left: 20px;
+        display: flex;
+        justify-content: center;
+        .el-icon {
+           .svg-icon {
+             margin-right: 0px;
+           }
         }
 
         .sub-el-icon {

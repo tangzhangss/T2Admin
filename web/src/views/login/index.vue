@@ -104,6 +104,7 @@ export default {
        this.$service_tool.setImageUploadHeaders({
           prop:"logo",
           tip:"点击或拖拽上传，大小不能超过1MB",
+          tipPlacement:"left",
           label:"LOGO",
           iType:"image",
           iSpan:24,
@@ -115,7 +116,7 @@ export default {
           label:"账户",
           tip:"唯一标识,注册后不可更改",
           iType:"text",
-          iSpan:13,
+          iSpan:12,
           placeholder:"CD1024",
         },
         {
@@ -156,7 +157,7 @@ export default {
           iType:"text",
           required:true,
           placeholder:"四川省成都市龙泉驿区派瑞国际",
-          iSpan:20,
+          iSpan:24,
         },
         {
           prop:"remark",
@@ -164,7 +165,7 @@ export default {
           iType:"text",
           required:true,
           placeholder:"",
-          iSpan:20,
+          iSpan:24,
         },
       ],
     }

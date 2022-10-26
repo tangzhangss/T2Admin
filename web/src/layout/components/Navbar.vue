@@ -110,10 +110,10 @@
       :append-to-body='true'
     >
       <el-form label-position="right" label-width="auto" :inline="true">
-        <el-form-item label="新密码" prop="pass" style="display: flex;align-items: center" required>
+        <el-form-item label="新密码" prop="pass" style="display: flex;align-items: center">
           <el-input type="password" v-model="tempValue1" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass" style="display: flex;align-items: center" required>
+        <el-form-item label="确认密码" prop="checkPass" style="display: flex;align-items: center">
           <el-input type="password"  v-model="tempValue2"  auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
