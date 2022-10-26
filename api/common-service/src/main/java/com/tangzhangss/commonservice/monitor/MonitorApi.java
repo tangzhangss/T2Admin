@@ -69,9 +69,9 @@ public class MonitorApi {
                             ramUse+=Long.parseLong(obj2.getStr("ramUse").replaceAll(",",""));
                         }
                     }
-                    obj.set("ramUseRate",ramUseRate==0l?"undefined":(ramUseRate+"%"));
+                    obj.set("ramUseRate",ramUseRate + "%");
                     obj.set("ramUse",(BaseUtil.round(ramUse/1024,2)+" MB"));
-                    obj.set("cpuUseRate",cpuUseRate==0l?"undefined":(cpuUseRate+"%"));
+                    obj.set("cpuUseRate",cpuUseRate + "%");
                 }
             }
         }
