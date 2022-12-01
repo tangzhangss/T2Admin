@@ -1,9 +1,8 @@
 package com.tangzhangss.commonutils.test;
 
+import com.tangzhangss.commonutils.annotation.Excel;
 import com.tangzhangss.commonutils.base.SysBaseEntity;
-import com.tangzhangss.commonutils.base.SysDynamic;
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -29,6 +28,15 @@ public class TestEntity extends SysBaseEntity {
     @OneToOne
     @JoinColumn(name = "test2Id",referencedColumnName = "id",insertable = false,updatable = false)
     private TestEntity2 testEntity2;
+
+
+    /**
+     * 导出测试列
+     */
+    @Excel(name = "名字")
+    private String exportName;
+    @Excel(name = "数值", readConverterExp = "1=one,2=two")
+    private String exportValue;
 
 
 //    ----

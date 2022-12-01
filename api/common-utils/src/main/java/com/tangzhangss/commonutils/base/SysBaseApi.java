@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -62,5 +63,16 @@ public abstract class SysBaseApi<T extends SysBaseEntity,TT extends SysBaseServi
         return Result.ok();
     }
 
-
+    /**
+     * request中参数除了查询条件还需要的条件如下
+     * column:"xxx,xxx",对应@Excel的name   （需要导出的列类型）
+     * format:"xlsx/cvs",
+     * fileName:"导出文件的名字";
+     *
+     * @param request
+     */
+    @GetMapping("/export")
+    public void export(HttpServletRequest request) throws IOException {
+        myService.export(request);
+    }
 }

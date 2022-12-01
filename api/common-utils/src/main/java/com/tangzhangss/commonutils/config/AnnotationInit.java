@@ -1,23 +1,18 @@
 package com.tangzhangss.commonutils.config;
 
 import com.tangzhangss.commonutils.base.SysBaseEntity;
-import com.tangzhangss.commonutils.base.SysDynamic;
-import com.tangzhangss.commonutils.utils.ExceptionUtil;
+import com.tangzhangss.commonutils.annotation.SysDynamic;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtField;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
-import javassist.bytecode.FieldInfo;
 import javassist.bytecode.annotation.Annotation;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.reflections.Reflections;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Set;
 
 /**

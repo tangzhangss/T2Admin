@@ -1,6 +1,5 @@
 package com.tangzhangss.commonservice.client;
 
-import com.tangzhangss.commonutils.base.SysDynamic;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -16,7 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tbl_common_service_client")
 @Data
-@SysDynamic
 public class ClientEntity {
     @Id
     private String id = "";//id

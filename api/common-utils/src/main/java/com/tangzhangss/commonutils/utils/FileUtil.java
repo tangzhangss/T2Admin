@@ -23,6 +23,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -547,7 +548,7 @@ public class FileUtil {
                 OutputStream out = response.getOutputStream();
         ){
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            response.setHeader("Content-disposition","attachment; filename="+file.getName());
+            response.setHeader("Content-disposition","attachment; filename=" + URLEncoder.encode(file.getName(),"UTF-8"));
             response.setCharacterEncoding("utf-8");
             response.setContentLengthLong(file.length());
             //读取文件流

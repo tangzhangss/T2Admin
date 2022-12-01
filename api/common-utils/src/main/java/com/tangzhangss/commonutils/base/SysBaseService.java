@@ -1,18 +1,27 @@
 package com.tangzhangss.commonutils.base;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.text.csv.CsvUtil;
+import cn.hutool.core.text.csv.CsvWriter;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
+import com.tangzhangss.commonutils.annotation.Excel;
 import com.tangzhangss.commonutils.config.Attribute;
 import com.tangzhangss.commonutils.datasource.builder.UpdateBuilder;
+import com.tangzhangss.commonutils.dict.DictService;
 import com.tangzhangss.commonutils.exception.ServiceException;
 import com.tangzhangss.commonutils.querydsl.QueryDslUtil;
 import com.tangzhangss.commonutils.resultdata.Result;
 import com.tangzhangss.commonutils.service.DBService;
+import com.tangzhangss.commonutils.test.TestEntity;
 import com.tangzhangss.commonutils.uidgenerator.UidGeneratorService;
 import com.tangzhangss.commonutils.utils.BaseUtil;
 import com.tangzhangss.commonutils.utils.ExceptionUtil;
+import com.tangzhangss.commonutils.utils.FileUtil;
 import com.tangzhangss.commonutils.utils.JPAUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
@@ -31,8 +40,12 @@ import javax.persistence.*;
 import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -63,6 +76,9 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
 
     @Autowired
     protected DBService dbService;
+
+    @Autowired
+    protected DictService dictService;
 
     // 是否查全部-默认false
     protected ThreadLocal<Boolean> isQueryAll= new ThreadLocal<>();
@@ -1114,6 +1130,127 @@ public abstract class SysBaseService<T extends SysBaseEntity,TT extends SysBaseD
                 .append(");");
 
         dbService.executeSql(sql.toString());
+    }
+
+
+    /**
+     * 导出
+     * request中参数除了查询条件还需要的条件如下
+     * column:"xxx,xxx",对应@Excel的name   （需要导出的列类型）
+     * format:"xlsx/cvs",
+     * fileName:"导出文件的名字";
+     */
+    public void export(HttpServletRequest request) throws IOException {
+        final List<T> dataList = get(request, null).getContent();
+
+        /**
+         * 获取导出的数据
+         */
+        final List<String> columnList = CollUtil.newArrayList(request.getParameter("column").split(","));
+        if (columnList.size()==0) ExceptionUtil.throwException("Please select at least one export column");
+
+        List<List<String>> rowList = new ArrayList<>();
+        rowList.add(columnList);
+        for (T data : dataList) {
+            List<String> row = new ArrayList<>(dataList.size());
+            for (int i = 0; i < columnList.size(); i++) {
+                row.add(getExportValue(data, columnList.get(i)));
+            }
+            rowList.add(row);
+        }
+
+        String fileName = Optional.ofNullable(request.getParameter("fileName")).orElse("T2Admin");
+
+        if (fileName.length()<3) fileName += "_" + LocalDate.now();
+
+        String format = Optional.ofNullable(request.getParameter("format")).orElse("xlsx");
+
+        //创建临时文件
+        File tempFile = File.createTempFile(fileName+"_", "." + format);
+
+        switch (format) {
+            case "xlsx" : {
+                //查询数据
+                // 通过工具类创建writer
+                ExcelWriter writer = ExcelUtil.getBigWriter();
+                // 一次性写出内容，使用默认样式，强制输出标题
+                writer.write(rowList);
+
+                writer.flush(tempFile);
+
+                // 关闭writer，释放内存
+                writer.close();
+                break;
+            }
+            case "csv": {
+                final CsvWriter writer = CsvUtil.getWriter(tempFile, Charset.forName("utf-8"));
+                writer.write(rowList);
+                // 关闭writer，释放内存
+                writer.close();
+                break;
+            }
+            default: throw new ServiceException("不支持的导出类型");
+        }
+
+        //返回文件
+        FileUtil.downLoad(tempFile, response);
+
+        tempFile.delete();
+    }
+
+    /**
+     * 获取excel导出列对应的值
+     * --后期可扩展成其他对象
+     * @param data
+     * @param name
+     * @return 最终值全部转为字符串
+     */
+    private String getExportValue(T data, String name) {
+        Field[] fields =  data.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            final Excel annotation = field.getAnnotation(Excel.class);
+            if (annotation==null)continue;
+            if (annotation.name().equals(name)) {
+                //打开私有访问
+                field.setAccessible(true);
+                try {
+                    String value= String.valueOf(field.get(data));
+
+                    //解析表达式
+                    String exp = null;
+
+                    //1.看有没有字典
+                    final String dictType = annotation.dictType();
+                    if (StringUtils.isNotBlank(dictType)) {
+                        exp = dictService.getDictDataByType(dictType);
+                    }
+
+                    if (StringUtils.isBlank(exp)) {
+                        //2看有没有readConverterExp
+                        exp = annotation.readConverterExp();
+                    }
+
+                    //如果存在表达式
+                    if (StringUtils.isNotBlank(exp)){
+                        final String[] arr = exp.split(",");
+                        for (int i = 0; i < arr.length; i++) {
+                            final String[] v = arr[i].split("=");
+                            if (v[0].equals(value)){
+                                value = v[1];
+                                break;
+                            }
+                        }
+                    }
+
+
+                    return value.equals("null")?"":value;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                    return "";
+                }
+            }
+        }
+        return "";
     }
 }
 
