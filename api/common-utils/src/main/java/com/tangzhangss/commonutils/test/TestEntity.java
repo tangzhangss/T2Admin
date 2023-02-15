@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @Data
 @DynamicUpdate
 public class TestEntity extends SysBaseEntity {
+
+
     @Column(name = "local_date")
     private LocalDate localDate;
     private LocalDateTime localDateTime;
@@ -25,6 +27,7 @@ public class TestEntity extends SysBaseEntity {
 
     private Long test2Id;
 
+    @Transient
     @OneToOne
     @JoinColumn(name = "test2Id",referencedColumnName = "id",insertable = false,updatable = false)
     private TestEntity2 testEntity2;

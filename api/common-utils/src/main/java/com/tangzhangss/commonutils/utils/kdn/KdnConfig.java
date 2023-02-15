@@ -17,6 +17,7 @@ public class KdnConfig {
     //请求url, 正式环境地址
     private String reqURL;
     private boolean isProEnv;//是否正式环境
+
     public KdnConfig() {
     }
     public KdnConfig(String businessId, String apiKey, boolean isProEnv) {

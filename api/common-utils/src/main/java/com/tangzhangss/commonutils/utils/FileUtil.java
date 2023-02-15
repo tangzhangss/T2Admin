@@ -1,9 +1,8 @@
 package com.tangzhangss.commonutils.utils;
 
 import cn.hutool.core.comparator.CompareUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.json.JSONObject;
-import cn.hutool.log.StaticLog;
-import lombok.val;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -27,7 +26,12 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.apache.poi.ss.usermodel.DateUtil;
 
 public class FileUtil {
 
